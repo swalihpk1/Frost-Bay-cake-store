@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     location:{
         type:String,
         required:true
+    },
+    isBlocked:{
+        type:Number,
+        default:0
     }
 }); 
 

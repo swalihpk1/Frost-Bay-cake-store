@@ -1,0 +1,46 @@
+<%-include('../layouts/header')-%>
+ <!-- for otp  -->
+ <link rel="stylesheet" href="/assets/css/otp.css"> 
+ <link rel="stylesheet" href="/assets/css/otp2.css">
+</head>
+<body>
+ <!--$%adsense%$-->
+ <main class="cd__main">
+    <!-- Start DEMO HTML (Use the following code into your project)-->
+    <body class="container-fluid bg-body-tertiary d-block">
+<div class="row justify-content-center">
+ <div class="col-12 col-md-6 col-lg-4" style="min-width: 500px;">
+   <div class="card bg-white mb-5 mt-5 border-0" style="box-shadow: 0 12px 15px rgba(0, 0, 0, 0.02);">
+     <div class="card-body p-5 text-center">
+       <h4>Otp Verification</h4>
+       <p>Your code was sent to you via email</p>
+     <form action="" method="post"> 
+       <div class="otp-field mb-4">
+         <input name="a" type="number" />
+         <input name="b" type="number" disabled />
+         <input name="c" type="number" disabled />
+         <input name="d" type="number" disabled />
+         <input name="e" type="number" disabled />
+       </div>
+
+       <button type="submit" class="btn btn-primary mb-3">
+         Verify
+       </button>
+    </form>
+
+       <p class="resend text-muted mb-0">
+         Didn't receive code? <a href="">Request again</a>
+       </p>
+     </div>
+   </div>
+ </div>
+</div>
+</body>
+    <!-- END EDMO HTML (Happy Coding!)-->
+ </main>
+
+ 
+ <!-- Script JS -->
+ <script src="/assets/js/otp.js"></script>
+
+ <%-include('../layouts/footer')-%>

@@ -14,11 +14,15 @@ app.use(express.static('public'));
 
 // SIGN-UP
 app.get('/authentication', userController.authentication);
-// app.post('/authentication', userController.insertUser);
+app.post('/authentication', userController.insertUser);
 
 // HOME
 app.get('/home', userController.home);
-app.post('/home', userController.insertUser);
+
+
+//OTP
+app.get('/otpVerify',userController.renderOtp)
+app.post('/otpVerify',userController.verifyOtp)
 
 
 module.exports = app;
