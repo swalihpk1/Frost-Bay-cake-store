@@ -1,0 +1,13 @@
+.field-icon {
+    position: absolute;
+    top: 39%;
+    right: 35%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+ }
+ @media only screen and (max-width:1200px) {
+    .field-icon{
+        right: 33%;
+    }
+ }

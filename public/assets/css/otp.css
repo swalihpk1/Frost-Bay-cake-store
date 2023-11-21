@@ -41,3 +41,18 @@
     color: black;
     text-decoration: none;
   }
+  .form-control{
+    height: 40px;
+    padding: 0.85rem 0rem;
+    font-size: 1.8rem;
+    line-height: 1.5;
+    font-weight: 300;
+    color: #777;
+    background-color: #fafafa;
+    border: 1px solid #ebebeb;
+    border-radius: 0;
+    margin-bottom: 2rem;
+    transition: all 0.3s;
+    box-shadow: none;
+}
+  

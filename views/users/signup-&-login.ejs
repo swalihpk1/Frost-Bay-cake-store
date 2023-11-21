@@ -1,4 +1,6 @@
 <%-include('../layouts/header')-%>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="/assets/css/eye-toggler.css">
 </head>
 <body>
     <div class="page-wrapper">
@@ -139,20 +141,25 @@
                                 </li>
                             </ul>
                             <div class="tab-content">
-                                <div class="tab-pane fade" id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
-                                    <form action="#" method="post">
+                                <div class="tab-pane fade " id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
+                                    <% if(typeof message !== 'undefined'){ %>
+
+                                        <h6 class="text-danger"><%= message %></h6>
+                  
+                                        <%  } %>
+                                    <form action="/login" method="post">
                                         <div class="form-group">
                                             <label for="singin-email-2">Email address *</label>
-                                            <input type="text" class="form-control" id="singin-email-2"
-                                                name="login-email" required>
+                                            <input type="email" class="form-control" id="singin-email-2"
+                                                name="loginEmail" required>
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
                                             <label for="singin-password-2">Password *</label>
                                             <input type="password" class="form-control" id="singin-password-2"
-                                                name="login-password" required>
+                                                name="loginPassword" required>
                                         </div><!-- End .form-group -->
-
+                                        <a href="/resendOtp" class="forgot-link">Login with OTP?</a>
                                         <div class="form-footer">
                                             <button type="submit" class="btn btn-outline-primary-2">
                                                 <span>LOG IN</span>
@@ -169,27 +176,30 @@
                                     aria-labelledby="register-tab-2">
                                     <% if(typeof message !== 'undefined'){ %>
 
-                                        <h5 class="text-danger"><%= message %></h5>
+                                        <h6 class="text-danger"><%= message %></h6>
                   
                                         <%  } %>
                                     <form action="" method="POST">
                                         <div class="form-group">
                                             <label for="register-email-2">Name *</label>
                                             <input type="text" class="form-control" id="register-name"
-                                                name="name" required>
+                                                name="name" >
                                         </div>
 
                                         <div class="form-group">
                                             <label for="register-email-2">Email address *</label>
-                                            <input type="email" class="form-control" id="register-emal"
-                                                name="signupEmail" required>
+                                            <input type="" class="form-control" id="register-emal"
+                                                name="signupEmail" >
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
                                             <label for="register-password-2">Password *</label>
                                             <input type="password" class="form-control" id="register-password-2"
                                                 name="signupPassword" required>
+                                                <!-- <span toggle="#password-field"
+									            class="fa fa-fw fa-eye field-icon toggle-password"></span> -->
                                         </div><!-- End .form-group -->
+                                        
 
                                         <div class="form-group">
                                             <label for="register-password-2">Confirm password *</label>
@@ -264,7 +274,7 @@
 
             <div class="footer-bottom">
                 <div class="container">
-                    <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
+                    <p class="footer-copyright">Copyright © 2019 Frost-Bay Store. All Rights Reserved.</p>
                     <!-- End .footer-copyright -->
                     <figure class="footer-payments">
                         <img src="/assets/images/payments.png" alt="Payment methods" width="272" height="20">
@@ -301,7 +311,7 @@
                         <a href="#">Contact us</a>
                     </li>
                     <li>
-                        <a href="blog.html">About us</a>
+                        <a href="">About us</a>
                     </li>
                 </ul>
             </nav><!-- End .mobile-nav -->
@@ -316,7 +326,7 @@
     </div><!-- End .mobile-menu-container -->
 
     <!-- Sign in / Register Modal -->
-    <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-body">
@@ -327,112 +337,18 @@
                     <div class="form-box">
                         <div class="form-tab">
                             <ul class="nav nav-pills nav-fill" role="tablist">
-                                <li class="nav-item">
+                                <!-- <li class="nav-item">
                                     <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin"
                                         role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab"
-                                        aria-controls="register" aria-selected="false">Register</a>
-                                </li>
+                                </li> -->
+                              
                             </ul>
-                            <div class="tab-content" id="tab-content-5">
-                                <div class="tab-pane fade show active" id="signin" role="tabpanel"
-                                    aria-labelledby="signin-tab">
-                                    <form action="#">
-                                        <div class="form-group">
-                                            <label for="singin-email">Username or email address *</label>
-                                            <input type="text" class="form-control" id="singin-email"
-                                                name="singin-email" required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-group">
-                                            <label for="singin-password">Password *</label>
-                                            <input type="password" class="form-control" id="singin-password"
-                                                name="singin-password" required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-footer">
-                                            <button type="submit" class="btn btn-outline-primary-2">
-                                                <span>LOG IN</span>
-                                                <i class="icon-long-arrow-right"></i>
-                                            </button>
-
-                                            
-                                            <a href="#" class="forgot-link">Forgot Your Password?</a>
-                                        </div><!-- End .form-footer -->
-                                    </form>
-                                    <div class="form-choice">
-                                        <p class="text-center">or sign in with</p>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login btn-g">
-                                                    <i class="icon-google"></i>
-                                                    Login With Google
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login btn-f">
-                                                    <i class="icon-facebook-f"></i>
-                                                    Login With Facebook
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .form-choice -->
-                                </div><!-- .End .tab-pane -->
-                                <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                                    <form action="#">
-                                        <div class="form-group">
-                                            <label for="register-email">Your email address *</label>
-                                            <input type="email" class="form-control" id="register-email"
-                                                name="register-email" required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-group">
-                                            <label for="register-password">Password *</label>
-                                            <input type="password" class="form-control" id="register-password"
-                                                name="register-password" required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-footer">
-                                            <button type="submit" class="btn btn-outline-primary-2">
-                                                <span>SIGN UP</span>
-                                                <i class="icon-long-arrow-right"></i>
-                                            </button>
-
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="register-policy"
-                                                    required>
-                                                <label class="custom-control-label" for="register-policy">I agree to the
-                                                    <a href="#">privacy policy</a> *</label>
-                                            </div><!-- End .custom-checkbox -->
-                                        </div><!-- End .form-footer -->
-                                    </form>
-                                    <div class="form-choice">
-                                        <p class="text-center">or sign in with</p>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login btn-g">
-                                                    <i class="icon-google"></i>
-                                                    Login With Google
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                            <div class="col-sm-6">
-                                                <a href="#" class="btn btn-login  btn-f">
-                                                    <i class="icon-facebook-f"></i>
-                                                    Login With Facebook
-                                                </a>
-                                            </div><!-- End .col-6 -->
-                                        </div><!-- End .row -->
-                                    </div><!-- End .form-choice -->
-                                </div><!-- .End .tab-pane -->
-                            </div><!-- End .tab-content -->
                         </div><!-- End .form-tab -->
                     </div><!-- End .form-box -->
                 </div><!-- End .modal-body -->
             </div><!-- End .modal-content -->
         </div><!-- End .modal-dialog -->
-    </div><!-- End .modal -->
+    </div>
 
     <!-- Plugins JS File -->
     <script src="/assets/js/jquery.min.js"></script>
@@ -443,5 +359,7 @@
     <script src="/assets/js/owl.carousel.min.js"></script>
     <!-- Main JS File -->
     <script src="/assets/js/main.js"></script>
+    <!-- ------Eye toggler js------ -->
+    <script src="/assets/js/popper.js"></script>
 
     <%-include('../layouts/footer')-%>

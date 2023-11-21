@@ -15,14 +15,19 @@
        <h4>Otp Verification</h4>
        <p>Your code was sent to you via email</p>
      <form action="" method="post"> 
-       <div class="otp-field mb-4">
+       <div class="otp-field mb-2">
          <input name="a" type="number" />
          <input name="b" type="number" disabled />
          <input name="c" type="number" disabled />
          <input name="d" type="number" disabled />
          <input name="e" type="number" disabled />
+         <input name="f" type="number" disabled />
        </div>
+       <% if(typeof message !== 'undefined'){ %>
 
+        <h6 class="text-danger"><%= message %></h6>
+
+        <%  } %>
        <button type="submit" class="btn btn-primary mb-3">
          Verify
        </button>
