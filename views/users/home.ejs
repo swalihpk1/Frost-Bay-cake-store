@@ -1,11 +1,31 @@
-<%-include('../layouts/header')-%>
+<%-include('../layouts/user/header')-%>
+
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/config">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/icons/favicon-16x16.png">
+<link rel="manifest" href="/assets/images/icons/site.html">
+<link rel="mask-icon" href="/assets/images/icons/safari-pinned-tab.svg" color="#666666">
+<link rel="shortcut icon" href="/assets/images/icons/favicon.ico">
+<meta name="apple-mobile-web-app-title" content="Molla">
+<meta name="application-name" content="Molla">
+<meta name="msapplication-TileColor" content="#cc9966">
+<meta name="msapplication-config" content="/assets/images/icons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+
+<!-- Plugins CSS File -->
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<!-- Main CSS File -->
+<link rel="stylesheet" href="/assets/css/style.css">
+
 
      <!-- For home -->
 
-     <link rel="stylesheet" href="assets/css/demos/demo-16.css">
-     <link rel="stylesheet" href="assets/css/plugins/owl-carousel/owl.carousel.css">
-     <link rel="stylesheet" href="assets/css/plugins/magnific-popup/magnific-popup.css">
-     <link rel="stylesheet" href="assets/vendor/line-awesome/line-awesome/line-awesome/css/line-awesome.min.css">
+     <link rel="stylesheet" href="/assets/css/demos/demo-16.css">
+     <link rel="stylesheet" href="/assets/css/plugins/owl-carousel/owl.carousel.css">
+     <link rel="stylesheet" href="/assets/css/plugins/magnific-popup/magnific-popup.css">
+     <link rel="stylesheet" href="/assets/vendor/line-awesome/line-awesome/line-awesome/css/line-awesome.min.css">
 </head>
 <body>
     <div class="page-wrapper">
@@ -14,7 +34,7 @@
                 <div class="container">
                     <div class="header-left">
                         <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
-                            <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                            <a href="#" class="search-toggle" role="button"><i class="fa-solid fa-magnifying-glass" style="color: #949494;"></i></a>
                             <form action="#" method="get">
                                 <div class="header-search-wrapper search-wrapper-wide">
                                     <label for="q" class="sr-only">Search</label>
@@ -92,7 +112,10 @@
                                     <span>Total</span>
 
                                     <span class="cart-total-price">$160.00</span>
+
+                                     
                                 </div><!-- End .dropdown-cart-total -->
+                                
 
                                 <div class="dropdown-cart-action">
                                     <a href="cart.html" class="btn btn-primary">View Cart</a>
@@ -100,6 +123,27 @@
                                 </div><!-- End .dropdown-cart-total -->
                             </div><!-- End .dropdown-menu -->
                         </div><!-- End .cart-dropdown -->
+                         
+<!-- -------- -->         <% if(user){ %>
+
+                              <h5 class="ml-5 pt-1"><%= user.name %></h5>
+                  
+                          <%  }else{ %>
+
+                            <a href="/authentication" class=" text-white text-center m-3 p-2" style="width:6rem; height: 3rem; border:none;background-color: #cc9966; color: aliceblue;"
+                            ><span>LOGIN</span></a>
+
+                          <%  } %>
+                          <div class="dropdown">
+                            <button class="bg-white border-0" dropdown-toggle" type="button" id="" data-toggle="dropdown">
+                                <img class="" src="/assets/images/icons/Profile.svg" alt="">
+                            </button>
+                            <div class="dropdown-menu bg-dark">
+                              <a class="dropdown-item text-white " href="/logout"  onclick="confirmLogout()">Logout</a>
+                            </div>
+                          </div>
+
+
                     </div>
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
@@ -1226,36 +1270,7 @@
         </div><!-- End .modal-dialog -->
     </div><!-- End .modal -->
 
-    <div class="container newsletter-popup-container mfp-hide" id="newsletter-popup-form">
-        <div class="row justify-content-center">
-            <div class="col-10">
-                <div class="row no-gutters bg-white newsletter-popup-content">
-                    <div class="col-xl-3-5col col-lg-7 banner-content-wrap">
-                        <div class="banner-content text-center">
-                            <img src="assets/images/popup/newsletter/logo.png" class="logo" alt="logo" width="60" height="15">
-                            <h2 class="banner-title">get <span>25<light>%</light></span> off</h2>
-                            <p>Subscribe to the Molla eCommerce newsletter to receive timely updates from your favorite products.</p>
-                            <form action="#">
-                                <div class="input-group input-group-round">
-                                    <input type="email" class="form-control form-control-white" placeholder="Your Email Address" aria-label="Email Adress" required>
-                                    <div class="input-group-append">
-                                        <button class="btn" type="submit"><span>go</span></button>
-                                    </div><!-- .End .input-group-append -->
-                                </div><!-- .End .input-group -->
-                            </form>
-                            <div class="custom-control custom-checkbox">
-                                <input type="checkbox" class="custom-control-input" id="register-policy-2" required>
-                                <label class="custom-control-label" for="register-policy-2">Do not show this popup again</label>
-                            </div><!-- End .custom-checkbox -->
-                        </div>
-                    </div>
-                    <div class="col-xl-2-5col col-lg-5 ">
-                        <img src="assets/images/popup/newsletter/img-1.jpg" class="newsletter-img" alt="newsletter">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
     <!-- Plugins JS File -->
     <script src="assets/js/jquery.min.js"></script>
     <script src="assets/js/bootstrap.bundle.min.js"></script>
@@ -1268,4 +1283,18 @@
     <script src="assets/js/main.js"></script>
     <script src="assets/js/demos/demo-16.js"></script>
 
-<%-include('../layouts/footer')-%>
+    <script>
+        function confirmLogout() {
+            const isConfirmed = confirm("Are you sure you want to logout?");
+            if (isConfirmed) {
+                // Redirect to the logout URL
+                window.location.href = "/logout";
+            } else {
+                // Optionally, you can add code to handle the "Cancel" or "No" case
+                console.log("Logout canceled");
+            }
+        }
+    </script>
+    
+
+<%-include('../layouts/user/footer')-%>

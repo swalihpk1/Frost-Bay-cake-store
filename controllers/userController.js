@@ -7,18 +7,18 @@ const { verify, Verify } = require("crypto");
 const { REFUSED } = require("dns");
 const { ObjectId } = require("bson");
 const { emit } = require("process");
+const { statfsSync } = require("fs");
 
 
 // nodemailer stuffs
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL_ADDRESS, 
-        pass:'ketl pkrp qftk mqeb' 
+        user: process.env.EMAIL_ADDRESS,
+        pass: 'ketl pkrp qftk mqeb'
     },
 });
-
-
+   
 
 // ----------Signup-&-Login------------
 const authentication = async (req, res) => {
@@ -46,15 +46,16 @@ const securePassword = async (password) => {
 const insertUser = async (req, res) => {
     try {
 
-        const {signupEmail} = req.body;
-        const userCheck = await User.findOne({ email:signupEmail });
+        const { signupEmail } = req.body;
+        const userCheck = await User.findOne({ email: signupEmail });
         if (userCheck) {
-          return res.render("signup-&-login", {message: "User already exist, please login"
-          });
+            return res.render("signup-&-login", {
+                message: "User already exist, please login"
+            });
         }
 
         const securepassword = await securePassword(req.body.signupPassword)
-        const user =  new User({
+        const user = new User({
             name: req.body.name.trim(),
             email: req.body.signupEmail,
             password: securepassword,
@@ -63,9 +64,9 @@ const insertUser = async (req, res) => {
             location: req.body.location
         });
 
-        const userData = await user.save().then((result)=>{
-            sendOtpVerification(result,res);
-            
+        const userData = await user.save().then((result) => {
+            sendOtpVerification(result, res);
+
         })
     } catch (error) {
         console.log(error.message);
@@ -73,12 +74,12 @@ const insertUser = async (req, res) => {
 }
 
 // -------SEND-OTP-FOR-SIGNUP------
-const sendOtpVerification = async ({_id,email},res) => {
-   
+const sendOtpVerification = async ({ _id, email }, res) => {
+
     try {
-    
+
         const otp = `${100000 + Math.floor(Math.random() * 900000)}`;
-        console.log("SendOtp"+otp);
+        console.log("SendOtp" + otp);
         // Send the OTP to the user's email
         const mailOptions = {
             from: process.env.EMAIL_ADDRESS,
@@ -86,22 +87,22 @@ const sendOtpVerification = async ({_id,email},res) => {
             subject: 'OTP Verification',
             text: `Your OTP is: ${otp}`,
         };
-        
-        const hashedOtp = await bcrypt.hash(otp,10);
+
+        const hashedOtp = await bcrypt.hash(otp, 10);
         const newUserOtp = new userOtpVerification({
-            userId:_id,
-            otp:hashedOtp,
-            createAt:Date.now(),
-            expiresAt:Date.now()+300000  
+            userId: _id,
+            otp: hashedOtp,
+            createAt: Date.now(),
+            expiresAt: Date.now() + 300000
         });
 
         await newUserOtp.save();
         await transporter.sendMail(mailOptions);
-        
+
         const userId = newUserOtp.userId
         res.redirect(`/otpVerify?id=${userId}`);
 
-        
+
     } catch (error) {
         console.log(error.message);
         res.status(500).send('Internal Server Error');
@@ -119,18 +120,19 @@ const renderOtp = async (req, res) => {
 
 
 // -------Verifying-otp--------
-const verifyOtp = async(req,res)=>{
+const verifyOtp = async (req, res) => {
     try {
-        
+
         const userId = req.query.id
-        const otp = req.body.a+req.body.b+req.body.c+req.body.d+req.body.e+req.body.f;
-        const user = await userOtpVerification.findOne({userId});
-        const otpHash = await bcrypt.compare(otp,user.otp);
-       console.log(otpHash);
-        if(otpHash == true){
-             res.redirect('/home');
-        }else{
-            res.render('otp',{message:"Enter valid OTP"})
+        const otp = req.body.a + req.body.b + req.body.c + req.body.d + req.body.e + req.body.f;
+        const user = await userOtpVerification.findOne({ userId });
+        const otpHash = await bcrypt.compare(otp, user.otp);
+        console.log(otpHash);
+        if (otpHash == true) {
+            req.session.user_id = user._id;
+            res.redirect('/home');
+        } else {
+            res.render('otp', { message: "Enter valid OTP" })
         }
 
 
@@ -140,28 +142,27 @@ const verifyOtp = async(req,res)=>{
 }
 
 // ------Verify-Login------
-const verifyLogin = async (req,res) => {
-  
+const verifyLogin = async (req, res) => {
+
     try {
         const email = req.body.loginEmail;
         const password = req.body.loginPassword;
         const userData = await User.findOne({ email });
-        console.log(userData);                  /*-------------------*/
+        // console.log(userData);                  /*-------------------*/
 
 
         if (userData) {
             const passwordMatch = await bcrypt.compare(password, userData.password);
             if (passwordMatch) {
-
-                // req.session.user_id = userData._id;
+                req.session.user_id = userData._id;
                 res.redirect('/home');
 
             } else {
-                res.render('signup-&-login', { message: "Incorrect username or password"});
+                res.render('signup-&-login', { message: "Incorrect username or password" });
             }
 
         } else {
-            res.render('signup-&-login', { message: "Incorrect username or password"});
+            res.render('signup-&-login', { message: "Incorrect username or password" });
         }
     } catch (error) {
         console.log(error.message);
@@ -169,39 +170,46 @@ const verifyLogin = async (req,res) => {
 }
 
 // ------Resend-Otp-----
-const resendOtp = async(req,res)=>{
+const logOtp = async (req, res) => {
     try {
-        res.render('resendOtp')
+        res.render('logOtp')
     } catch (error) {
         console.log(error.message);
     }
 }
 
 //------Send-Otp-From-login-----
-const sendOtp = async(req,res)=>{
+const sendOtp = async (req, res) => {
     try {
         const resendEmail = req.body.resendEmail;
-        const user = await User.findOne({email:resendEmail})
-    if (user) {
-     sendOtpVerification(user,res)
-    } else {
-        res.render('resendOtp', { message: "User not exist, please signup"});
-    }
-
-
-
-
+        const user = await User.findOne({ email: resendEmail })
+        if (user) {
+            sendOtpVerification(user, res)
+        } else {
+            res.render('logOtp', { message: "User not exist, please signup" });
+        }
     } catch (error) {
         console.log(error.message);
     }
 }
 
-
-
 // -----Home------
 const home = async (req, res) => {
+    try{
+        const id = req.session.user_id
+        const user = await User.findOne({_id:id});
+        res.render('home',{user:user});
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// -------Logout-----
+const logout = async (req, res) => {
     try {
-        res.render('home');
+
+        req.session.destroy();
+        res.redirect(`/`);
 
     } catch (error) {
         console.log(error.message);
@@ -216,8 +224,8 @@ module.exports = {
     renderOtp,
     verifyOtp,
     verifyLogin,
-    resendOtp,
-    sendOtp
-    // logout,
+    logOtp,
+    sendOtp,
+    logout
 
 }

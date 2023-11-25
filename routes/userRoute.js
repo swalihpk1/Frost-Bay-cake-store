@@ -1,8 +1,8 @@
 
 const express = require("express");
-const path = require('path');
 const userController = require("../controllers/userController");
-const validation = require("../middlewares/validation")
+const validation = require("../middlewares/validation");
+const authUser = require("../middlewares/AuthUser");
 
 const app = express();
 
@@ -13,25 +13,29 @@ app.set('views','./views/users');
 
 app.use(express.static('public'));
 
+app.get('/',authUser.isLogout,userController.home);
+
 // SIGN-UP
-app.get('/authentication', userController.authentication);
+app.get('/authentication',authUser.isLogout,userController.authentication);
 app.post('/authentication',validation.validateForm,userController.insertUser);
 
 // HOME
-app.get('/home', userController.home);
+app.get('/home',authUser.isLogin, userController.home);
 
 
 //OTP
-app.get('/otpVerify',userController.renderOtp);
+app.get('/otpVerify',authUser.isLogout,userController.renderOtp);
 app.post('/otpVerify',userController.verifyOtp);
 
 // LOGIN
 app.post('/login',userController.verifyLogin);
 
 //RESEND-OTP
-app.get('/resendOtp',userController.resendOtp);
-app.post('/resendOtp',userController.sendOtp)
+app.get('/logOtp',authUser.isLogout,userController.logOtp);
+app.post('/logOtp',userController.sendOtp);
 
+//LOGOUT
+app.get('/logout',authUser.isLogin,userController.logout);
 
 
 module.exports = app;

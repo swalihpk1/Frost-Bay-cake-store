@@ -1,4 +1,26 @@
-<%-include('../layouts/header')-%>
+<%-include('../layouts/user/header')-%>
+
+<link rel="apple-touch-icon" sizes="180x180" href="/assets/images/icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/config/">
+<link rel="icon" type="image/png" sizes="16x16" href="/assets/images/icons/favicon-16x16.png">
+<link rel="manifest" href="/assets/images/icons/site.html">
+<link rel="mask-icon" href="/assets/images/icons/safari-pinned-tab.svg" color="#666666">
+<link rel="shortcut icon" href="/assets/images/icons/favicon.ico">
+<meta name="apple-mobile-web-app-title" content="Molla">
+<meta name="application-name" content="Molla">
+<meta name="msapplication-TileColor" content="#cc9966">
+<meta name="msapplication-config" content="/assets/images/icons/browserconfig.xml">
+<meta name="theme-color" content="#ffffff">
+
+
+<!-- Plugins CSS File -->
+<link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+<!-- Main CSS File -->
+<link rel="stylesheet" href="/assets/css/style.css">
+
+
+
+
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="/assets/css/eye-toggler.css">
 </head>
@@ -36,7 +58,7 @@
                         <div class="header-search">
                             <a href="#" class="search-toggle" role="button" title="Search"><i
                                     class="icon-search"></i></a>
-                            <form action="#" method="get">
+                            <form action="#" method="get"> 
                                 <div class="header-search-wrapper">
                                     <label for="q" class="sr-only">Search</label>
                                     <input type="search" class="form-control" name="q" id="q" placeholder="Search in..."
@@ -125,11 +147,17 @@
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
 
+
+  
+  
+                
             <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
                 style="background-image: url('/assets/images/Logo bg.jpg')">
                 <div class="container">
                     <div class="form-box">
+                    
                         <div class="form-tab">
+                          
                             <ul class="nav nav-pills nav-fill" role="tablist">
                                 <li class="nav-item">
                                     <a class="nav-link" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab"
@@ -159,7 +187,7 @@
                                             <input type="password" class="form-control" id="singin-password-2"
                                                 name="loginPassword" required>
                                         </div><!-- End .form-group -->
-                                        <a href="/resendOtp" class="forgot-link">Login with OTP?</a>
+                                        <a href="/logOtp" class="forgot-link">Login with OTP?</a>
                                         <div class="form-footer">
                                             <button type="submit" class="btn btn-outline-primary-2">
                                                 <span>LOG IN</span>
@@ -179,7 +207,7 @@
                                         <h6 class="text-danger"><%= message %></h6>
                   
                                         <%  } %>
-                                    <form action="" method="POST">
+                                    <form method="POST">
                                         <div class="form-group">
                                             <label for="register-email-2">Name *</label>
                                             <input type="text" class="form-control" id="register-name"
@@ -350,6 +378,7 @@
         </div><!-- End .modal-dialog -->
     </div>
 
+
     <!-- Plugins JS File -->
     <script src="/assets/js/jquery.min.js"></script>
     <script src="/assets/js/bootstrap.bundle.min.js"></script>
@@ -362,4 +391,4 @@
     <!-- ------Eye toggler js------ -->
     <script src="/assets/js/popper.js"></script>
 
-    <%-include('../layouts/footer')-%>
+    <%-include('../layouts/user/footer')-%>
