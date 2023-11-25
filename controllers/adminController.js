@@ -1,4 +1,5 @@
 const User = require("../models/usersModel");
+const { use } = require("../routes/userRoute");
 
 
 
@@ -38,8 +39,48 @@ const users = async (req,res)=>{
 }
 
 
+// ------Block-User------
+const blockUser = async (req, res) => {
+    try {
+      const userId = req.body.userId;
+      const blockedUser = await User.findByIdAndUpdate(userId, { isBlocked: 1 }, { new: true });
+
+      if (!blockedUser) {
+        return res.status(404).json({ status: 'error'});
+      }
+
+      res.json({ status: 'success'});
+  
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+
+
+// ------Unblock-User------
+const UnBlockUser = async (req, res) => {
+    try {
+      const userId = req.body.userId;
+      const UnBlockedUser = await User.findByIdAndUpdate(userId, { isBlocked: 0 }, { new: true });
+
+      if (!UnBlockedUser) {
+        return res.status(404).json({ status: 'error'});
+      }
+
+      res.json({ status: 'success'});
+  
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+
 module.exports ={
     dashboard,
     products,
-    users
+    users,
+    blockUser,
+    UnBlockUser
+
 }

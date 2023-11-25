@@ -99,7 +99,7 @@ const sendOtpVerification = async ({ _id, email }, res) => {
         await newUserOtp.save();
         await transporter.sendMail(mailOptions);
 
-        const userId = newUserOtp.userId
+        const userId = _id
         res.redirect(`/otpVerify?id=${userId}`);
 
 
