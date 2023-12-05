@@ -125,6 +125,7 @@ const verifyOtp = async (req, res) => {
 
         const userId = req.query.id
         const otp = req.body.a + req.body.b + req.body.c + req.body.d + req.body.e + req.body.f;
+        console.log(otp);
         const user = await userOtpVerification.findOne({ userId });
         const otpHash = await bcrypt.compare(otp, user.otp);
         console.log(otpHash);

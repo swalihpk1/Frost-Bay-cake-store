@@ -384,7 +384,7 @@
                                 </div>
 
                                 <div class="nav-item">
-                                    <a class="nav-link" href="">
+                                    <a class="nav-link" href="/admin/category">
                                         <i class="bi-people nav-icon"></i>
                                         <span class="nav-link-title">Category</span>
                                     </a>
@@ -653,8 +653,15 @@
                                             <%= user[i].email %>
                                         </td>
                                         <td>
-                                            <button class="btn btn-danger" id="blockButton<%= user[i]._id %>"
-                                                onclick="showConfirmationModal('<%= user[i]._id %>')">Block</button>
+                                            <% if(user[i].isBlocked !=1 ){ %>
+                                                <button class="btn btn-danger" id="blockButton<%= user[i]._id %>"
+                                                    onclick="showConfirmationModal('<%= user[i]._id %>')">Block</button>
+                                                <% }else{ %>
+
+                                                    <button class="btn btn-success" id="blockButton<%= user[i]._id %>"
+                                                        onclick="showConfirmationModal('<%= user[i]._id %>')">Unblock</button>
+                                           <% } %>
+
                                         </td>
                                         <td>2</td>
                                     </tr>
@@ -667,23 +674,27 @@
                     <!-- End Table -->
 
                     <!-- Modal -->
-                    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="confirmationModal" tabindex="-1"
+                        aria-labelledby="confirmationModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
-                          <div class="modal-content">
-                            <div class="modal-header">
-                              <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
-                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to block this user?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-danger"
+                                        onclick="confirmBlockUser()">Block</button>
+                                </div>
                             </div>
-                            <div class="modal-body">
-                              Are you sure you want to block this user?
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                              <button type="button" class="btn btn-danger" onclick="confirmBlockUser()">Block</button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>                  
+                        </div>x
+                    </div>
 
                     <!-- Footer -->
                     <div class="card-footer">
@@ -2878,7 +2889,6 @@
             </div>
         </div>
 
-        \
 
         <!-- Import Products Modal -->
         <div class="modal fade" id="importProductsModal" tabindex="-1" aria-labelledby="importProductsModalLabel"
@@ -2953,245 +2963,70 @@
         <!-- JS Front -->
         <script src="/assets/admin/js/theme.min.js"></script>
 
-
         <script>
             function blockUser(userId) {
-              const blockButton = document.getElementById(`blockButton${userId}`)
-            
+                const blockButton = document.getElementById(`blockButton${userId}`);
+
                 // Assuming you are using fetch API
-                let text = blockButton.innerHTML
+                let text = blockButton.innerHTML;
+                console.log(text);
 
-                if(text == "Block"){
-
+                if (text === "Block") {
+                    // Only block the user if they are not already blocked
                     fetch(`/admin/blockUser`, {
-                    method: 'PUT', headers: {
-                        "Content-Type": "application/json"
-                    },body:JSON.stringify({userId})
-                })
-                    .then(response => response.json())
-                    .then(data => {
-
-                        if(data.status==="success"){
-                            alert("successfully blocked");
-                            blockButton.classList.remove('btn-danger');
-                            blockButton.classList.add('btn-success');
-                            blockButton.innerHTML = "Unblock"
-
-                        }
+                        method: 'PUT',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ userId })
                     })
-                    .catch(error => console.error('Error blocking user:', error));
+                        .then(response => response.json())
+                        .then(data => {
 
-                }else{
-
-                    console.log('Unblock');
+                            window.location.href = '/admin/users';
+                        })
+                        .catch(error => console.error('Error blocking user:', error));
+                } else if (text === "Unblock") {
+                    // Only unblock the user if they are currently blocked
                     fetch(`/admin/UnBlockUser`, {
-                    method: 'PUT', headers: {
-                        "Content-Type": "application/json"
-                    },body:JSON.stringify({userId})
-                })
-                    .then(response => response.json())
-                    .then(data => {
-
-                        if(data.status==="success"){
-                            alert("successfully Unblocked");
-                            blockButton.classList.remove('btn-success');
-                            blockButton.classList.add('btn-danger');
-                            blockButton.innerHTML = "Block"
-
-                        }
+                        method: 'PUT',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({ userId })
                     })
-                    .catch(error => console.error('Error blocking user:', error));
+                        .then(response => response.json())
+                        .then(data => {
+                            window.location.href = '/admin/users';
+                        })
+                        .catch(error => console.error('Error unblocking user:', error));
                 }
-                
             }
+
         </script>
-        
+
         <script>
             function showConfirmationModal(userId) {
-              // Set the user ID in a data attribute of the confirmation modal
-              $('#confirmationModal').data('userId', userId);
-              // Show the confirmation modal
-              $('#confirmationModal').modal('show');
+
+                $('#confirmationModal').data('userId', userId);
+
+                $('#confirmationModal').modal('show');
             }
-          
+
             function confirmBlockUser() {
-              // Get the user ID from the data attribute
-              const userId = $('#confirmationModal').data('userId');
-              // Call the blockUser function with the confirmed user ID
-              blockUser(userId);
-              // Close the modal
-              $('#confirmationModal').modal('hide');
+
+                const userId = $('#confirmationModal').data('userId');
+
+                blockUser(userId);
+
+                $('#confirmationModal').modal('hide');
             }
-          </script>
+        </script>
 
 
 
         <!-- JS Plugins Init. -->
-        <script>
-            $(document).on('ready', function () {
-                // INITIALIZATION OF DATATABLES
-                // =======================================================
-                HSCore.components.HSDatatables.init($('#datatable'), {
-                    select: {
-                        style: 'multi',
-                        selector: 'td:first-child input[type="checkbox"]',
-                        classMap: {
-                            checkAll: '#datatableCheckAll',
-                            counter: '#datatableCounter',
-                            counterInfo: '#datatableCounterInfo'
-                        }
-                    },
-                    language: {
-                        zeroRecords: `<div class="text-center p-4">
-              <img class="mb-3" src=".//assets/admin/illustrations/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="default">
-              <img class="mb-3" src=".//assets/admin/illustrations-light/oc-error.svg" alt="Image Description" style="width: 10rem;" data-hs-theme-appearance="dark">
-            <p class="mb-0">No data to show</p>
-            </div>`
-                    }
-                });
 
-                const datatable = HSCore.components.HSDatatables.getItem('datatable')
-
-                $('.js-datatable-filter').on('change', function () {
-                    var $this = $(this),
-                        elVal = $this.val(),
-                        targetColumnIndex = $this.data('target-column-index');
-
-                    datatable.column(targetColumnIndex).search(elVal).draw();
-                });
-
-                $('#datatableSearch').on('mouseup', function (e) {
-                    var $input = $(this),
-                        oldValue = $input.val();
-
-                    if (oldValue == "") return;
-
-                    setTimeout(function () {
-                        var newValue = $input.val();
-
-                        if (newValue == "") {
-                            // Gotcha
-                            datatable.search('').draw();
-                        }
-                    }, 1);
-                });
-
-                $('#toggleColumn_product').change(function (e) {
-                    datatable.columns(1).visible(e.target.checked)
-                })
-
-                $('#toggleColumn_type').change(function (e) {
-                    datatable.columns(2).visible(e.target.checked)
-                })
-
-                datatable.columns(3).visible(false)
-
-                $('#toggleColumn_vendor').change(function (e) {
-                    datatable.columns(3).visible(e.target.checked)
-                })
-
-                $('#toggleColumn_stocks').change(function (e) {
-                    datatable.columns(4).visible(e.target.checked)
-                })
-
-                $('#toggleColumn_sku').change(function (e) {
-                    datatable.columns(5).visible(e.target.checked)
-                })
-
-                $('#toggleColumn_price').change(function (e) {
-                    datatable.columns(6).visible(e.target.checked)
-                })
-
-                datatable.columns(7).visible(false)
-
-                $('#toggleColumn_quantity').change(function (e) {
-                    datatable.columns(7).visible(e.target.checked)
-                })
-
-                $('#toggleColumn_variants').change(function (e) {
-                    datatable.columns(8).visible(e.target.checked)
-                })
-            });
-        </script>
-
-        <!-- JS Plugins Init. -->
-        <script>
-            (function () {
-                window.onload = function () {
-
-
-                    // INITIALIZATION OF NAVBAR VERTICAL ASIDE
-                    // =======================================================
-                    new HSSideNav('.js-navbar-vertical-aside').init()
-
-
-                    // INITIALIZATION OF FORM SEARCH
-                    // =======================================================
-                    new HSFormSearch('.js-form-search')
-
-
-                    // INITIALIZATION OF BOOTSTRAP DROPDOWN
-                    // =======================================================
-                    HSBsDropdown.init()
-
-
-                    // INITIALIZATION OF SELECT
-                    // =======================================================
-                    HSCore.components.HSTomSelect.init('.js-select')
-
-
-                    // INITIALIZATION OF NAV SCROLLER
-                    // =======================================================
-                    new HsNavScroller('.js-nav-scroller')
-
-
-                    // INITIALIZATION OF DROPZONE
-                    // =======================================================
-                    HSCore.components.HSDropzone.init('.js-dropzone')
-                }
-            })()
-        </script>
-                      
-
-
-
-        <!-- Style Switcher JS -->
-
-        <!-- <script>
-                (function () {
-                    // STYLE SWITCHER
-                    // =======================================================
-                    const $dropdownBtn = document.getElementById('selectThemeDropdown') // Dropdowon trigger
-                    const $variants = document.querySelectorAll(`[aria-labelledby="selectThemeDropdown"] [data-icon]`) // All items of the dropdown
-
-                    // Function to set active style in the dorpdown menu and set icon for dropdown trigger
-                    const setActiveStyle = function () {
-                        $variants.forEach($item => {
-                            if ($item.getAttribute('data-value') === HSThemeAppearance.getOriginalAppearance()) {
-                                $dropdownBtn.innerHTML = `<i class="${$item.getAttribute('data-icon')}" />`
-                                return $item.classList.add('active')
-                            }
-
-                            $item.classList.remove('active')
-                        })
-                    }
-
-                    // Add a click event to all items of the dropdown to set the style
-                    $variants.forEach(function ($item) {
-                        $item.addEventListener('click', function () {
-                            HSThemeAppearance.setAppearance($item.getAttribute('data-value'))
-                        })
-                    })
-
-                    // Call the setActiveStyle on load page
-                    setActiveStyle()
-
-                    // Add event listener on change style to call the setActiveStyle function
-                    window.addEventListener('on-hs-appearance-change', function () {
-                        setActiveStyle()
-
-                    })()
-        </script> -->
 
 
 

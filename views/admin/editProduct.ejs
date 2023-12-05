@@ -7,7 +7,6 @@
         body {
             opacity: 0;
         }
-
     </style>
 
     <!-- ONLY DEV -->
@@ -16,20 +15,7 @@
         body {
             opacity: 0;
         }
-    /* Style for the file input */ 
-    .custom-file-input {
-      position: relative;
-      z-index: 2;
-      opacity: 0; 
-     }  
-     .custom-file-image {
-      position: absolute;
-      top: 1.8rem;
-      left: 40%; 
-      object-fit: cover;
-      z-index: 1;
-    }
-    </style> 
+    </style>
 
     <!-- END ONLY DEV -->
 
@@ -415,7 +401,7 @@
                 </div>
         </aside>
 
-        <main id="content" role="main" class="main">
+        <main id="content" role="main"  class="main pb-4!important">
             <!-- Content -->
             <div class="content container-fluid">
                 <!-- Page Header -->
@@ -426,7 +412,7 @@
 
                             </nav>
 
-                            <h1 class="page-header-title">Add Product</h1>
+                            <h1 class="page-header-title">Edit Product</h1>
 
 
                         </div>
@@ -447,48 +433,57 @@
                             <!-- End Header -->
 
                             <!-- Body -->
-                            <form action="/admin/products/addProduct" method="post" enctype="multipart/form-data">
+                            <form action="/admin/products/editProduct" method="post" enctype="multipart/form-data">
                                 <div class="card-body">
                                     <!-- Form -->
+                                    <input type="text" name="productId" style="display: none;" value="<%= product._id %>">
                                     <div class="mb-4">
                                         <label for="productNameLabel" class="form-label">Cake name <i
                                                 class="bi-question-circle text-body ms-1" data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
                                                 title="Products are the goods or services you sell."></i></label>
 
-                                        <input type="text" name="productName" class="form-control" name="productName"
-                                            id="productNameLabel">
+                                        <input type="text" name="productName" value="<%= product.productName%>"
+                                            class="form-control" name="productName" id="productNameLabel">
                                     </div>
                                     <!-- End Form -->
 
-
+                                  
 
 
                                     <div class="col-sm-12">
                                         <!-- Form -->
                                         <div class="mb-4 w-75">
                                             <label for="weightLabel" class="form-label">Weights</label>
-
                                             <div
                                                 class="weight m-3 w-100 d-flex justify-content-between align-items-center">
+                                      
                                                 <div class="d-flex align-items-center">
-                                                    <input class="me-2" name="weight" value="0.5" type="checkbox">
-                                                    <label for="">0.5 kg</label>
+                                                    <input class="me-2" name="weight" value="0.5" type="checkbox" <% if
+                                                        (product.weights.some(weight=> weight.value === '0.5' &&
+                                                    weight.selected)) { %>checked<% } %>>
+                                                        <label for="">0.5 kg</label>
                                                 </div>
 
                                                 <div class="d-flex align-items-center">
-                                                    <input class="me-2" name="weight" value="1" type="checkbox">
-                                                    <label for="">1 kg</label>
+                                                    <input class="me-2" name="weight" value="1" type="checkbox" <% if
+                                                        (product.weights.some(weight=> weight.value === '1' &&
+                                                    weight.selected)) { %>checked<% } %>>
+                                                        <label for="">1 kg</label>
                                                 </div>
 
                                                 <div class="d-flex align-items-center">
-                                                    <input class="me-2" name="weight" value="1.5" type="checkbox">
-                                                    <label for="">1.5 kg</label>
+                                                    <input class="me-2" name="weight" value="1.5" type="checkbox" <% if
+                                                        (product.weights.some(weight=> weight.value === '1.5' &&
+                                                    weight.selected)) { %>checked<% } %>>
+                                                        <label for="">1.5 kg</label>
                                                 </div>
 
                                                 <div class="d-flex align-items-center">
-                                                    <input class="me-2" value="2" name="weight" type="checkbox">
-                                                    <label for="">2 kg</label>
+                                                    <input class="me-2" value="2" name="weight" type="checkbox" <% if
+                                                        (product.weights.some(weight=> weight.value === '2' &&
+                                                    weight.selected)) { %>checked<% } %>>
+                                                        <label for="">2 kg</label>
                                                 </div>
 
                                             </div>
@@ -502,17 +497,17 @@
                                         <div class="d-flex">
                                             <div class="flex-grow-1 me-3">
                                                 <input type="text" id="length1" name="length" class="form-control"
-                                                    maxlength="2" placeholder="length" />
+                                                    maxlength="2" value="<%= product.length %>" placeholder="length" />
                                             </div>
 
                                             <div class="flex-grow-1 me-3">
                                                 <input type="text" id="length2" name="base" class="form-control"
-                                                    maxlength="2" placeholder="base" />
+                                                    maxlength="2" value="<%= product.base %>" placeholder="base" />
                                             </div>
 
                                             <div class="flex-grow-1">
                                                 <input type="text" id="length3" name="height" class="form-control"
-                                                    maxlength="2" placeholder="width" />
+                                                    maxlength="2" value="<%= product.height %>" placeholder="width" />
                                             </div>
 
                                         </div>
@@ -526,8 +521,7 @@
 
                                     <div class="textarea-custom mb-4">
                                         <textarea name="incredients" class="form-control border-1"
-                                            placeholder="Type Cake ingredients..."
-                                            style="resize: vertical; min-height: 3rem;"></textarea>
+                                            style="resize: vertical; min-height: 3rem;"><%= product.incredients %></textarea>
                                     </div>
 
 
@@ -536,7 +530,7 @@
                                     <div class="textarea-custom mb-4">
                                         <textarea name="description" class="form-control border-1"
                                             placeholder="Type Cake ingredients..."
-                                            style="resize: vertical; min-height: 3rem;"></textarea>
+                                            style="resize: vertical; min-height: 3rem;"><%= product.description %></textarea>
                                     </div>
                                     <!--  -->
                                     <!-- End Quill -->
@@ -568,8 +562,9 @@
                                     <label for="priceNameLabel" class="form-label">Price(INR)</label>
 
                                     <div class="input-group">
-                                        <input type="text" name="price" class="form-control" name="priceName"
-                                            id="priceNameLabel" placeholder="0.00" aria-label="0.00">
+                                        <input type="text" name="price" value="<%= product.price %>"
+                                            class="form-control" name="priceName" id="priceNameLabel" placeholder="0.00"
+                                            aria-label="0.00">
                                     </div>
                                 </div>
                                 <!-- End Form -->
@@ -593,18 +588,20 @@
                                     <div class="tom-select-custom">
                                         <div class="d-flex">
                                             <select name="category" class="js-select form-select flex-grow-1"
-                                                autocomplete="off" id="categoryLabel" data-hs-tom-select-options='{
-                                              "searchInDropdown": false,
-                                              "hideSearch": true,
-                                              "placeholder": "Select category"
-                                            }'>
+                                                autocomplete="off" id="categoryLabel">
+                                                <option value="<%= product.category %>">
+                                                    <%= product.category %>
+                                                </option>
+
+                                                <!-- Display the rest of the categories -->
                                                 <% for (let i=0; i < category.length; i++) { %>
+                                                    <% if (category[i].categoryName !==product.category) { %>
+                                                        <option value="<%= category[i].categoryName %>">
+                                                            <%= category[i].categoryName %>
+                                                        </option>
+                                                        <% } %>
+                                                            <% } %>
 
-                                                    <option value="<%=category[i].categoryName%>">
-                                                        <%=category[i].categoryName%>
-                                                    </option>
-
-                                                    <%}%>
                                             </select>
 
                                             <!-- Add Category Button -->
@@ -620,28 +617,12 @@
                                 <div class="mb-4">
                                     <label for="priceNameLabel" class="form-label">Quantity</label>
                                     <div class="input-group">
-                                        <input type="number" name="quantity" class="form-control" placeholder="eg:123 ">
+                                        <input type="number" name="quantity" class="form-control"
+                                            value="<%=product.totalQuantity %>" placeholder="eg:123 ">
                                     </div>
                                 </div>
 
 
-                            </div>
-
-                            <!-- Body -->
-                        </div>
-
-
-                        <div class="card mt-4">
-
-                            <!-- Body -->
-                            <div class="card-body p-0">
-                                <!-- Form -->
-                                <img class="custom-file-image align-items-center  ml-5" style="width: 46px; height: 58px;" src="/assets/admin/illustrations-light/oc-browse.svg" alt="File dropzone image">
-                                <h5 class="text-center text-secondary m-0">Drop your product images here </h5>
-                                    <input class="ml-5 custom-file-input" style="height: 4.5rem;width: 100%;" type="file" name="productImages" id="fileInput" multiple >
-                                    
-
-                                    </div>
                             </div>
 
                             <!-- Body -->
@@ -659,6 +640,10 @@
 
                 </div>
 
+
+
+
+
                 <div class="position-fixed start-50 bottom-0 translate-middle-x w-100 zi-99 mb-3"
                     style="max-width: 40rem;">
                     <!-- Card -->
@@ -666,7 +651,7 @@
                         <div class="card-body">
                             <div class="row justify-content-center justify-content-sm-between">
                                 <div class="col">
-                                    <!-- <button type="button" class="btn btn-ghost-danger">Delete</button> -->
+                                    <!-- <button type="button" class="btn btn-ghost-danger">Delete</button> --> 
                                 </div>
                                 <!-- End Col -->
 
@@ -682,20 +667,38 @@
                             <!-- End Row -->
                         </div>
                     </div>
-
-
-
-                    <!-- End Card -->
                 </div>
             </div>
-          <div class="col-lg-8 mb-3 mb-lg-0">
-            <div class="m-4 d-flex" id="imageContainer">
-            </div>
-          </div>
-            
 
+            <div class="container-fluid ml-1 d-flex ">
+                <div class="card me-5 position-relative" style="width: 16.5rem;">
+                    <img class="card-img-top" src="/assets/productImages/uploadImages/<%=product.productImages[0] %>" alt="Card image cap" id="imagePreview1">
+                    <button class="btn text-secondary" onclick="triggerFileInput('fileInput1')">Click to change</button>
+                    <input type="file" name="image1" id="fileInput1" class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;" onchange="updateImage(0, this)" >
+                </div>
+                
+                <div class="card me-5 position-relative" style="width: 16.5rem;">
+                    <img class="card-img-top" src="/assets/productImages/uploadImages/<%=product.productImages[1] %>" alt="Card image cap" id="imagePreview2">
+                    <button class="btn text-secondary" onclick="triggerFileInput('fileInput2')">Click to change</button>
+                    <input type="file" name="image2" id="fileInput2" class="position-absolute top-0 start-0 w-100 h-100" style="opacity: ;" onchange="updateImage(1, this)" >
+                </div>
+                
+                <div class="card me-5 position-relative" style="width: 16.5rem;">
+                    <img class="card-img-top" src="/assets/productImages/uploadImages/<%=product.productImages[2] %>" alt="Card image cap" id="imagePreview3">
+                    <button class="btn text-secondary" onclick="triggerFileInput('fileInput3')">Click to change</button>
+                    <input type="file"name="image3" id="fileInput3" class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;" onchange="updateImage(2, this)" >
+                </div>
+                
+                <div class="card me-5 position-relative" style="width: 16.5rem;">
+                    <img class="card-img-top" src="/assets/productImages/uploadImages/<%=product.productImages[3] %>" alt="Card image cap" id="imagePreview4">
+                    <button class="btn text-secondary" onclick="triggerFileInput('fileInput4')">Click to change</button>
+                    <input  type="file" name="image4" id="fileInput4"  class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;" onchange="updateImage(3, this)">
+                </div>
+            </div>
             <!-- End Footer -->
         </main>
+
+
 
 
 
@@ -1219,7 +1222,7 @@
                         <!-- End Media -->
 
                         <hr class="my-4">
-
+<
                         <!-- Media -->
 
                         <!-- End Footer -->
@@ -1228,45 +1231,24 @@
             </div>
 
             <script>
-                const fileInput = document.getElementById('fileInput');
-                const imageContainer = document.getElementById('imageContainer');
-            
-                let selectedFiles = [];
-            
-                fileInput.addEventListener('change', (event) => {
-                  const files = event.target.files;
-            
-                  if (files.length) {
-                    for (const file of files) {
-                      selectedFiles.push(file);
-            
-                      const card = createCard(file);
-                      imageContainer.appendChild(card);
-                    }
-
-                  }
-                });
-            
-                function createCard(file) {
-                  let closeButtonCount = 0;
-                  const card = document.createElement('div');
-                  card.classList.add('card');
-            
-                  const cardImage = document.createElement('img');
-                  cardImage.classList.add('card-img-top');
-                  cardImage.src = URL.createObjectURL(file);
-            
-                  const closeButton = document.createElement('button');
-
-
-                  closeButtonCount++;
-                  card.appendChild(cardImage);
-                  card.appendChild(closeButton);
-                  return card;
+                function triggerFileInput(fileInputId) {
+                    // Trigger the file input
+                    document.getElementById(fileInputId).click();
                 }
             
-
+                function updateImage(index, input) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        // Update image source
+                        document.getElementById('imagePreview' + (index + 1)).src = e.target.result;
+            
+                        // Update image name (assuming a corresponding name element exists)
+                        document.getElementById('imageName' + (index + 1)).innerText = input.files[0].name;
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
             </script>
+
 
             <!-- End Products Advanced Features Modal -->
             <!-- ========== END SECONDARY CONTENTS ========== -->

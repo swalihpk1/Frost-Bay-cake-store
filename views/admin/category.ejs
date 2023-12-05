@@ -145,49 +145,7 @@
                     <!-- End Navbar Vertical Toggle -->
 
                     <!-- Search Form -->
-                    <div class="dropdown ms-2">
-                        <!-- Input Group -->
-                        <div class="d-none d-lg-block">
-                            <div
-                                class="input-group input-group-merge input-group-borderless input-group-hover-light navbar-input-group">
-                                <div class="input-group-prepend input-group-text">
-                                    <i class="bi-search"></i>
-                                </div>
 
-                                <input type="search" class="js-form-search form-control" placeholder="Search in front"
-                                    aria-label="Search in front" data-hs-form-search-options='{
-                       "clearIcon": "#clearSearchResultsIcon",
-                       "dropMenuElement": "#searchDropdownMenu",
-                       "dropMenuOffset": 20,
-                       "toggleIconOnFocus": true,
-                       "activeClass": "focus"
-                     }'>
-                                <a class="input-group-append input-group-text" href="javascript:;">
-                                    <i id="clearSearchResultsIcon" class="bi-x-lg" style="display: none;"></i>
-                                </a>
-                            </div>
-                        </div>
-                        <button
-                            class="js-form-search js-form-search-mobile-toggle btn btn-ghost-secondary btn-icon rounded-circle d-lg-none"
-                            type="button" data-hs-form-search-options='{
-                       "clearIcon": "#clearSearchResultsIcon",
-                       "dropMenuElement": "#searchDropdownMenu",
-                       "dropMenuOffset": 20,
-                       "toggleIconOnFocus": true,
-                       "activeClass": "focus"
-                     }'>
-                            <i class="bi-search"></i>
-                        </button>
-                        <!-- End Input Group -->
-
-                        <!-- Card Search Content -->
-                        <div id="searchDropdownMenu"
-                            class="hs-form-search-menu-content dropdown-menu dropdown-menu-form-search navbar-dropdown-menu-borderless">
-
-                        </div>
-                        <!-- End Card Search Content -->
-
-                    </div>
 
                     <!-- End Search Form -->
                 </div>
@@ -369,7 +327,7 @@
                             <div id="navbarVerticalMenuPagesMenu">
                                 <!-- Collapse -->
                                 <div class="nav-item">
-                                    <a class="nav-link active" href="/admin/products">
+                                    <a class="nav-link " href="/admin/products">
                                         <i class="bi-people nav-icon"></i>
                                         <span class="nav-link-title">Cakes</span>
                                     </a>
@@ -383,7 +341,7 @@
                                 </div>
 
                                 <div class="nav-item">
-                                    <a class="nav-link" href="/admin/category">
+                                    <a class="nav-link active" href="/admin/category">
                                         <i class="bi-people nav-icon"></i>
                                         <span class="nav-link-title">Category</span>
                                     </a>
@@ -426,6 +384,7 @@
                                             </a>
                                         </div>
                                     </div>
+
                                     <!-- End Style Switcher -->
                                 </li>
                                 </li>
@@ -443,8 +402,8 @@
                 <div class="page-header">
                     <div class="row align-items-center mb-3">
                         <div class="col-sm mb-2 mb-sm-0">
-                            <h1 class="page-header-title">Products <span
-                                    class="badge bg-soft-dark text-dark ms-2">72,031</span></h1>
+                            <h1 class="page-header-title">Categorys <span
+                                    class="badge bg-soft-dark text-dark ms-2">4</span></h1>
                         </div>
                         <!-- End Col -->
                         <!-- End Col -->
@@ -468,7 +427,7 @@
                         <!-- Nav -->
                         <ul class="nav nav-tabs page-header-tabs" id="pageHeaderTab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#">All products</a>
+                                <a class="nav-link active" href="#">All Categorys</a>
                             </li>
                         </ul>
                         <!-- End Nav -->
@@ -491,19 +450,11 @@
                                     <div class="input-group-prepend input-group-text">
                                         <i class="bi-search"></i>
                                     </div>
-                                    <input id="datatableSearch" type="search" class="form-control"
-                                        placeholder="Search users" aria-label="Search users">
+                                    <input id="datatableSearch" type="search" class="form-control" placeholder="Search"
+                                        aria-label="Search users">
                                 </div>
                                 <!-- End Search -->
                             </form>
-                        </div>
-
-                        <div class="d-grid d-sm-flex gap-2">
-
-                            <div class="col-sm-auto">
-                                <a class="btn btn-primary" href="/admin/products/addProduct">Add product</a>
-                            </div>
-                            <!-- End Dropdown -->
                         </div>
                     </div>
                     <!-- End Header -->
@@ -513,118 +464,87 @@
                         <table id="datatable"
                             class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
                             data-hs-datatables-options>
-                            <thead class="thead-light">
+                            <thead class="thead-light text-center">
                                 <tr>
-                                    <th scope="col" class="table-column-pe-0">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value=""
-                                                id="datatableCheckAll">
-                                            <label class="form-check-label">
-                                            </label>
-                                        </div>
-                                    </th>
-                                    <th class="table-column-ps-0">Product</th>
-                                    <th>Category</th>
-                                    <th>show</th>
-                                    <th>Price</th>
-                                    <th>Quantity</th>
-                                    <th>Kilograms</th>
+
+                                    <th>Sl.No</th>
+                                    <th>Category Name</th>
+                                    <th>Total Cakes</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
 
-                            <tbody>
-                                <% for (let i=0; i < products.length; i++) { %>
+                            <tbody class="text-center">
+                                <% for (let i=0; i < category.length; i++) { %>
                                     <tr>
-                                        <td class="table-column-pe-0">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value=""
-                                                    id="datatableCheckAll1">
-                                                <label class="form-check-label" for="datatableCheckAll1"></label>
-                                            </div>
-                                        </td>
-                                        <td class="table-column-ps-0">
-                                            <a class="d-flex align-items-center" href="ecommerce-product-details.html">
-                                                <div class="flex-shrink-0">
 
-
-                                                    <img class="avatar avatar-lg"
-                                                        src="/assets/productImages/uploadImages/<%= products[i].productImages[0] %>"
-                                                        alt="Image Description">
-                                                </div>
-                                                <div class="flex-grow-1 ms-3">
-                                                    <h5 class="text-inherit mb-0">
-                                                        <%= products[i].productName %>
-                                                    </h5>
-                                                </div>
-                                            </a>
+                                        <td>
+                                            <%=i+1%>.
                                         </td>
                                         <td>
-                                            <%= products[i].category%>
+                                            <%=category[i].categoryName%>
                                         </td>
-                                        <td>
-
-                                            <div class="form-check form-switch">
-                                                <input class="form-check-input" type="checkbox" onclick="showConfirmationModal('<%= products[i]._id %>')"
-                                                    id="stocksCheckbox" <% if(products[i].isShow==0) { %>checked<% } %>>
-                                            </div>
-                                        </td>
-                                        <td>Rs.<%= products[i].price %>
-                                        </td>
-                                        <td>
-                                            <%= products[i].totalQuantity %>
-                                        </td>
-                                        <td>
-                                            <% for (let j=0; j < products[i].weights.length; j++) { %>
-                                                <%= products[i].weights[j].value %> kg
-                                                    <% if (j < products[i].weights.length - 1) { %>/ <% } %>
-                                                            <% } %>
-                                        </td>
-                                        <td>
-                                            <div class="btn-group position- " role="group">
-                                                <a class="btn btn-white btn-sm"
-                                                    href="/admin/products/editProduct/<%= products[i]._id %>">
+                                        <td>34</td>
+                                        <td class="text-center align-middle">
+                                            <div class="d-flex justify-content-center">
+                                                <a class="btn btn-white btn-sm  edit-category-btn" href="#"
+                                                  onclick="editCategory(('<%=category[i].categoryName%>'),('<%=category[i]._id%>'))">
                                                     <i class="bi-pencil-fill me-1"></i> Edit
                                                 </a>
-                                                <!-- End Button Group -->
+                                                <% if(category[i].isListed == 0 ){ %>
+                                                <button class="btn btn-white btn-sm delete-category-btn" id="listButtton<%=category[i]._id%>" onclick="showConfirmationModal('<%=category[i]._id%>')">
+                                                     Unlist</button>
+                                               <% }else if(category[i].isListed == 1 ){ %>
+                                                <button class="btn btn-white btn-sm delete-category-btn" id="listButtton<%=category[i]._id%>" onclick="showConfirmationModal('<%=category[i]._id%>')">
+                                                List</button>
+                                               <% } %>
                                             </div>
                                         </td>
                                     </tr>
-                                    <% } %>
+                                    <%}%>
                             </tbody>
                         </table>
                     </div>
                     <!-- End Table -->
 
+                    <!-- Footer -->
+                    <div class="card-footer">
+                        <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
+                            <div class="col-sm mb-2 mb-sm-0">
+                                <div class=" justify-content-center justify-content-sm-start align-items-center">
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="confirmationModal" tabindex="-1"
-                        aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    Are you sure you want to hide ?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-danger"
-                                        onclick="confirmHideProduct()">Hide</button>
+                                    <h5 id="addCategoryBtn" onclick="toggleAddCategoryForm()">Add Category</h5>
+                                    <!-- Pagination Quantity -->
+
+                                    <form method="post" class="my-4" id="addCategoryForm" style="display: none;">
+                                        <input type="text" class="form-control w-25" name="categoryName"
+                                            placeholder="Enter the category name">
+                                        <button type="submit" class="btn btn-primary">Add</button>
+                                    </form>
+
+
                                 </div>
                             </div>
-                        </div>x
+                            <!-- End Col -->
+
+                            <div class="col-sm-auto">
+                                <div class="d-flex justify-content-center justify-content-sm-end">
+                                    <!-- Pagination -->
+                                    <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+                                </div>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
                     </div>
+                    <!-- End Footer -->
                 </div>
                 <!-- End Card -->
             </div>
             <!-- End Content -->
 
             <!-- Footer -->
+
 
 
 
@@ -1342,7 +1262,7 @@
 
                 <!-- End Single Header -->
             </div>
-           <div class="js-build-layout-header-double">
+            <div class="js-build-layout-header-double">
                 <!-- Double Header -->
                 <header id="header" class="navbar navbar-expand-lg navbar-bordered navbar-spacer-y-0 flex-lg-column">
                     <div class="navbar-dark w-100 bg-dark py-2">
@@ -1397,131 +1317,7 @@
                                             <!-- End Input Group -->
 
                                             <!-- Card Search Content -->
-                                            <div id="searchDropdownMenu"
-                                                class="hs-form-search-menu-content dropdown-menu dropdown-menu-form-search navbar-dropdown-menu-borderless">
-                                                <div class="card">
-                                                    <!-- Body -->
-                                                    <div class="card-body-height">
-                                                        <div class="d-lg-none">
-                                                            <div
-                                                                class="input-group input-group-merge navbar-input-group mb-5">
-                                                                <div class="input-group-prepend input-group-text">
-                                                                    <i class="bi-search"></i>
-                                                                </div>
 
-                                                                <input type="search" class="form-control"
-                                                                    placeholder="Search in front"
-                                                                    aria-label="Search in front">
-                                                                <a class="input-group-append input-group-text"
-                                                                    href="javascript:;">
-                                                                    <i class="bi-x-lg"></i>
-                                                                </a>
-                                                            </div>
-                                                        </div>
-
-                                                        <span class="dropdown-header">Recent searches</span>
-
-                                                        <div class="dropdown-item bg-transparent text-wrap">
-                                                            <a class="btn btn-soft-dark btn-xs rounded-pill"
-                                                                href="index.html">
-                                                                Gulp <i class="bi-search ms-1"></i>
-                                                            </a>
-                                                            <a class="btn btn-soft-dark btn-xs rounded-pill"
-                                                                href="index.html">
-                                                                Notification panel <i class="bi-search ms-1"></i>
-                                                            </a>
-                                                        </div>
-
-                                                        <div class="dropdown-divider"></div>
-
-                                                        <span class="dropdown-header">Tutorials</span>
-
-                                                        <a class="dropdown-item" href="index.html">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="flex-shrink-0">
-                                                                    <span
-                                                                        class="icon icon-soft-dark icon-xs icon-circle">
-                                                                        <i class="bi-sliders"></i>
-                                                                    </span>
-                                                                </div>
-
-                                                                <div class="flex-grow-1 text-truncate ms-2">
-                                                                    <span>How to set up Gulp?</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-
-                                                        <a class="dropdown-item" href="index.html">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="flex-shrink-0">
-                                                                    <span
-                                                                        class="icon icon-soft-dark icon-xs icon-circle">
-                                                                        <i class="bi-paint-bucket"></i>
-                                                                    </span>
-                                                                </div>
-
-                                                                <div class="flex-grow-1 text-truncate ms-2">
-                                                                    <span>How to change theme color?</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-
-                                                        <div class="dropdown-divider"></div>
-
-                                                        <span class="dropdown-header">Members</span>
-
-                                                        <a class="dropdown-item" href="index.html">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="flex-shrink-0">
-                                                                    <img class="avatar avatar-xs avatar-circle"
-                                                                        src="/assets/admin/img/160x160/img10.jpg"
-                                                                        alt="Image Description">
-                                                                </div>
-                                                                <div class="flex-grow-1 text-truncate ms-2">
-                                                                    <span>Amanda Harvey <i
-                                                                            class="tio-verified text-primary"
-                                                                            data-toggle="tooltip" data-placement="top"
-                                                                            title="Top endorsed"></i></span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-
-                                                        <a class="dropdown-item" href="index.html">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="flex-shrink-0">
-                                                                    <img class="avatar avatar-xs avatar-circle"
-                                                                        src="/assets/admin/img/160x160/img3.jpg"
-                                                                        alt="Image Description">
-                                                                </div>
-                                                                <div class="flex-grow-1 text-truncate ms-2">
-                                                                    <span>David Harrison</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-
-                                                        <a class="dropdown-item" href="index.html">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="flex-shrink-0">
-                                                                    <div
-                                                                        class="avatar avatar-xs avatar-soft-info avatar-circle">
-                                                                        <span class="avatar-initials">A</span>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="flex-grow-1 text-truncate ms-2">
-                                                                    <span>Anne Richard</span>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                    <!-- End Body -->
-
-                                                    <!-- Footer -->
-                                                    <a class="card-footer text-center" href="index.html">
-                                                        See all results <i class="bi-chevron-right small"></i>
-                                                    </a>
-                                                    <!-- End Footer -->
-                                                </div>
-                                            </div>
                                             <!-- End Card Search Content -->
 
                                         </div>
@@ -2013,49 +1809,450 @@
                     </div>
                 </header>
                 <!-- End Double Header -->
-            </div> 
+            </div>
         </div>
 
         <script src="/assets/admin/js/demo.js"></script>
 
-       
+        <!-- END ONLY DEV -->
+
+        <!-- ========== SECONDARY CONTENTS ========== -->
+        <!-- Keyboard Shortcuts -->
+
+        <!-- End Keyboard Shortcuts -->
+
+        <!-- Activity -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasActivityStream"
+            aria-labelledby="offcanvasActivityStreamLabel">
+            <div class="offcanvas-header">
+                <h4 id="offcanvasActivityStreamLabel" class="mb-0">Activity stream</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <!-- Step -->
+                <ul class="step step-icon-sm step-avatar-sm">
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <div class="step-avatar">
+                                <img class="step-avatar" src="/assets/admin/img/160x160/img9.jpg"
+                                    alt="Image Description">
+                            </div>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">Iana Robinson</h5>
+
+                                <p class="fs-5 mb-1">Added 2 files to task <a class="text-uppercase" href="#"><i
+                                            class="bi-journal-bookmark-fill"></i> Fd-7</a></p>
+
+                                <ul class="list-group list-group-sm">
+                                    <!-- List Item -->
+                                    <li class="list-group-item list-group-item-light">
+                                        <div class="row gx-1">
+                                            <div class="col-6">
+                                                <!-- Media -->
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0">
+                                                        <img class="avatar avatar-xs"
+                                                            src="/assets/admin/brands/excel-icon.svg"
+                                                            alt="Image Description">
+                                                    </div>
+                                                    <div class="flex-grow-1 text-truncate ms-2">
+                                                        <span class="d-block fs-6 text-dark text-truncate"
+                                                            title="weekly-reports.xls">weekly-reports.xls</span>
+                                                        <span class="d-block small text-muted">12kb</span>
+                                                    </div>
+                                                </div>
+                                                <!-- End Media -->
+                                            </div>
+                                            <!-- End Col -->
+
+                                            <div class="col-6">
+                                                <!-- Media -->
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0">
+                                                        <img class="avatar avatar-xs"
+                                                            src="/assets/admin/brands/word-icon.svg"
+                                                            alt="Image Description">
+                                                    </div>
+                                                    <div class="flex-grow-1 text-truncate ms-2">
+                                                        <span class="d-block fs-6 text-dark text-truncate"
+                                                            title="weekly-reports.xls">weekly-reports.xls</span>
+                                                        <span class="d-block small text-muted">4kb</span>
+                                                    </div>
+                                                </div>
+                                                <!-- End Media -->
+                                            </div>
+                                            <!-- End Col -->
+                                        </div>
+                                        <!-- End Row -->
+                                    </li>
+                                    <!-- End List Item -->
+                                </ul>
+
+                                <span class="small text-muted text-uppercase">Now</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <span class="step-icon step-icon-soft-dark">B</span>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">Bob Dean</h5>
+
+                                <p class="fs-5 mb-1">Marked <a class="text-uppercase" href="#"><i
+                                            class="bi-journal-bookmark-fill"></i> Fr-6</a> as <span
+                                        class="badge bg-soft-success text-success rounded-pill"><span
+                                            class="legend-indicator bg-success"></span>"Completed"</span></p>
+
+                                <span class="small text-muted text-uppercase">Today</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <div class="step-avatar">
+                                <img class="step-avatar-img" src="/assets/admin/img/160x160/img3.jpg"
+                                    alt="Image Description">
+                            </div>
+
+                            <div class="step-content">
+                                <h5 class="h5 mb-1">Crane</h5>
+
+                                <p class="fs-5 mb-1">Added 5 card to <a href="#">Payments</a></p>
+
+                                <ul class="list-group list-group-sm">
+                                    <li class="list-group-item list-group-item-light">
+                                        <div class="row gx-1">
+                                            <div class="col">
+                                                <img class="img-fluid rounded" src="/assets/admin/components/card-1.svg"
+                                                    alt="Image Description">
+                                            </div>
+                                            <div class="col">
+                                                <img class="img-fluid rounded" src="/assets/admin/components/card-2.svg"
+                                                    alt="Image Description">
+                                            </div>
+                                            <div class="col">
+                                                <img class="img-fluid rounded" src="/assets/admin/components/card-3.svg"
+                                                    alt="Image Description">
+                                            </div>
+                                            <div class="col-auto align-self-center">
+                                                <div class="text-center">
+                                                    <a href="#">+2</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <span class="small text-muted text-uppercase">May 12</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <span class="step-icon step-icon-soft-info">D</span>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">David Lidell</h5>
+
+                                <p class="fs-5 mb-1">Added a new member to Front Dashboard</p>
+
+                                <span class="small text-muted text-uppercase">May 15</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <div class="step-avatar">
+                                <img class="step-avatar-img" src="/assets/admin/img/160x160/img7.jpg"
+                                    alt="Image Description">
+                            </div>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">Rachel King</h5>
+
+                                <p class="fs-5 mb-1">Marked <a class="text-uppercase" href="#"><i
+                                            class="bi-journal-bookmark-fill"></i> Fr-3</a> as <span
+                                        class="badge bg-soft-success text-success rounded-pill"><span
+                                            class="legend-indicator bg-success"></span>"Completed"</span></p>
+
+                                <span class="small text-muted text-uppercase">Apr 29</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <div class="step-avatar">
+                                <img class="step-avatar-img" src="/assets/admin/img/160x160/img5.jpg"
+                                    alt="Image Description">
+                            </div>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">Finch Hoot</h5>
+
+                                <p class="fs-5 mb-1">Earned a "Top endorsed" <i
+                                        class="bi-patch-check-fill text-primary"></i> badge</p>
+
+                                <span class="small text-muted text-uppercase">Apr 06</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <span class="step-icon step-icon-soft-primary">
+                                <i class="bi-person-fill"></i>
+                            </span>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">Project status updated</h5>
+
+                                <p class="fs-5 mb-1">Marked <a class="text-uppercase" href="#"><i
+                                            class="bi-journal-bookmark-fill"></i> Fr-3</a> as <span
+                                        class="badge bg-soft-primary text-primary rounded-pill"><span
+                                            class="legend-indicator bg-primary"></span>"In progress"</span></p>
+
+                                <span class="small text-muted text-uppercase">Feb 10</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+                </ul>
+                <!-- End Step -->
+
+                <div class="d-grid">
+                    <a class="btn btn-white" href="javascript:;">View all <i class="bi-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- End Activity -->
+
+        <!-- Welcome Message Modal -->
+        <div class="modal fade" id="welcomeMessageModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- Header -->
+                    <div class="modal-close">
+                        <button type="button" class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <i class="bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <!-- End Header -->
+
+                    <!-- Body -->
+                    <div class="modal-body p-sm-5">
+                        <div class="text-center">
+                            <div class="w-75 w-sm-50 mx-auto mb-4">
+                                <img class="img-fluid" src="/assets/admin/illustrations/oc-collaboration.svg"
+                                    alt="Image Description" data-hs-theme-appearance="default">
+                                <img class="img-fluid" src="/assets/admin/illustrations-light/oc-collaboration.svg"
+                                    alt="Image Description" data-hs-theme-appearance="dark">
+                            </div>
+
+                            <h4 class="h1">Welcome to Front</h4>
+
+                            <p>We're happy to see you in our community.</p>
+                        </div>
+                    </div>
+                    <!-- End Body -->
+
+                    <!-- Footer -->
+                    <div class="modal-footer d-block text-center py-sm-5">
+                        <small class="text-cap text-muted">Trusted by the world's best teams</small>
+
+                        <div class="w-85 mx-auto">
+                            <div class="row justify-content-between">
+                                <div class="col">
+                                    <img class="img-fluid" src="/assets/admin/brands/gitlab-gray.svg"
+                                        alt="Image Description">
+                                </div>
+                                <div class="col">
+                                    <img class="img-fluid" src="/assets/admin/brands/fitbit-gray.svg"
+                                        alt="Image Description">
+                                </div>
+                                <div class="col">
+                                    <img class="img-fluid" src="/assets/admin/brands/flow-xo-gray.svg"
+                                        alt="Image Description">
+                                </div>
+                                <div class="col">
+                                    <img class="img-fluid" src="/assets/admin/brands/layar-gray.svg"
+                                        alt="Image Description">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Footer -->
+                </div>
+            </div>
+        </div>
 
 
+
+        <!-- Import Products Modal -->
+        <div class="modal fade" id="importProductsModal" tabindex="-1" aria-labelledby="importProductsModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- Header -->
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="importProductsModalLabel">Import products by CSV</h4>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <!-- End Header -->
+
+                    <!-- Body -->
+                    <div class="modal-body">
+                        <p><a class="link" href="#">Download a sample CSV template</a> to see an example of the format
+                            required.</p>
+
+                        <!-- Dropzone -->
+                        <div id="attachFilesNewProjectLabel" class="js-dropzone dz-dropzone dz-dropzone-card mb-4">
+                            <div class="dz-message">
+                                <img class="avatar avatar-xl avatar-4x3 mb-3"
+                                    src="/assets/admin/illustrations/oc-browse.svg" alt="Image Description"
+                                    data-hs-theme-appearance="default">
+                                <img class="avatar avatar-xl avatar-4x3 mb-3"
+                                    src="/assets/admin/illustrations-light/oc-browse.svg" alt="Image Description"
+                                    data-hs-theme-appearance="dark">
+
+                                <h5>Drag and drop your file here</h5>
+
+                                <p class="mb-2">or</p>
+
+                                <span class="btn btn-white btn-sm">Browse files</span>
+                            </div>
+                        </div>
+                        <!-- End Dropzone -->
+
+                        <!-- Form Check -->
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value=""
+                                id="overwriteCurrentProductsCheckbox">
+                            <label class="form-check-label" for="overwriteCurrentProductsCheckbox">
+                                Overwrite any current products that have the same handle. Existing values will be used
+                                for any missing columns. <a href="#">Learn more</a>
+                            </label>
+                        </div>
+                        <!-- End Form Check -->
+                    </div>
+                    <!-- End Body -->
+
+                    <!-- Footer -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-bs-dismiss="modal"
+                            aria-label="Close">Cancel</button>
+                        <button type="button" class="btn btn-primary">Upload and continue</button>
+                    </div>
+                    <!-- End Footer -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Category Modal -->
+        <div class="modal" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control d-none" value="categoryId" id="categoryId"
+                        placeholder="">
+                        <input type="text" class="form-control" value="" id="editedCategoryInput"
+                            placeholder="">
+                    </div>
+                
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button  class="btn btn-primary" onclick="saveEditedCategory()"  type="button">Save</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--Delete Modal -->
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Are you sure you want to List this Category?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="button" class="btn btn-danger" onclick="confirmListCategory()">List</button>
+                </div>
+              </div>
+            </div>
+          </div>     
+        
+        <!-- List / Unlist Modal with function-->
         <script>
-            function showConfirmationModal(userId) {
+            function showConfirmationModal(categoryId) {
+            console.log(categoryId)
+              $('#confirmationModal').data('categoryId', categoryId);
 
-                $('#confirmationModal').data('productId', productId);
-
-                $('#confirmationModal').modal('show');
+              $('#confirmationModal').modal('show');
             }
+          
+            function confirmListCategory() {
 
-            function confirmHideProduct() {
+              const categoryId = $('#confirmationModal').data('categoryId');
+              const listButtton = document.getElementById(`listButtton${categoryId}`);
 
-                const productId = $('#confirmationModal').data('productId');
+              const text = listButtton.innerHTML
 
-
-                if (document.getElementById('stocksCheckbox').checked) {
-                    fetch(`/admin/products/hideProduct`, {
+            //   listCategory(categoryId);
+            if (text.trim() === "List" ) {
+                    console.log("1ith");
+                    fetch(`/admin/category/listCategory`, {
                         method: 'PUT',
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({ productId })
+                        body: JSON.stringify({ categoryId })
                     })
                         .then(response => response.json())
                         .then(data => {
                             console.log(data);
-                            window.location.href = '/admin/products';
+                            window.location.href = '/admin/category';
                         })
-                        .catch(error => console.error('Error Hiding product:', error));
+                        .catch(error => console.error('Error Listing Category:', error));
         
                 } else{
-                    fetch(`/admin/products/showProduct`, {
+                    console.log("2ith");
+                    fetch(`/admin/category/UnListCategory`, {
                         method: 'PUT',
                         headers: {
                             "Content-Type": "application/json"
                         },
-                        body: JSON.stringify({ productId })
+                        body: JSON.stringify({ categoryId })
                     })
                         .then(response => response.json())
                         .then(data => {
@@ -2064,8 +2261,74 @@
                         .catch(error => console.error('Error Unlisting Category:', error));
                 }
 
-                $('#confirmationModal').modal('hide');
+              $('#confirmationModal').modal('hide');
             }
         </script>
 
-        <%-include('../layouts/admin/footer')-%>
+        <!-- Your JavaScript to handle the modal -->
+       <script>
+
+        var categoryId;
+        // Function to set the input value and show the edit category modal
+        function editCategory(categoryName,categoryId) {
+         this.categoryId = categoryId
+            console.log(categoryName);
+            document.getElementById('editedCategoryInput').value = categoryName;
+            document.getElementById('categoryId').value = categoryId;
+
+            // Show the edit category modal using Bootstrap method
+            $('#editCategoryModal').modal('show');
+        }
+
+         // Function to save the edited category
+        function saveEditedCategory() {
+        // Gather form data
+        const editedCategoryName = document.getElementById('editedCategoryInput').value
+        // Send a POST request using Fetch API
+        fetch('/admin/category/editCategory', {
+            method: 'PUT',headers: {
+            "Content-Type": "application/json"
+        },body:JSON.stringify({categoryId,editedCategoryName})
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+            // Redirect on the client side
+            window.location.href = '/admin/category';
+        }
+ 
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+
+            // Close the edit category modal using Bootstrap method
+            $('#editCategoryModal').modal('hide');
+        }
+    </script>
+
+
+
+
+
+        <script>
+            function toggleAddCategoryForm() {
+                var form = document.getElementById('addCategoryForm');
+                form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
+            }
+
+
+        </script>
+
+        <!-- End Product Filter Modal -->
+        <!-- ========== END SECONDARY CONTENTS ========== -->
+
+        <!-- JS Implementing Plugins -->
+        <script src="/assets/admin/js/vendor.min.js"></script>
+
+        <!-- JS Front -->
+        <script src="/assets/admin/js/theme.min.js"></script>
+
+       
+
+        <%-include('../layouts/admin/footer')-%></div>

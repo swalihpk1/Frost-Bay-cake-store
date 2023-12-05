@@ -9,7 +9,6 @@ const isLogin = async (req, res, next) => {
             res.redirect('/authentication');
         }
 
-
     } catch (error) {
         console.log(error.message);
     }
