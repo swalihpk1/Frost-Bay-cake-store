@@ -23,8 +23,9 @@ app.use(session({
 app.use(nocache());
 
 // bodyParser
-app.use(express.json());
 app.use(express.urlencoded({extended:true}))
+app.use(express.json());
+
 
 // User_Routes
 const userRoute = require("./routes/userRoute");

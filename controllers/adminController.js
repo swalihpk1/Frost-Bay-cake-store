@@ -195,17 +195,6 @@ const UnListCatogory = async (req, res) => {
     }
 };
 
-// // -------Upload-Product-Image------- 
-// const uploadProductImage = async (req,res)=>{
-//     try {
-//         console.log("vann");
-//         const image = req.files;
-//         console.log(image);
-//     } catch (error) {
-//         console.log(error.message);
-//     }
-// }
-
 // ---------Edit-Products------------
 const editProduct = async (req, res) => {
     try {
@@ -223,9 +212,17 @@ const editProduct = async (req, res) => {
 // -------Insert edited product-------
 const inserEditedProduct = async (req, res) => {
     try {
-
         const productId = req.body.productId;
-        const product = await Products.findByIdAndUpdate(productId,{
+        const files = req.files;
+
+        // Extract the image file names from req.files
+        const image1 = files['image1'] ? files['image1'][0].filename : null;
+        const image2 = files['image2'] ? files['image2'][0].filename : null;
+        const image3 = files['image3'] ? files['image3'][0].filename : null;
+        const image4 = files['image4'] ? files['image4'][0].filename : null;
+
+        // Create an object with the fields to update
+        const updateFields = {
             productName: req.body.productName,
             weights: req.body.weight.map(weightValue => ({ value: weightValue, selected: true })),
             length: req.body.length,
@@ -236,23 +233,68 @@ const inserEditedProduct = async (req, res) => {
             price: parseFloat(req.body.price),
             totalQuantity: req.body.quantity,
             category: req.body.category,
-        })
-        const editedProduct = await product.save()
-        console.log(editedProduct);
+        };
 
-        if(editedProduct){
-            res.redirect('/admin/products')
+        // Add image fields to the updateFields object if they are provided
+        if (image1) updateFields['productImages.0'] = image1;
+        if (image2) updateFields['productImages.1'] = image2;
+        if (image3) updateFields['productImages.2'] = image3;
+        if (image4) updateFields['productImages.3'] = image4;
+
+        // Use the updateFields object to update the product
+        const product = await Products.findByIdAndUpdate(productId, updateFields, { new: true });
+
+        console.log(product);
+
+        if (product) {
+            res.json({status:"success"})
         }
 
+        return res.status(404).json({ status: 'error' });
 
-            await Products.findByIdAndUpdate()
+    } catch (error) {
+        console.error(error.message);
+    }
+};
 
+
+
+// --------Show-products-------
+const showProduct = async (req, res) => {
+    try {
+        console.log("show");
+        const productId = req.body.productId;
+        const product = await Products.findByIdAndUpdate(productId, { isShow: 0 }, { new: true });
+
+        if (product.isShow == 1) {
+            return res.status(404).json({ status: 'error' });
+        }
+        res.json({ product: product.isShow });
 
     } catch (error) {
         console.log(error.message);
-        res.status(500).send('Internal Server Error');
     }
 };
+
+
+// --------Hide-products-------
+const hideProduct = async (req, res) => {
+    try {
+        console.log("hide");
+        const productId = req.body.productId;
+        const product = await Products.findByIdAndUpdate(productId, { isShow: 1 }, { new: true });
+
+        if (product.isShow != 1) {
+            return res.status(404).json({ status: 'error' });
+        }
+        res.json({ product: product.isShow });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+
 
 
 module.exports = {
@@ -268,8 +310,8 @@ module.exports = {
     editCategory,
     listCatogory,
     UnListCatogory,
-    // uploadProductImage,
     editProduct,
-    inserEditedProduct
-
+    inserEditedProduct,
+    hideProduct,
+    showProduct
 }

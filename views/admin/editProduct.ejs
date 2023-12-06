@@ -401,7 +401,7 @@
                 </div>
         </aside>
 
-        <main id="content" role="main"  class="main pb-4!important">
+        <main id="content" role="main" class="main pb-4!important">
             <!-- Content -->
             <div class="content container-fluid">
                 <!-- Page Header -->
@@ -433,10 +433,11 @@
                             <!-- End Header -->
 
                             <!-- Body -->
-                            <form action="/admin/products/editProduct" method="post" enctype="multipart/form-data">
+                            <form action="" method="post" id="form" enctype="multipart/form-data">
                                 <div class="card-body">
                                     <!-- Form -->
-                                    <input type="text" name="productId" style="display: none;" value="<%= product._id %>">
+                                    <input type="text" name="productId" style="display: none;"
+                                        value="<%= product._id %>">
                                     <div class="mb-4">
                                         <label for="productNameLabel" class="form-label">Cake name <i
                                                 class="bi-question-circle text-body ms-1" data-bs-toggle="tooltip"
@@ -448,7 +449,7 @@
                                     </div>
                                     <!-- End Form -->
 
-                                  
+
 
 
                                     <div class="col-sm-12">
@@ -457,7 +458,7 @@
                                             <label for="weightLabel" class="form-label">Weights</label>
                                             <div
                                                 class="weight m-3 w-100 d-flex justify-content-between align-items-center">
-                                      
+
                                                 <div class="d-flex align-items-center">
                                                     <input class="me-2" name="weight" value="0.5" type="checkbox" <% if
                                                         (product.weights.some(weight=> weight.value === '0.5' &&
@@ -651,7 +652,7 @@
                         <div class="card-body">
                             <div class="row justify-content-center justify-content-sm-between">
                                 <div class="col">
-                                    <!-- <button type="button" class="btn btn-ghost-danger">Delete</button> --> 
+                                    <!-- <button type="button" class="btn btn-ghost-danger">Delete</button> -->
                                 </div>
                                 <!-- End Col -->
 
@@ -662,46 +663,70 @@
                                     </div>
                                 </div>
                                 </form>
-                                <!-- End Col -->
+                                <!-- End Col -
                             </div>
                             <!-- End Row -->
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="container-fluid ml-1 d-flex ">
-                <div class="card me-5 position-relative" style="width: 16.5rem;">
-                    <img class="card-img-top" src="/assets/productImages/uploadImages/<%=product.productImages[0] %>" alt="Card image cap" id="imagePreview1">
-                    <button class="btn text-secondary" onclick="triggerFileInput('fileInput1')">Click to change</button>
-                    <input type="file" name="image1" id="fileInput1" class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;" onchange="updateImage(0, this)" >
+                <div class="container-fluid ml-1 d-flex ">
+                    <!-- Image Input Field 1 -->
+                    <div class="card me-5 position-relative" style="width: 16.5rem;">
+                        <img class="card-img-top"
+                            src="/assets/productImages/uploadImages/<%=product.productImages[0] %>" alt="Card image cap"
+                            id="imagePreview1">
+                        <button class="btn text-secondary" onclick="triggerFileInput('fileInput1')">Click to
+                            change</button>
+                        <input type="file" name="image1" id="fileInput1"
+                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;"
+                            onchange="updateImage(0, this)">
+                        <p id="imageName1"></p>
+                    </div>
+
+                    <!-- Image Input Field 2 -->
+                    <div class="card me-5 position-relative" style="width: 16.5rem;">
+                        <img class="card-img-top"
+                            src="/assets/productImages/uploadImages/<%=product.productImages[1] %>" alt="Card image cap"
+                            id="imagePreview2">
+                        <button class="btn text-secondary" onclick="triggerFileInput('fileInput2')">Click to
+                            change</button>
+                        <input type="file" name="image2" id="fileInput2"
+                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;"
+                            onchange="updateImage(1, this)">
+                        <p id="imageName2"></p>
+                    </div>
+
+                    <!-- Image Input Field 3 -->
+                    <div class="card me-5 position-relative" style="width: 16.5rem;">
+                        <img class="card-img-top"
+                            src="/assets/productImages/uploadImages/<%=product.productImages[2] %>" alt="Card image cap"
+                            id="imagePreview3">
+                        <button class="btn text-secondary" onclick="triggerFileInput('fileInput3')">Click to
+                            change</button>
+                        <input type="file" name="image3" id="fileInput3"
+                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;"
+                            onchange="updateImage(2, this)">
+                        <p id="imageName3"></p>
+                    </div>
+
+                    <!-- Image Input Field 4 -->
+                    <div class="card me-5 position-relative" style="width: 16.5rem;">
+                        <img class="card-img-top"
+                            src="/assets/productImages/uploadImages/<%=product.productImages[3] %>" alt="Card image cap"
+                            id="imagePreview4">
+                        <button class="btn text-secondary" onclick="triggerFileInput('fileInput4')">Click to
+                            change</button>
+                        <input type="file" name="image4" id="fileInput4"
+                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;"
+                            onchange="updateImage(3, this)">
+                        <p id="imageName4"></p>
+                    </div>
+
                 </div>
-                
-                <div class="card me-5 position-relative" style="width: 16.5rem;">
-                    <img class="card-img-top" src="/assets/productImages/uploadImages/<%=product.productImages[1] %>" alt="Card image cap" id="imagePreview2">
-                    <button class="btn text-secondary" onclick="triggerFileInput('fileInput2')">Click to change</button>
-                    <input type="file" name="image2" id="fileInput2" class="position-absolute top-0 start-0 w-100 h-100" style="opacity: ;" onchange="updateImage(1, this)" >
-                </div>
-                
-                <div class="card me-5 position-relative" style="width: 16.5rem;">
-                    <img class="card-img-top" src="/assets/productImages/uploadImages/<%=product.productImages[2] %>" alt="Card image cap" id="imagePreview3">
-                    <button class="btn text-secondary" onclick="triggerFileInput('fileInput3')">Click to change</button>
-                    <input type="file"name="image3" id="fileInput3" class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;" onchange="updateImage(2, this)" >
-                </div>
-                
-                <div class="card me-5 position-relative" style="width: 16.5rem;">
-                    <img class="card-img-top" src="/assets/productImages/uploadImages/<%=product.productImages[3] %>" alt="Card image cap" id="imagePreview4">
-                    <button class="btn text-secondary" onclick="triggerFileInput('fileInput4')">Click to change</button>
-                    <input  type="file" name="image4" id="fileInput4"  class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;" onchange="updateImage(3, this)">
-                </div>
-            </div>
-            <!-- End Footer -->
+                <!-- End Footer -->
         </main>
-
-
-
-
-
 
 
         <!-- ========== END MAIN CONTENT ========== -->
@@ -1222,54 +1247,75 @@
                         <!-- End Media -->
 
                         <hr class="my-4">
-<
-                        <!-- Media -->
+                        < <!-- Media -->
 
-                        <!-- End Footer -->
+                            <!-- End Footer -->
                     </div>
                 </div>
             </div>
 
+            <!-- ----------form submition----------- -->
             <script>
-                function triggerFileInput(fileInputId) {
-                    // Trigger the file input
-                    document.getElementById(fileInputId).click();
-                }
-            
+                document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.querySelector('form');
+
+                    form.addEventListener('submit', function (event) {
+                        event.preventDefault();
+
+                        const formData = new FormData(form);
+
+                        // Loop through all image input fields
+                        for (let i = 1; i <= 4; i++) {
+                            const input = document.getElementById(`fileInput${i}`);
+                            const files = input.files;
+
+                            // Append each file to FormData with a unique name
+                            for (let j = 0; j < files.length; j++) {
+                                formData.append(`image${i}`, files[j]);
+                            }
+                        }
+
+                        fetch('/admin/products/editProduct', {
+                            method: 'POST',
+                            body: formData
+
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+
+                                if(data.status == "success"){
+                                    window.location.href = '/admin/products'
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                            });
+                    });
+                });
+            </script>
+
+            <script>
                 function updateImage(index, input) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
                         // Update image source
                         document.getElementById('imagePreview' + (index + 1)).src = e.target.result;
-            
-                        // Update image name (assuming a corresponding name element exists)
+
+                        // Update image name
                         document.getElementById('imageName' + (index + 1)).innerText = input.files[0].name;
                     };
+
                     reader.readAsDataURL(input.files[0]);
                 }
+
             </script>
 
-
-            <!-- End Products Advanced Features Modal -->
-            <!-- ========== END SECONDARY CONTENTS ========== -->
 
             <!-- JS Implementing Plugins -->
             <script src="/assets/admin/js/vendor.min.js"></script>
 
             <!-- JS Front -->
             <script src="/assets/admin/js/theme.min.js"></script>
-
-
-
-
-            <!-- JS Plugins Init. -->
-
-
-            <!-- JS Plugins Init. -->
-
-
-
-            <!-- Style Switcher JS -->
 
 
 

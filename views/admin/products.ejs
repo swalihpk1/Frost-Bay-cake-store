@@ -18,7 +18,7 @@
     </style>
 
     <!-- END ONLY DEV -->
-
+ 
     <script>
         window.hs_config = { "autopath": "@@autopath", "deleteLine": "hs-builder:delete", "deleteLine:build": "hs-builder:build-delete", "deleteLine:dist": "hs-builder:dist-delete", "previewMode": false, "startPath": "/index.html", "vars": { "themeFont": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap", "version": "?v=1.0" }, "layoutBuilder": { "extend": { "switcherSupport": true }, "header": { "layoutMode": "default", "containerMode": "container-fluid" }, "sidebarLayout": "default" }, "themeAppearance": { "layoutSkin": "default", "sidebarSkin": "default", "styles": { "colors": { "primary": "#377dff", "transparent": "transparent", "white": "#fff", "dark": "132144", "gray": { "100": "#f9fafc", "900": "#1e2022" } }, "font": "Inter" } }, "languageDirection": { "lang": "en" }, "skipFilesFromBundle": { "dist": ["/assets/admin/js/hs.theme-appearance.js", "/assets/admin/js/hs.theme-appearance-charts.js", "/assets/admin/js/demo.js"], "build": ["/assets/admin/css/theme.css", "/assets/admin/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside-mini-cache.js", "/assets/admin/js/demo.js", "/assets/admin/css/theme-dark.html", "/assets/admin/css/docs.css", "/assets/admin/vendor/icon-set/style.html", "/assets/admin/js/hs.theme-appearance.js", "/assets/admin/js/hs.theme-appearance-charts.js", "node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.html", "/assets/admin/js/demo.js"] }, "minifyCSSFiles": ["/assets/admin/css/theme.css", "/assets/admin/css/theme-dark.css"], "copyDependencies": { "dist": { "*/assets/admin/js/theme-custom.js": "" }, "build": { "*/assets/admin/js/theme-custom.js": "", "node_modules/bootstrap-icons/font/*fonts/**": "/assets/admin/css" } }, "buildFolder": "", "replacePathsToCDN": {}, "directoryNames": { "src": "./src", "dist": "./dist", "build": "./build" }, "fileNames": { "dist": { "js": "theme.min.js", "css": "theme.min.css" }, "build": { "css": "theme.min.css", "js": "theme.min.js", "vendorCSS": "vendor.min.css", "vendorJS": "vendor.min.js" } }, "fileTypes": "jpg|png|svg|mp4|webm|ogv|json" }
         window.hs_config.gulpRGBA = (p1) => {
@@ -566,7 +566,7 @@
 
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox" onclick="showConfirmationModal('<%= products[i]._id %>')"
-                                                    id="stocksCheckbox" <% if(products[i].isShow==0) { %>checked<% } %>>
+                                                    id="stocksCheckbox<%= products[i]._id %>" <% if(products[i].isShow == 0) { %>checked<% } %>>
                                             </div>
                                         </td>
                                         <td>Rs.<%= products[i].price %>
@@ -2017,12 +2017,12 @@
         </div>
 
         <script src="/assets/admin/js/demo.js"></script>
-
-       
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 
 
         <script>
-            function showConfirmationModal(userId) {
+            function showConfirmationModal(productId) {
 
                 $('#confirmationModal').data('productId', productId);
 
@@ -2034,8 +2034,9 @@
                 const productId = $('#confirmationModal').data('productId');
 
 
-                if (document.getElementById('stocksCheckbox').checked) {
-                    fetch(`/admin/products/hideProduct`, {
+                if (document.getElementById(`stocksCheckbox${productId}`).checked) {
+                    console.log("show");
+                    fetch(`/admin/products/showProduct`, {
                         method: 'PUT',
                         headers: {
                             "Content-Type": "application/json"
@@ -2050,7 +2051,8 @@
                         .catch(error => console.error('Error Hiding product:', error));
         
                 } else{
-                    fetch(`/admin/products/showProduct`, {
+                    console.log("hide");
+                    fetch(`/admin/products/hideProduct`, {
                         method: 'PUT',
                         headers: {
                             "Content-Type": "application/json"
@@ -2059,7 +2061,8 @@
                     })
                         .then(response => response.json())
                         .then(data => {
-                            window.location.href = '/admin/category';
+                            console.log(data);
+                            window.location.href = '/admin/products';
                         })
                         .catch(error => console.error('Error Unlisting Category:', error));
                 }

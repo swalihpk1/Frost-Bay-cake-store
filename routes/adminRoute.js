@@ -65,8 +65,6 @@ app.put('/category/listCategory', adminController.listCatogory);
 //Unlist Category
 app.put('/category/UnListCategory', adminController.UnListCatogory);
 
-// //Upload ProductImage
-// app.post('/products/addProduct/uploadImage',adminController.uploadProductImage);
 
 // Render edit products
 app.get('/products/editProduct/:productId', adminController.editProduct);
@@ -80,10 +78,10 @@ app.post('/products/editProduct', upload.fields([
 
 ]), adminController.inserEditedProduct);
 
-//Hide Category
+//Hide Product
 app.put('/products/hideProduct', adminController.hideProduct);
 
-//Show Category
-app.put('/category/listCategory', adminController.listCatogory);
+//Show Product
+app.put('/products/showProduct', adminController.showProduct);
 
 module.exports = app;
