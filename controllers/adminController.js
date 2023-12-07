@@ -3,14 +3,51 @@ const { use } = require("../routes/userRoute");
 const Products = require("../models/productModel");
 const Category = require("../models/categoryModel");
 
+// --------Admin-login-------
+const login = async (req, res) => {
+    try {
+        res.render('login')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
+//--Admin-Login-verification-----
+const verifyLogin = async (req, res) => {
+    try {
+console.log(req.body);
+        const adminEmail = process.env.ADMIN_EMAIL.trim();
+        const adminPass = process.env.ADMIN_PASSWORD.trim();
 
+        if(req.body.email === adminEmail && req.body.password === adminPass){
+            req.session.admin = true
+
+            res.redirect('/admin/dashboard')
+        }else{
+             res.render('login',{message:"Invalid email or password"});
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const logout = async(req,res)=>{
+    try {
+        req.session.destroy();
+        res.redirect(`/admin`);
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 // -------Dashboards------
 const dashboard = async (req, res) => {
     try {
+        const adminEmail = process.env.ADMIN_EMAIL.trim();
+        const adminName = process.env.ADMIN_NAME.trim();
 
-        res.render('dashboard');
+        res.render('dashboard',{adminName:adminName,adminEmail:adminEmail});
 
     } catch (error) {
         console.log(error.message);
@@ -247,7 +284,7 @@ const inserEditedProduct = async (req, res) => {
         console.log(product);
 
         if (product) {
-            res.json({status:"success"})
+            res.json({ status: "success" })
         }
 
         return res.status(404).json({ status: 'error' });
@@ -298,6 +335,8 @@ const hideProduct = async (req, res) => {
 
 
 module.exports = {
+    login,
+    verifyLogin,
     dashboard,
     products,
     users,
@@ -313,5 +352,7 @@ module.exports = {
     editProduct,
     inserEditedProduct,
     hideProduct,
-    showProduct
+    showProduct,
+    logout
+
 }

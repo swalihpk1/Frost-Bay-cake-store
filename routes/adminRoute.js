@@ -2,7 +2,9 @@ const express = require("express");
 const app = express();
 const adminController = require("../controllers/adminController");
 const multer = require("multer");
-const path = require("path")
+const path = require("path");
+const authAdmin = require("../middlewares/authAdmin");
+
 
 app.use(express.json());
 
@@ -21,21 +23,25 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage, });
 
-
-
 app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 app.set('views', './views/admin');
 
+// Render Login
+app.get('/',authAdmin.isLogout,adminController.login)
+
+// VerifyLogin
+app.post('/',adminController.verifyLogin)
+
 // Dashboard
-app.get('/', adminController.dashboard);
+app.get('/dashboard',authAdmin.isLogin,adminController.dashboard);
 
 //Products
-app.get('/products', adminController.products);
+app.get('/products',authAdmin.isLogin, adminController.products);
 
 //Users
-app.get('/users', adminController.users);
+app.get('/users',authAdmin.isLogin,adminController.users);
 
 //Block User
 app.put('/blockUser', adminController.blockUser);
@@ -51,7 +57,7 @@ app.get('/products/addProduct', adminController.addProduct);
 app.post('/products/addProduct', upload.array("productImages",4),adminController.insertProduct);
 
 //Render 
-app.get('/category', adminController.category);
+app.get('/category',authAdmin.isLogin,adminController.category);
 
 //Add Category
 app.post('/category', adminController.insertCategory);
@@ -83,5 +89,8 @@ app.put('/products/hideProduct', adminController.hideProduct);
 
 //Show Product
 app.put('/products/showProduct', adminController.showProduct);
+
+//Log-Out
+app.get('/logout',authAdmin.isLogin,adminController.logout);
 
 module.exports = app;

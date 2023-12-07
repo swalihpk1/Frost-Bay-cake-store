@@ -138,9 +138,15 @@
                             <button class="bg-white border-0" dropdown-toggle" type="button" id="" data-toggle="dropdown">
                                 <img class="" src="/assets/images/icons/Profile.svg" alt="">
                             </button>
-                            <div class="dropdown-menu bg-dark">
-                              <a class="dropdown-item text-white " href="/logout"  onclick="confirmLogout()">Logout</a>
-                            </div>
+                           
+                                <% if(user){ %>
+                                    <div class="dropdown-menu bg-dark">
+                                    <a class="dropdown-item text-white " href="/logout"  onclick="confirmLogout()">Logout</a>
+                                     </div>
+                                <%  } %>
+                                
+                              
+                           
                           </div>
 
 

@@ -311,11 +311,6 @@
             </div>
         </header>
 
-        <!-- ========== END HEADER ========== -->
-
-        <!-- ========== MAIN CONTENT ========== -->
-        <!-- Navbar Vertical -->
-
         <aside
             class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered bg-white  ">
             <div class="navbar-vertical-container">
@@ -353,7 +348,7 @@
                         <div id="navbarVerticalMenu" class="nav nav-pills nav-vertical card-navbar-nav">
                             <!-- Collapse -->
                             <div class="nav-item">
-                                <a class="nav-link" href="/admin">
+                                <a class="nav-link" href="/admin/dashboard">
                                     <i class="bi-house-door nav-icon"></i>
                                     <span class="nav-link-title">Dashboards</span>
                                 </a>
@@ -670,6 +665,15 @@
                         </div>
                     </div>
                 </div>
+                                  
+                <div class="container-fluid d-flex justify-content-around " style="padding-left: 0;">
+                    
+                    <h4 class="text-center text-secondary">Main image</h4>
+                    <h4 class="text-center text-secondary">Left image</h4>
+                    <h4 class="text-center text-secondary">Right image</h4>
+                    <h4 class="text-center text-secondary">Bottom image</h4>
+                </div>
+        
 
                 <div class="container-fluid ml-1 d-flex ">
                     <!-- Image Input Field 1 -->
@@ -680,7 +684,7 @@
                         <button class="btn text-secondary" onclick="triggerFileInput('fileInput1')">Click to
                             change</button>
                         <input type="file" name="image1" id="fileInput1"
-                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;"
+                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:0;"
                             onchange="updateImage(0, this)">
                         <p id="imageName1"></p>
                     </div>
@@ -693,7 +697,8 @@
                         <button class="btn text-secondary" onclick="triggerFileInput('fileInput2')">Click to
                             change</button>
                         <input type="file" name="image2" id="fileInput2"
-                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;"
+                        
+                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:0;"
                             onchange="updateImage(1, this)">
                         <p id="imageName2"></p>
                     </div>
@@ -706,7 +711,7 @@
                         <button class="btn text-secondary" onclick="triggerFileInput('fileInput3')">Click to
                             change</button>
                         <input type="file" name="image3" id="fileInput3"
-                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;"
+                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:0;"
                             onchange="updateImage(2, this)">
                         <p id="imageName3"></p>
                     </div>
@@ -719,7 +724,7 @@
                         <button class="btn text-secondary" onclick="triggerFileInput('fileInput4')">Click to
                             change</button>
                         <input type="file" name="image4" id="fileInput4"
-                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:;"
+                            class="position-absolute top-0 start-0 w-100 h-100" style="opacity:0;"
                             onchange="updateImage(3, this)">
                         <p id="imageName4"></p>
                     </div>

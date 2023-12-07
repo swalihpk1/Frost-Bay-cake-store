@@ -816,8 +816,15 @@
                                                 alt="Image Description">
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <h5 class="mb-0">Mark Williams</h5>
-                                            <p class="card-text text-body">mark@site.com</p>
+                                              <% if(typeof adminName !== 'undefined'){ %>
+                                                     <h5 class="mb-0"><%= adminName %></h5>
+                                              <%  } %>
+                                              <% if(typeof adminEmail !== 'undefined'){ %>
+                                                <p class="card-text text-body"><%= adminEmail %></p>
+                                              <%  } %>
+                                                 
+                                              
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -898,7 +905,7 @@
 
                                 <div class="dropdown-divider"></div>
 
-                                <a class="dropdown-item" href="#">Sign out</a>
+                                <a class="dropdown-item" href="/admin/logout">Sign out</a>
                             </div>
                         </div>
                         <!-- End Account -->
@@ -950,7 +957,7 @@
                     <div id="navbarVerticalMenu" class="nav nav-pills nav-vertical card-navbar-nav">
                         <!-- Collapse -->
                         <div class="nav-item">
-                            <a class="nav-link active" href="/admin">
+                            <a class="nav-link active" href="/admin/dashboard">
                                 <i class="bi-house-door nav-icon"></i>
                                 <span class="nav-link-title">Dashboards</span>
                             </a>
