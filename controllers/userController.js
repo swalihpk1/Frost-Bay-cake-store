@@ -109,7 +109,7 @@ const sendOtpVerification = async ({ _id, email }, res) => {
     }
 }
 
-//------Render-OTP-------
+//------Render-OTP-Page------
 const renderOtp = async (req, res) => {
     try {
         res.render('otp');
@@ -194,7 +194,7 @@ const sendOtp = async (req, res) => {
     }
 }
 
-// -----Home------
+// -----Render-Home------
 const home = async (req, res) => {
     try{
         const id = req.session.user_id
@@ -218,6 +218,7 @@ const logout = async (req, res) => {
 }
 
 
+
 module.exports = {
     authentication,
     home,
@@ -227,6 +228,5 @@ module.exports = {
     verifyLogin,
     logOtp,
     sendOtp,
-    logout
-
+    logout,
 }

@@ -2,6 +2,7 @@ const User = require("../models/usersModel");
 const { use } = require("../routes/userRoute");
 const Products = require("../models/productModel");
 const Category = require("../models/categoryModel");
+ 
 
 // --------Admin-login-------
 const login = async (req, res) => {
@@ -15,16 +16,16 @@ const login = async (req, res) => {
 //--Admin-Login-verification-----
 const verifyLogin = async (req, res) => {
     try {
-console.log(req.body);
+        console.log(req.body);
         const adminEmail = process.env.ADMIN_EMAIL.trim();
         const adminPass = process.env.ADMIN_PASSWORD.trim();
 
-        if(req.body.email === adminEmail && req.body.password === adminPass){
+        if (req.body.email === adminEmail && req.body.password === adminPass) {
             req.session.admin = true
 
             res.redirect('/admin/dashboard')
-        }else{
-             res.render('login',{message:"Invalid email or password"});
+        } else {
+            res.render('login', { message: "Invalid email or password" });
         }
 
     } catch (error) {
@@ -32,7 +33,7 @@ console.log(req.body);
     }
 }
 
-const logout = async(req,res)=>{
+const logout = async (req, res) => {
     try {
         req.session.destroy();
         res.redirect(`/admin`);
@@ -47,7 +48,7 @@ const dashboard = async (req, res) => {
         const adminEmail = process.env.ADMIN_EMAIL.trim();
         const adminName = process.env.ADMIN_NAME.trim();
 
-        res.render('dashboard',{adminName:adminName,adminEmail:adminEmail});
+        res.render('dashboard', { adminName: adminName, adminEmail: adminEmail });
 
     } catch (error) {
         console.log(error.message);
@@ -131,6 +132,11 @@ const addProduct = async (req, res) => {
 // -------Get-and-Store-all-products-in-DB-------
 const insertProduct = async (req, res) => {
     try {
+         
+
+
+
+
 
         const product = new Products({
             productName: req.body.productName,

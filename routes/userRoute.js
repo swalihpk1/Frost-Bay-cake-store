@@ -1,41 +1,50 @@
-
+// Require modules
 const express = require("express");
-const userController = require("../controllers/userController");
-const validation = require("../middlewares/validation");
-const authUser = require("../middlewares/AuthUser");
-
 const app = express();
 
 
-//View engine
+// Require user Controllers
+const userController = require("../controllers/userController");
+const productController = require("../controllers/productController");
+
+
+// Require custom middlewares
+const validation = require("../middlewares/validation");
+const authUser = require("../middlewares/AuthUser");
+
+
+// Set view engine
 app.set('view engine','ejs');
 app.set('views','./views/users');
-
 app.use(express.static('public'));
 
+// ---------------------Home--------------------
 app.get('/',authUser.isLogout,userController.home);
+app.get('/home',authUser.isLogin, userController.home);
 
-// SIGN-UP
+// --------------------------------Signup--------------------------------
 app.get('/authentication',authUser.isLogout,userController.authentication);
 app.post('/authentication',validation.validateForm,userController.insertUser);
 
-// HOME
-app.get('/home',authUser.isLogin, userController.home);
-
-
-//OTP
+// --------------------------OTP-verification-------------------
 app.get('/otpVerify',authUser.isLogout,userController.renderOtp);
 app.post('/otpVerify',userController.verifyOtp);
 
-// LOGIN
+// --------------------Login----------------
 app.post('/login',userController.verifyLogin);
 
-//RESEND-OTP
+// ---------------------Login with OTP--------------------
 app.get('/logOtp',authUser.isLogout,userController.logOtp);
 app.post('/logOtp',userController.sendOtp);
 
-//LOGOUT
+// --------------------User-Logout---------------------
 app.get('/logout',authUser.isLogin,userController.logout);
+
+// --------------------Product-listing---------------------
+app.get('/shop',authUser.noAuth,productController.shop);
+
+// --------------------------------------Product-Details-----------------------------------
+app.get('/shop/productDetails/:productId',authUser.noAuth,productController.productDetails);
 
 
 module.exports = app;
