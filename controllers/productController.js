@@ -12,7 +12,8 @@ const shop = async(req,res)=>{
         const user = await User.findOne({_id:userId})
         const products = await Products.find({})
         const category = await Category.find({});
-        res.render('shop',{category:category,products:products,user:user})
+        const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
+        res.render('shop',{category:category,products:products,user:userDetails})
     } catch (error) {
         console.log(error.message);
     }
@@ -24,7 +25,8 @@ const productDetails = async(req,res)=>{
         const user = await User.findOne({_id:userId})
         const productId = req.params.productId
         const product =  await Products.findOne({_id:productId})
-        res.render('productDetails',{product:product,user:user})
+        const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
+        res.render('productDetails',{product:product,user:userDetails})
     } catch (error) {
         console.log(error.message);
     }

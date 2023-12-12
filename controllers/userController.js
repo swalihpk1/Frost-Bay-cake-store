@@ -27,7 +27,7 @@ const authentication = async (req, res) => {
         res.render('signup-&-login');
 
     } catch (error) {
-        console.log(error.message);
+        res.render('404');
     }
 }
 // ----------Secure-password(bcrypt)------------
@@ -37,7 +37,7 @@ const securePassword = async (password) => {
         return passwordHash;
 
     } catch (error) {
-        console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -69,7 +69,7 @@ const insertUser = async (req, res) => {
 
         })
     } catch (error) {
-        console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -104,7 +104,7 @@ const sendOtpVerification = async ({ _id, email }, res) => {
 
 
     } catch (error) {
-        console.log(error.message);
+        res.render('404');
         res.status(500).send('Internal Server Error');
     }
 }
@@ -114,7 +114,7 @@ const renderOtp = async (req, res) => {
     try {
         res.render('otp');
     } catch (error) {
-        console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -138,7 +138,7 @@ const verifyOtp = async (req, res) => {
 
 
     } catch (error) {
-        console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -166,7 +166,7 @@ const verifyLogin = async (req, res) => {
             res.render('signup-&-login', { message: "Incorrect username or password" });
         }
     } catch (error) {
-        console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -175,7 +175,7 @@ const logOtp = async (req, res) => {
     try {
         res.render('logOtp')
     } catch (error) {
-        console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -190,18 +190,22 @@ const sendOtp = async (req, res) => {
             res.render('logOtp', { message: "User not exist, please signup" });
         }
     } catch (error) {
-        console.log(error.message);
+        res.render('404');
     }
 }
 
 // -----Render-Home------
 const home = async (req, res) => {
     try{
+
+       const message = req.query.message;
         const id = req.session.user_id
         const user = await User.findOne({_id:id});
-        res.render('home',{user:user});
+        const userCart = await User.populate(user, { path: 'cart.productId', model: 'products' });
+        res.render('home', { user:userCart,message:message});
+        // res.render('home',{user:user,message:message});
     } catch (error) {
-        console.log(error.message);
+       console.log(error.message);
     }
 }
 

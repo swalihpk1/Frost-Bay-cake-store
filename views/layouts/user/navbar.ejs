@@ -36,62 +36,56 @@
 
                     <div class="dropdown-menu dropdown-menu-right">
                         <div class="dropdown-cart-products">
+                            <% if (user) { %>
+                            <% if (user.cart.length > 0) { %>
+                                <% user.cart.forEach(cartItem => { %>
                             <div class="product">
                                 <div class="product-cart-details">
                                     <h4 class="product-title">
-                                        <a href="product.html">Beige knitted elastic runner shoes</a>
+                                        <a href="product.html"><%= cartItem.productId.productName %></a>
                                     </h4>
 
                                     <span class="cart-product-info">
-                                        <span class="cart-product-qty">1</span>
-                                        x $84.00
+                                        <span class="cart-product-qty"><%= cartItem.quantity %></span>
+                                        x $<%= cartItem.productId.price %>
                                     </span>
                                 </div><!-- End .product-cart-details -->
 
                                 <figure class="product-image-container">
                                     <a href="product.html" class="product-image">
-                                        <img src="assets/images/products/cart/product-1.jpg" alt="product">
+                                        <img src="/assets/productImages/uploadImages/<%= cartItem.productId.productImages[0] %>" alt="product">
                                     </a>
                                 </figure>
-                                <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
+
+                                <a href="#" class="btn-remove" title="Remove Product"><i class="fa-light fa-x fa-xs" style="color: #000000;"></i></a>
                             </div><!-- End .product -->
-
-                            <div class="product">
-                                <div class="product-cart-details">
-                                    <h4 class="product-title">
-                                        <a href="product.html">Blue utility pinafore denim dress</a>
-                                    </h4>
-
-                                    <span class="cart-product-info">
-                                        <span class="cart-product-qty">1</span>
-                                        x $76.00
-                                    </span>
-                                </div><!-- End .product-cart-details -->
-
-                                <figure class="product-image-container">
-                                    <a href="product.html" class="product-image">
-                                        <img src="assets/images/products/cart/product-2.jpg" alt="product">
-                                    </a>
-                                </figure>
-                                <a href="#" class="btn-remove" title="Remove Product"><i class="icon-close"></i></a>
-                            </div><!-- End .product -->
+                            <% }); %>
+                            <% } %>
+                          
+                           
+                       
                         </div><!-- End .cart-product -->
-
                         <div class="dropdown-cart-total">
                             <span>Total</span>
-
+                           
                             <span class="cart-total-price">$160.00</span>
-
-                             
+                            <% }%>
+                            
+                            
                         </div><!-- End .dropdown-cart-total -->
-                        
 
+                        <% if(user.cart.length > 0){ %>
                         <div class="dropdown-cart-action">
-                            <a href="cart.html" class="btn btn-primary">View Cart</a>
+                            <a href="/cart" class=" btn btn-secondary">View Cart</a>
                             <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
                         </div><!-- End .dropdown-cart-total -->
+                        <%  }else{%>
+                           <h6>!Oops,nothing here </h6>
+                           <a href="/shop" class=" btn btn-secondary">Shop</a>
+                         <% }%>
                     </div><!-- End .dropdown-menu -->
                 </div><!-- End .cart-dropdown -->
+               
                  
                  <% if(user){ %>
 
@@ -146,11 +140,16 @@
                     <span class="sr-only">Toggle mobile menu</span>
                     <i class="icon-bars"></i>
                 </button>
-            </div><!-- End .header-left -->
 
-            <div class="header-right">
-                <i class="la la-lightbulb-o"></i><p>Clearance Up to 30% Off</span></p>
-            </div>
+            </div><!-- End .header-left -->
+            <h6 class="text-danger">
+                <% if(typeof message !== 'undefined'){ %>
+
+                    <h5 class="text-danger position-absolute" style="left: 45%;"><%= message %></h5>
+
+                    <%  } %>
+            </h6>
+
         </div><!-- End .container -->
     </div><!-- End .header-bottom -->
 </header><!-- End .header -->

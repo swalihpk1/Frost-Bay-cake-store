@@ -1,5 +1,8 @@
 <%-include('../layouts/user/header')-%>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://unpkg.com/zoom.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/zoom.js/1.7.21/zoom.min.js"></script>
+
     </head>
 
     <body>
@@ -35,44 +38,31 @@
                         <div class="container">
                             <div class="product-details-top mb-2">
                                 <div class="row">
+
                                     <div class="col-md-6">
                                         <div class="product-gallery product-gallery-vertical">
                                             <div class="row">
-                                                <figure class="product-main-image">
-                                                    <img id="product-zoom"
-                                                        src="/assets/productImages/uploadImages/<%= product.productImages[0] %>"
-                                                        data-zoom-image="/assets/productImages/uploadImages/<%= product.productImages[0] %>"
+                                                <figure class="product-main-image" id="product-main-image">
+                                                    <img src="/assets/productImages/uploadImages/<%= product.productImages[0] %>"
                                                         alt="product image">
-                                                    <a href="#" id="btn-product-gallery" class="btn-product-gallery">
-                                                        <i class="icon-arrows"></i>
-                                                    </a>
                                                 </figure><!-- End .product-main-image -->
 
-                                                <div id="product-zoom-gallery" class="product-image-gallery">
-                                                    <a class="product-gallery-item active" href="#"
-                                                        data-image="/assets/productImages/uploadImages/<%= product.productImages[1] %>"
-                                                        data-zoom-image="/assets/productImages/uploadImages/<%= product.productImages[1] %>">
-                                                        <img src="/assets/productImages/uploadImages/<%= product.productImages[1] %>"
-                                                            alt="product side">
-                                                    </a>
 
-                                                    <a class="product-gallery-item" href="#"
-                                                        data-image="/assets/productImages/uploadImages/<%= product.productImages[2] %>"
-                                                        data-zoom-image="/assets/productImages/uploadImages/<%= product.productImages[2]%> ">
-                                                        <img src="/assets/productImages/uploadImages/<%= product.productImages[2] %>"
-                                                            alt="product cross">
-                                                    </a>
 
-                                                    <a class="product-gallery-item" href="#"
-                                                        data-image="/assets/productImages/uploadImages/<%= product.productImages[3] %> "
-                                                        data-zoom-image="/assets/productImages/uploadImages/<%= product.productImages[3] %>">
-                                                        <img src="/assets/productImages/uploadImages/<%= product.productImages[3] %>"
-                                                            alt="product with model">
-                                                    </a>
+                                                <div class="product-image-gallery">
+                                                    <% for (let i=0; i < product.productImages.length; i++) { %>
+                                                        <a class="product-gallery-item "
+                                                            href="/assets/productImages/uploadImages/<%= product.productImages[i] %>">
+                                                            <img src="/assets/productImages/uploadImages/<%= product.productImages[i] %>"
+                                                                alt="product image">
+                                                        </a>
+                                                        <% } %>
                                                 </div><!-- End .product-image-gallery -->
                                             </div><!-- End .row -->
                                         </div><!-- End .product-gallery -->
-                                    </div><!-- End .col-md-6 -->
+
+                                    </div>
+
 
                                     <div class="col-md-6">
                                         <div class="product-details">
@@ -103,34 +93,41 @@
                                             <div class="my-5">
                                                 <label for="qty">Qty:</label>
                                                 <div class="input-group product-details-quantity d-inline-flex ">
-                                                    <input type="text"  id="qty" class="form-control qnty bg-primary font-weight-bold text-white" style="height: 5.4rem;" value="1" min="1" max="10" step="1" data-decimals="0" required readonly>
+                                                    <input type="text" id="qty"
+                                                        class="form-control qnty bg-primary font-weight-bold text-white"
+                                                        style="height: 5.4rem;" value="1" min="1" max="10" step="1"
+                                                        data-decimals="0" required readonly>
                                                     <div class="input-group-append h-25 flex-column qnty">
-                                                        <button type="button" class="border-0 " style="height: 2.6rem;" onclick="incrementQuantity()">+</button>
-                                                        <button type="button" class="border-0 " style="height: 2.6rem;" onclick="decrementQuantity()">-</button>
+                                                        <button type="button" class="border-0 " style="height: 2.6rem;"
+                                                            onclick="incrementQuantity()">+</button>
+                                                        <button type="button" class="border-0 " style="height: 2.6rem;"
+                                                            onclick="decrementQuantity()">-</button>
                                                     </div>
                                                 </div><!-- End .input-group -->
                                             </div><!-- End .details-filter-row -->
-                                            
-                                            
+
+
 
                                             <div class="product-details-action">
-                                                <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                                <form action="">
+                                                <a href="/addProductCart/<%= product._id %>" 4 class="btn-product btn-cart"><span>add to cart</span></a>
 
                                                 <div class="details-action-wrapper">
                                                     <a href="#" class="btn-product btn-wishlist"
                                                         title="Wishlist"><span>Add to Wishlist</span></a>
                                                 </div><!-- End .details-action-wrapper -->
-
+                                            </form>
                                             </div><!-- End .product-details-action -->
 
                                             <div class=" d-flex my-4 ">
-                                                <% product.weights.forEach(weight => { %>
+                                                <% product.weights.forEach(weight=> { %>
                                                     <div>
-                                                        <button class="btns <% if (weight.selected) { %> active-btn <% }%>">
+                                                        <button
+                                                            class="btns <% if (weight.selected) { %> active-btn <% }%>">
                                                             <%= weight.value %> kg
                                                         </button>
                                                     </div>
-                                                <% }); %>
+                                                    <% }); %>
                                             </div>
 
                                             <div class="product-details-footer">
@@ -174,19 +171,26 @@
                                         <div>
                                             <label class="text-dark m-3">Available Kilograms : </label>
                                             <p class="d-inline"><i>
-                                                <% product.weights.forEach(weight => { %>
-                                                    <i><%= weight.value %> kg /</i>
-                                                <% }); %>
-                                            </i></p>
+                                                    <% product.weights.forEach(weight=> { %>
+                                                        <i>
+                                                            <%= weight.value %> kg /
+                                                        </i>
+                                                        <% }); %>
+                                                </i></p>
                                         </div>
                                         <div>
                                             <label class="text-dark m-3">Dimentions : </label>
-                                            <p class="d-inline"><i><%= product.length %>cm x <%= product.base %>cm x <%= product.height %>cm</i></p>
+                                            <p class="d-inline"><i>
+                                                    <%= product.length %>cm x <%= product.base %>cm x <%= product.height
+                                                                %>cm
+                                                </i></p>
                                         </div>
                                         <div>
                                             <label class="text-dark m-3">Incredients : </label>
                                             <p class="d-inline">
-                                                <i><%= product.incredients %></i>
+                                                <i>
+                                                    <%= product.incredients %>
+                                                </i>
                                             </p>
                                         </div>
                                     </div>
@@ -197,7 +201,8 @@
                                     <div class="tab-pane fade" id="product-delivery-tab" role="tabpanel"
                                         aria-labelledby="product-delivery-link">
                                         <div class="m-5">
-                                            <img class="d-inline-block" src="/assets/images/icons/with 2 hour.svg" alt="">
+                                            <img class="d-inline-block" src="/assets/images/icons/with 2 hour.svg"
+                                                alt="">
                                             <h6 class="d-inline ml-4" style="color: gray;">Within 2 hours delivery</h6>
                                         </div>
                                         <div class="m-5">
@@ -607,6 +612,30 @@
         </div><!-- End .modal -->
 
 
+        <!-- --------product images-------- -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const productMainImage = document.getElementById('product-main-image');
+                const galleryItems = document.querySelectorAll('.product-gallery-item');
+
+                galleryItems.forEach(function (item) {
+                    item.addEventListener('click', function (event) {
+                        event.preventDefault();
+
+                        // Remove the 'active' class from all gallery items
+                        galleryItems.forEach(function (item) {
+                            item.classList.remove('active');
+                        });
+
+                        // Set the 'active' class for the clicked gallery item
+                        this.classList.add('active');
+
+                        const newImageSrc = this.querySelector('img').getAttribute('src');
+                        productMainImage.querySelector('img').setAttribute('src', newImageSrc);
+                    });
+                });
+            });
+        </script>
 
         <!-- Add this script at the end of your HTML body -->
         <script>
@@ -626,31 +655,29 @@
         </script>
 
 
-<!-- ------qnty---- -->
-    <script>
+        <!-- ------qnty---- -->
+        <script>
             function incrementQuantity() {
-             var quantityInput = document.getElementById('qty');
-            var currentValue = parseInt(quantityInput.value, 10);
-            if (currentValue < 10) { // Assuming the maximum quantity is 10
-            quantityInput.value = currentValue + 1;
-        }
-    }
+                var quantityInput = document.getElementById('qty');
+                var currentValue = parseInt(quantityInput.value, 10);
+                if (currentValue < 10) { // Assuming the maximum quantity is 10
+                    quantityInput.value = currentValue + 1;
+                }
+            }
 
-    function decrementQuantity() {
-        var quantityInput = document.getElementById('qty');
-        var currentValue = parseInt(quantityInput.value, 10);
-        if (currentValue > 1) {
-            quantityInput.value = currentValue - 1;
-        }
-    }
-</script>
-
-
+            function decrementQuantity() {
+                var quantityInput = document.getElementById('qty');
+                var currentValue = parseInt(quantityInput.value, 10);
+                if (currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                }
+            }
+        </script>
 
 
 
-        <!-- Add this in the <head> section of your HTML -->
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
 
         <!-- Plugins JS File -->
         <script src="assets/js/jquery.min.js"></script>

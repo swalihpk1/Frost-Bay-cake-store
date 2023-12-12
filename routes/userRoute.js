@@ -6,6 +6,8 @@ const app = express();
 // Require user Controllers
 const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
+const cartControllers = require("../controllers/cartController");
+
 
 
 // Require custom middlewares
@@ -40,11 +42,21 @@ app.post('/logOtp',userController.sendOtp);
 // --------------------User-Logout---------------------
 app.get('/logout',authUser.isLogin,userController.logout);
 
-// --------------------Product-listing---------------------
+// --------------------Product-listing------------------
 app.get('/shop',authUser.noAuth,productController.shop);
 
 // --------------------------------------Product-Details-----------------------------------
 app.get('/shop/productDetails/:productId',authUser.noAuth,productController.productDetails);
+
+// ---------------------------------Add-Product-Cart---------------------------------
+app.get('/addProductCart/:productId',authUser.isLogin,cartControllers.addProductCart);
+
+// -------------------view-Cart-page--------------------
+app.get('/cart',authUser.isLogin,cartControllers.viewCart);
+
+// -------------------Remove-product--------------------
+app.delete('/cart/removeProduct',authUser.isLogin,cartControllers.removeProduct);
+
 
 
 module.exports = app;

@@ -2,6 +2,8 @@ const User = require("../models/usersModel");
 const { use } = require("../routes/userRoute");
 const Products = require("../models/productModel");
 const Category = require("../models/categoryModel");
+const Sharp = require("sharp");
+const path = require("path")
  
 
 // --------Admin-login-------
@@ -132,11 +134,17 @@ const addProduct = async (req, res) => {
 // -------Get-and-Store-all-products-in-DB-------
 const insertProduct = async (req, res) => {
     try {
-         
+        // Resize the uploaded images using sharp
+        const resizedImages = await Promise.all(req.files.map(async (file) => {
+            const imagePath = path.join(__dirname, '..', 'public', 'assets', 'productImages', 'uploadImages', file.filename);
+            const resizedImagePath = path.join(__dirname, '..', 'public', 'assets', 'productImages', 'croppedImages', file.filename);
 
+            await Sharp(imagePath)
+                .resize({ width: 600, height: 600 })
+                .toFile(resizedImagePath);
 
-
-
+            return file.filename;
+        }));
 
         const product = new Products({
             productName: req.body.productName,
@@ -149,7 +157,7 @@ const insertProduct = async (req, res) => {
             price: parseFloat(req.body.price),
             totalQuantity: req.body.quantity,
             category: req.body.category,
-            productImages: req.files.map(file => file.filename)
+            productImages: resizedImages,
         });
 
         const productData = await product.save()
@@ -158,10 +166,9 @@ const insertProduct = async (req, res) => {
         if (productData) {
             res.redirect('/admin/products')
         }
-
-
     } catch (error) {
         console.log(error.message);
+        res.status(500).send("Internal Server Error");
     }
 }
 
