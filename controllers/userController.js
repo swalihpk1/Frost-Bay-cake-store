@@ -239,7 +239,7 @@ const userAccount = async (req, res) => {
 //  -------Edit-User-Data--------
 const editUserData = async (req, res) => {
     try {
-        let imageName;
+        let imageName; 
 
         const file = req.file;
 

@@ -1,7 +1,43 @@
 <%-include('../layouts/user/header')-%>
-    <style>
+<style>
+    #notification-container {
+        position: fixed;
+        bottom: 20px;
+        left: 20px; /* Adjust left position */
+        max-width: 300px;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6); /* Shadow */
+        animation: slideInLeft 0.5s, slideOutLeft 0.5s 2.5s;
+        display: none;
+    }
 
-    </style>
+    @keyframes slideInLeft {
+        from {
+            transform: translateX(-100%);
+        }
+
+        to {
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideOutLeft {
+        from {
+            transform: translateX(0);
+        }
+
+        to {
+            transform: translateX(-100%);
+        }
+    }
+</style>
+
+
+
+
+
 
     </head>
 
@@ -9,6 +45,7 @@
         <div class="page-wrapper">
 
             <%-include('../layouts/user/navbar')-%>
+            
 
                 <main class="main">
                     <div class="page-header text-center"
@@ -62,7 +99,7 @@
                                             <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
                                                 aria-labelledby="tab-dashboard-link">
                                                 <form class="form" action="/account/editUser" method="post"
-                                                    id="editform" onsubmit="return validateForm()"
+                                                    id="editform" 
                                                     enctype="multipart/form-data">
                                                     <div class="d-flex flex-column align-items-center">
                                                         <div class="profile-image-container">
@@ -614,6 +651,10 @@
                 </div><!-- End .modal-content -->
             </div><!-- End .modal-dialog -->
         </div><!-- End .modal -->
+
+        <div id="notification-container" ></div>
+
+
         <!-- Plugins JS File -->
         <script src="/assets/js/jquery.min.js"></script>
         <script src="/assets/js/bootstrap.bundle.min.js"></script>
@@ -689,32 +730,48 @@
         </script>
 
 
-        <script>
-            // Assuming you have a function to display notifications
-            function showNotification(message, type = 'success') {
-                // Implement your notification display logic here
-                alert(message); // You can replace this with a more sophisticated notification library
-            }
+<script>
+    function showNotification(message, success = true) {
+        const notificationContainer = document.getElementById('notification-container');
+        notificationContainer.innerHTML = message;
 
-            // Add this script to handle form submission and display notifications
-            document.getElementById('editform').addEventListener('submit', async function (event) {
-                event.preventDefault();
+        if (success) {
+            notificationContainer.style.color = 'green';
+        } else {
+            notificationContainer.style.color = 'red';
+        }
 
-                // Assuming you are using the fetch API to send form data to the server
-                const formData = new FormData(this);
-                const response = await fetch('/account/editUser', {
-                    method: 'POST',
-                    body: formData,
-                });
+        notificationContainer.style.display = 'block';
 
-                const result = await response.json();
+        setTimeout(() => {
+            notificationContainer.style.display = 'none';
+        }, 3000); // Adjust the time as needed
+    }
 
-                // Check the success status and display the appropriate notification
-                if (result.success) {
-                    showNotification(result.message, 'success');
-                } else {
-                    showNotification(result.message, 'error');
-                }
-            });
-        </script>
+    document.getElementById('editform').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    if (!validateForm()) {
+        return;
+    }
+
+    const formData = new FormData(this);
+    const response = await fetch('/account/editUser', {
+        method: 'POST',
+        body: formData,
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+        showNotification(result.message, true);
+    } else {
+        showNotification(result.message, false);
+    }
+});
+
+</script>
+
+    
+
         <%-include('../layouts/user/footer')-%>
