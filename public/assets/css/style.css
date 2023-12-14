@@ -31,11 +31,38 @@ border-style:double;
     align-items: center;
     border: 1px solid #c96;
     padding-left: 1.5rem; 
-
-
 }
-
 .cart-product-quantity i {
     color: #000000;
     cursor: pointer;
 }
+
+
+.profile-image-container {
+    width: 100px; /* Set your desired width */
+    height: 100px; /* Set your desired height */
+    margin-bottom: 10px; /* Adjust as needed */
+  
+}
+
+.profile-image-container img {
+    width: 100%;
+    height: auto;
+    object-fit: cover; /* Maintain aspect ratio while covering the container */
+    border-radius: 10rem;
+    border-style: groove;
+    border-color: #C96;
+}
+
+.change-profile-label {
+    cursor: pointer;
+    position: relative;
+    color: #000;
+    font-weight: 400;
+    display: inline-block;
+}
+.change-profile-label:hover{
+
+    color: #c96;
+}
+

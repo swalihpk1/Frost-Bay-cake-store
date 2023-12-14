@@ -1,155 +1,170 @@
 <header class="header header-6">
-    <div class="header-middle">
-        <div class="container">
-            <div class="header-left">
-                <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
-                    <a href="#" class="search-toggle" role="button"><i class="fa-solid fa-magnifying-glass" style="color: #949494;"></i></a>
-                    <form action="#" method="get">
-                        <div class="header-search-wrapper search-wrapper-wide">
-                            <label for="q" class="sr-only">Search</label>
-                            <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
-                            <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..." required>
-                        </div><!-- End .header-search-wrapper -->
-                    </form>
-                </div><!-- End .header-search -->
+  <div class="header-middle">
+    <div class="container">
+      <div class="header-left">
+        <div class="header-search header-search-extended header-search-visible d-none d-lg-block">
+          <a href="#" class="search-toggle" role="button"><i class="fa-solid fa-magnifying-glass"
+              style="color: #949494"></i></a>
+          <form action="#" method="get">
+            <div class="header-search-wrapper search-wrapper-wide">
+              <label for="q" class="sr-only">Search</label>
+              <button class="btn btn-primary" type="submit">
+                <i class="icon-search"></i>
+              </button>
+              <input type="search" class="form-control" name="q" id="q" ̦ placeholder="Search product ..." required />
             </div>
-            <div class="header-center">
-                <a href="index.html" class="logo">
-                    <img src="/assets/images/Frost-Bay logo.png" alt="Molla Logo" width="82" height="20">
-                </a>
-            </div><!-- End .header-left -->
+            <!-- End .header-search-wrapper -->
+          </form>
+        </div>
+        <!-- End .header-search -->
+      </div>
+      <div class="header-center">
+        <a href="index.html" class="logo">
+          <img src="/assets/images/Frost-Bay logo.png" alt="Molla Logo" width="82" height="20" />
+        </a>
+      </div>
+      <!-- End .header-left -->
 
-            <div class="header-right">
+      <div class="header-right">
+        <a href="wishlist.html" class="wishlist-link">
+          <i class="icon-heart-o"></i>
+          <span class="wishlist-count">3</span>
+          <span class="wishlist-txt">My Wishlist</span>
+        </a>
 
-                <a href="wishlist.html" class="wishlist-link">
-                    <i class="icon-heart-o"></i>
-                    <span class="wishlist-count">3</span>
-                    <span class="wishlist-txt">My Wishlist</span>
-                </a>
+        <div class="dropdown cart-dropdown">
+          <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false" data-display="static">
+            <i class="icon-shopping-cart"></i>
+            <span class="cart-count">2</span>
+            <span class="cart-txt">$ 164,00</span>
+          </a>
 
-                <div class="dropdown cart-dropdown">
-                    <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                        <i class="icon-shopping-cart"></i>
-                        <span class="cart-count">2</span>
-                        <span class="cart-txt">$ 164,00</span>
+          <div class="dropdown-menu dropdown-menu-right">
+            <div class="dropdown-cart-products">
+              <% if (user && user.cart.length> 0) { %> <% user.cart.forEach(cartItem=> { %>
+                  <div class="product">
+                    <div class="product-cart-details">
+                      <h4 class="product-title">
+                        <a href="product.html">
+                          <%= cartItem.productId.productName %>
+                        </a>
+                      </h4>
+                      <span class="cart-product-info">
+                        <span class="cart-product-qty">
+                          <%= cartItem.quantity %>
+                        </span>
+                        x $<%= cartItem.productId.price %>
+                      </span>
+                    </div>
+                    <!-- End .product-cart-details -->
+                    <figure class="product-image-container">
+                      <a href="product.html" class="product-image">
+                        <img src="/assets/productImages/uploadImages/<%= cartItem.productId.productImages[0] %>"
+                          alt="product" />
+                      </a>
+                    </figure>
+                    <a href="#" class="btn-remove" title="Remove Product">
+                      <i class="fa-light fa-x fa-xs" style="color: #000000"></i>
                     </a>
-
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <div class="dropdown-cart-products">
-                            <% if (user) { %>
-                            <% if (user.cart.length > 0) { %>
-                                <% user.cart.forEach(cartItem => { %>
-                            <div class="product">
-                                <div class="product-cart-details">
-                                    <h4 class="product-title">
-                                        <a href="product.html"><%= cartItem.productId.productName %></a>
-                                    </h4>
-
-                                    <span class="cart-product-info">
-                                        <span class="cart-product-qty"><%= cartItem.quantity %></span>
-                                        x $<%= cartItem.productId.price %>
-                                    </span>
-                                </div><!-- End .product-cart-details -->
-
-                                <figure class="product-image-container">
-                                    <a href="product.html" class="product-image">
-                                        <img src="/assets/productImages/uploadImages/<%= cartItem.productId.productImages[0] %>" alt="product">
-                                    </a>
-                                </figure>
-
-                                <a href="#" class="btn-remove" title="Remove Product"><i class="fa-light fa-x fa-xs" style="color: #000000;"></i></a>
-                            </div><!-- End .product -->
-                            <% }); %>
-                            <% } %>
-                          
-                           
-                       
-                        </div><!-- End .cart-product -->
-                        <div class="dropdown-cart-total">
-                            <span>Total</span>
-                           
-                            <span class="cart-total-price">$160.00</span>
-                            <% }%>
-                            
-                            
-                        </div><!-- End .dropdown-cart-total -->
-
-                        <% if(user.cart.length > 0){ %>
-                        <div class="dropdown-cart-action">
-                            <a href="/cart" class=" btn btn-secondary">View Cart</a>
-                            <a href="checkout.html" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
-                        </div><!-- End .dropdown-cart-total -->
-                        <%  }else{%>
-                           <h6>!Oops,nothing here </h6>
-                           <a href="/shop" class=" btn btn-secondary">Shop</a>
-                         <% }%>
-                    </div><!-- End .dropdown-menu -->
-                </div><!-- End .cart-dropdown -->
-               
-                 
-                 <% if(user){ %>
-
-                      <h5 class="ml-5 pt-1"><%= user.name %></h5>
-          
-                  <%  }else{ %>
-
-                    <a href="/authentication" class=" text-white text-center m-3 p-2" style="width:6rem; height: 3rem; border:none;background-color: #cc9966; color: aliceblue;"
-                    ><span>LOGIN</span></a>
-
-                  <%  } %>
-                  <div class="dropdown">
-                    <button class="bg-white border-0" dropdown-toggle" type="button" id="" data-toggle="dropdown">
-                        <img class="" src="/assets/images/icons/Profile.svg" alt="">
-                    </button>
-                   
-                        <% if(user){ %>
-                            <div class="dropdown-menu bg-dark">
-                            <a class="dropdown-item text-white " href="/logout"  onclick="confirmLogout()">Logout</a>
-                             </div>
-                        <%  } %>
-                   
                   </div>
+                  <!-- End .product -->
+                  <% }); %>
+                    <% } else { %>
+                      <div class="text-center">
+                        <p style="color: #949494">No cakes have been added yet.</p>
+                        <a href="/shop" class="btn btn-outline-primary-2">
+                          <span>GO SHOP</span><i class="icon-long-arrow-right"></i>
+                        </a>
+                      </div>
+                      <!-- .End .tab-pane -->
+                      <% } %>
+                        <% if (user && user.cart.length> 0 ) { %>
+                          <div class="dropdown-cart-total">
+                            <span>Total</span>
 
+                            <span class="cart-total-price">$160.00</span>
+                          </div>
+                          <!-- End .dropdown-cart-total -->
 
+                          <div class="dropdown-cart-action">
+                            <a href="/cart" class="btn btn-secondary">View Cart</a>
+                          </div>
+                          <!-- End .dropdown-cart-total -->
+                          <% } %>
             </div>
-        </div><!-- End .container -->
-    </div><!-- End .header-middle -->
+          </div>
+        </div>
+        <!-- End .cartDropdown -->
 
-    <div class="header-bottom sticky-header">
-        <div class="container">
-            <div class="header-left">
-                <nav class="main-nav">
-                    <ul class="menu sf-arrows">
-                        <li class="megamenu-container active">
-                            <a href="/home" class="">Home</a>
-                        </li>
-                        <li class="">
-                            <a href="/shop" class="">Shop</a>
-                        </li>
-                        <li class="">
-                            <a href="index.html" class="">Contact us</a>
-                        </li>
-                        <li class="">
-                            <a href="index.html" class="">About us</a>
-                        </li>
-                        
-                    </ul><!-- End .menu -->
-                </nav><!-- End .main-nav -->
+        <% if (user) { %>
+          <h5 class="ml-5 pt-1">
+            <%= user.name %>
+          </h5>
+          <% } else { %>
+            <a href="/authentication" class="text-white text-center m-3 p-2" style="
+            width: 6rem;
+            height: 3rem;
+            border: none;
+            background-color: #cc9966;
+            color: aliceblue;
+          ">
+              <span>LOGIN</span>
+            </a>
+            <% } %>
 
-                <button class="mobile-menu-toggler">
-                    <span class="sr-only">Toggle mobile menu</span>
-                    <i class="icon-bars"></i>
-                </button>
+              <div class="dropdown">
+                <a href="/account" class="bg-white border-0" dropdown-toggle type="button" id="" data-toggle="dropdown">
+                  <img class="" src="/assets/images/icons/Profile.svg" alt="" />
+                </a>
+              </div>
+      </div>
+      <!-- End .header.right -->
+    </div>
+    <!-- End .container -->
+  </div>
+  <!-- End .header-middle -->
 
-            </div><!-- End .header-left -->
-            <h6 class="text-danger">
-                <% if(typeof message !== 'undefined'){ %>
+  <div class="header-bottom sticky-header">
+    <div class="container">
+      <div class="header-left">
+        <nav class="main-nav">
+          <ul class="menu sf-arrows">
+            <li class="megamenu-container active">
+              <a href="/home" class="">Home</a>
+            </li>
+            <li class="">
+              <a href="/shop" class="">Shop</a>
+            </li>
+            <li class="">
+              <a href="index.html" class="">Contact us</a>
+            </li>
+            <li class="">
+              <a href="index.html" class="">About us</a>
+            </li>
+          </ul>
+          <!-- End .menu -->
+        </nav>
+        <!-- End .main-nav -->
 
-                    <h5 class="text-danger position-absolute" style="left: 45%;"><%= message %></h5>
+        <button class="mobile-menu-toggler">
+          <span class="sr-only">Toggle mobile menu</span>
+          <i class="icon-bars"></i>
+        </button>
+      </div>
+      <!-- End .header-left -->
+      <h6 class="text-danger">
+        <% if(typeof message !=='undefined' ){ %>
 
-                    <%  } %>
-            </h6>
+          <h5 class="text-danger position-absolute" style="left: 45%">
+            <%= message %>
+          </h5>
 
-        </div><!-- End .container -->
-    </div><!-- End .header-bottom -->
-</header><!-- End .header -->
+          <% } %>
+      </h6>
+    </div>
+    <!-- End .container -->
+  </div>
+  <!-- End .header-bottom -->
+</header>
+<!-- End .header -->

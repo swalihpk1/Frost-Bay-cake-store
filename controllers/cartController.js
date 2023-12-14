@@ -62,8 +62,33 @@ const removeProduct = async(req,res)=>{
         console.log(error.message);
      }
 }
+
+const updateQuantity = async(req,res)=>{
+    try {
+
+        const userId = req.userId;
+        const productId = req.body.productId;
+        const quantity = req.body.quantity;
+
+         // Update the quantity in the user's cart
+         const updatedUser = await User.findOneAndUpdate(
+            { _id: userId, 'cart.productId': productId },
+            { $set: { 'cart.$.quantity': quantity } },
+            { new: true }
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User or product not found in the cart." });
+        }
+        res.json({ status:"success"});
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 module.exports = {
     addProductCart,
     viewCart,
-    removeProduct
+    removeProduct,
+    updateQuantity
 };

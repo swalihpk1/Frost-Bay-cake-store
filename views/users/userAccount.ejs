@@ -1,226 +1,230 @@
 <%-include('../layouts/user/header')-%>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://unpkg.com/zoom.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/zoom.js/1.7.21/zoom.min.js"></script>
+    <style>
+
+    </style>
 
     </head>
 
     <body>
         <div class="page-wrapper">
+
             <%-include('../layouts/user/navbar')-%>
 
                 <main class="main">
-                    <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
-                        <div class="container d-flex align-items-center">
+                    <div class="page-header text-center"
+                        style="background-image: url('/assets/images/page-header-bg.jpg')">
+                        <div class="container">
+                            <h1 class="page-title">My Account<span>Frost-Bay</span></h1>
+                        </div><!-- End .container -->
+                    </div><!-- End .page-header -->
+                    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+                        <div class="container">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                                <li class="breadcrumb-item"><a href="#">Products</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Centered</li>
+                                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">My Account</li>
                             </ol>
-
-                            <nav class="product-pager ml-auto" aria-label="Product">
-                                <a class="product-pager-link product-pager-prev" href="#" aria-label="Previous"
-                                    tabindex="-1">
-                                    <i class="icon-angle-left"></i>
-                                    <span>Prev</span>
-                                </a>
-
-                                <a class="product-pager-link product-pager-next" href="#" aria-label="Next"
-                                    tabindex="-1">
-                                    <span>Next</span>
-                                    <i class="icon-angle-right"></i>
-                                </a>
-                            </nav><!-- End .pager-nav -->
                         </div><!-- End .container -->
                     </nav><!-- End .breadcrumb-nav -->
 
                     <div class="page-content">
-                        <div class="container">
-                            <div class="product-details-top mb-2">
+                        <div class="dashboard">
+                            <div class="container">
                                 <div class="row">
+                                    <aside class="col-md-4 col-lg-3">
+                                        <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
+                                                    href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
+                                                    aria-selected="true">Edit profile</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="tab-orders-link" data-toggle="tab"
+                                                    href="#tab-orders" role="tab" aria-controls="tab-orders"
+                                                    aria-selected="false">Orders</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="tab-address-link" data-toggle="tab"
+                                                    href="#tab-address" role="tab" aria-controls="tab-address"
+                                                    aria-selected="false">Adresses</a>
+                                            </li>
+                                            <li class="nav-item">
 
-                                    <div class="col-md-6">
-                                        <div class="product-gallery product-gallery-vertical">
-                                            <div class="row">
-                                                <figure class="product-main-image" id="product-main-image">
-                                                    <img src="/assets/productImages/uploadImages/<%= product.productImages[0] %>"
-                                                        alt="product image">
-                                                </figure><!-- End .product-main-image -->
+                                                <a class="nav-link" onclick="confirmLogout()" href="/logout">Sign
+                                                    Out</a>
+                                            </li>
+                                        </ul>
+                                    </aside><!-- End .col-lg-3 -->
 
 
+                                    <div class="col-md-8 col-lg-9">
+                                        <div class="tab-content">
+                                            <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                                aria-labelledby="tab-dashboard-link">
+                                                <form class="form" action="/account/editUser" method="post"
+                                                    id="editform" onsubmit="return validateForm()"
+                                                    enctype="multipart/form-data">
+                                                    <div class="d-flex flex-column align-items-center">
+                                                        <div class="profile-image-container">
+                                                            <img id="profileImage"
+                                                                src="/assets/userImages/croppedImages/<%= user.userImage %>"
+                                                                class="avatar img-circle img-thumbnail" alt="avatar">
+                                                        </div>
+                                                        <label for="fileInput" class="change-profile-label">
+                                                            <i>Change profile image</i>
+                                                            <i class="fa-solid fa-pen fa-sm d-inline-block"
+                                                                style="color: #cc9966;"></i>
+                                                        </label>
+                                                        <input type="file" name="userImage" id="fileInput" class=""
+                                                            style="display:none;" onchange="displayImage()">
+                                                    </div>
 
-                                                <div class="product-image-gallery">
-                                                    <% for (let i=0; i < product.productImages.length; i++) { %>
-                                                        <a class="product-gallery-item "
-                                                            href="/assets/productImages/uploadImages/<%= product.productImages[i] %>">
-                                                            <img src="/assets/productImages/uploadImages/<%= product.productImages[i] %>"
-                                                                alt="product image">
-                                                        </a>
-                                                        <% } %>
-                                                </div><!-- End .product-image-gallery -->
-                                            </div><!-- End .row -->
-                                        </div><!-- End .product-gallery -->
 
+                                                    <!-- -------Form----- -->
+                                                    <div class="tab-content">
+                                                        <div class="tab-pane active" id="home">
+                                                            <hr>
+
+                                                            <!-- Name Field -->
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="name">
+                                                                        <h6>Name</h6>
+                                                                    </label>
+                                                                    <input type="text" value="<%= user.name %>"
+                                                                        class="form-control m-0" id="name" name="name"
+                                                                        placeholder="Enter name">
+                                                                    <p class="m-0 text-danger" id="nameError"></p>
+                                                                </div>
+
+                                                                <!-- Email Field -->
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="email">
+                                                                        <h6>Email</h6>
+                                                                    </label>
+                                                                    <input type="" value="<%= user.email %>"
+                                                                        class="form-control m-0" id="email" name="email"
+                                                                        placeholder="you@email.com" disabled>
+                                                                    <p class="m-0 text-danger" id="emailError"></p>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Phone Field -->
+                                                            <div class="form-row">
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="phone">
+                                                                        <h6>Phone</h6>
+                                                                    </label>
+                                                                    <input type="text" value="<%= user.phone %>"
+                                                                        class="form-control m-0" id="phone" name="phone"
+                                                                        placeholder="Enter phone">
+                                                                    <p class="m-0 text-danger" id="phoneError"></p>
+                                                                </div>
+
+                                                                <!-- Location Field -->
+                                                                <div class="form-group col-md-6">
+                                                                    <label for="location">
+                                                                        <h6>Location</h6>
+                                                                    </label>
+                                                                    <select id="location" name="location"
+                                                                        class="form-control">
+                                                                        <option value="Kerala" <% if
+                                                                            (user.location==='Kerala' ) { %> selected
+                                                                            disabled <% } %>>Kerala</option>
+                                                                        <option value="Banglore" <% if
+                                                                            (user.location==='Banglore' ) { %> selected
+                                                                            disabled <% } %>>Banglore</option>
+                                                                        <option value="Chennai" <% if
+                                                                            (user.location==='Chennai' ) { %> selected
+                                                                            disabled <% } %>>Chennai</option>
+                                                                        <option value="Kochi" <% if
+                                                                            (user.location==='Kochi' ) { %> selected
+                                                                            disabled <% } %>>Kochi</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div>
+                                                                <i class="fa-solid fa-unlock fa-sm"
+                                                                    style="color: #cc9966;"></i>
+                                                                <p for="fileInput" class="change-profile-label"><i>
+                                                                        Reset Password ?</i></p>
+                                                            </div>
+
+                                                            <!-- Validation Error Messages -->
+                                                            <div id="errorMessages" class="text-danger"></div>
+
+                                                            <!-- Submit Button -->
+                                                            <div class="form-group d-flex flex-column align-items-end">
+                                                                <div class="col-xs-12">
+                                                                    <br>
+                                                                    <button class="btn btn-lg btn-success"
+                                                                        type="submit">Save</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <hr>
+                                            </div><!--/tab-pane-->
+                                        </div><!-- .End .tab-pane -->
                                     </div>
 
+                                    <div class="tab-pane fade" id="tab-orders" role="tabpanel"
+                                        aria-labelledby="tab-orders-link">
+                                        <p>No order has been made yet.</p>
+                                        <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i
+                                                class="icon-long-arrow-right"></i></a>
+                                    </div>
 
-                                    <div class="col-md-6">
-                                        <div class="product-details">
-                                            <h1 class="product-title">
-                                                <%= product.productName %>
-                                            </h1><!-- End .product-title -->
+                                    <div class="tab-pane fade" id="tab-downloads" role="tabpanel"
+                                        aria-labelledby="tab-downloads-link">
+                                        <p>No downloads available yet.</p>
+                                        <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i
+                                                class="icon-long-arrow-right"></i></a>
+                                    </div>
 
-                                            <div class="ratings-container">
-                                                <div class="ratings">
-                                                    <div class="ratings-val" style="width: 80%;"></div>
-                                                    <!-- End .ratings-val -->
-                                                </div><!-- End .ratings -->
-                                                <a class="ratings-text" href="#product-review-link" id="review-link">( 2
-                                                    Reviews )</a>
-                                            </div><!-- End .rating-container -->
+                                    <div class="tab-pane fade" id="tab-address" role="tabpanel"
+                                        aria-labelledby="tab-address-link">
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="card card-dashboard">
+                                                    <div class="card-body">
+                                                        <h3 class="card-title">Billing Address</h3>
+                                                        <!-- End .card-title -->
 
-                                            <div class="product-price">
-                                                $<%= product.price %>
-                                            </div><!-- End .product-price -->
+                                                        <p>User Name<br>
+                                                            User Company<br>
+                                                            John str<br>
+                                                            New York, NY 10001<br>
+                                                            1-234-987-6543<br>
+                                                            yourmail@mail.com<br>
+                                                            <a href="#">Edit <i class="icon-edit"></i></a>
+                                                        </p>
+                                                    </div><!-- End .card-body -->
+                                                </div><!-- End .card-dashboard -->
+                                            </div><!-- End .col-lg-6 -->
 
-                                            <div class="product-content">
-                                                <p>
-                                                    <%= product.description %>
-                                                </p>
-                                            </div><!-- End .product-content -->
+                                            <div class="col-lg-6">
+                                                <div class="card card-dashboard">
+                                                    <div class="card-body">
+                                                        <h3 class="card-title">Shipping Address</h3>
+                                                        <!-- End .card-title -->
 
-
-                                            <div class="my-5">
-                                                <label for="qty">Qty:</label>
-                                                <div class="input-group product-details-quantity d-inline-flex ">
-                                                    <input type="text" id="qty"
-                                                        class="form-control qnty bg-primary font-weight-bold text-white"
-                                                        style="height: 5.4rem;" value="1" min="1" max="10" step="1"
-                                                        data-decimals="0" required readonly>
-                                                    <div class="input-group-append h-25 flex-column qnty">
-                                                        <button type="button" class="border-0 " style="height: 2.6rem;"
-                                                            onclick="incrementQuantity()">+</button>
-                                                        <button type="button" class="border-0 " style="height: 2.6rem;"
-                                                            onclick="decrementQuantity()">-</button>
-                                                    </div>
-                                                </div><!-- End .input-group -->
-                                            </div><!-- End .details-filter-row -->
-
-
-
-                                            <div class="product-details-action">
-                                                <form action="">
-                                                <a href="/shop/addProductCart/<%= product._id %>" 4 class="btn-product btn-cart"><span>add to cart</span></a>
-
-                                                <div class="details-action-wrapper">
-                                                    <a href="#" class="btn-product btn-wishlist"
-                                                        title="Wishlist"><span>Add to Wishlist</span></a>
-                                                </div><!-- End .details-action-wrapper -->
-                                            </form>
-                                            </div><!-- End .product-details-action -->
-
-                                            <div class=" d-flex my-4 ">
-                                                <% product.weights.forEach(weight=> { %>
-                                                    <div>
-                                                        <button
-                                                            class="btns <% if (weight.selected) { %> active-btn <% }%>">
-                                                            <%= weight.value %> kg
-                                                        </button>
-                                                    </div>
-                                                    <% }); %>
-                                            </div>
-
-                                            <div class="product-details-footer">
-                                                <div class="product-cat">
-                                                    <span>Category:</span>
-                                                    <a href="#">
-                                                        <%= product.category %>
-                                                    </a>
-                                                </div><!-- End .product-cat -->
-
-                                            </div><!-- End .product-details-footer -->
-                                        </div><!-- End .product-details -->
-                                    </div><!-- End .col-md-6 -->
+                                                        <p>You have not set up this type of address yet.<br>
+                                                            <a href="#">Edit <i class="icon-edit"></i></a>
+                                                        </p>
+                                                    </div><!-- End .card-body -->
+                                                </div><!-- End .card-dashboard -->
+                                            </div><!-- End .col-lg-6 -->
+                                        </div><!-- End .row -->
+                                    </div>
                                 </div>
                             </div>
 
-
-
-                            <div class="product-details-tab">
-                                <ul class="nav nav-pills justify-content-center" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="product-info-link" data-toggle="tab"
-                                            href="#product-info-tab" role="tab" aria-controls="product-info-tab"
-                                            aria-selected="true">Additional information</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="product-review-link" data-toggle="tab"
-                                            href="#product-review-tab" role="tab" aria-controls="product-review-tab"
-                                            aria-selected="false">Reviews</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="product-delivery-link" data-toggle="tab"
-                                            href="#product-delivery-tab" role="tab" aria-controls="product-delivery-tab"
-                                            aria-selected="false">Delivery</a>
-                                    </li>
-                                </ul>
-
-                                <div class="tab-content">
-                                    <div class="tab-pane fade show active" id="product-info-tab" role="tabpanel"
-                                        aria-labelledby="product-info-link">
-                                        <div>
-                                            <label class="text-dark m-3">Available Kilograms : </label>
-                                            <p class="d-inline"><i>
-                                                    <% product.weights.forEach(weight=> { %>
-                                                        <i>
-                                                            <%= weight.value %> kg /
-                                                        </i>
-                                                        <% }); %>
-                                                </i></p>
-                                        </div>
-                                        <div>
-                                            <label class="text-dark m-3">Dimentions : </label>
-                                            <p class="d-inline"><i>
-                                                    <%= product.length %>cm x <%= product.base %>cm x <%= product.height
-                                                                %>cm
-                                                </i></p>
-                                        </div>
-                                        <div>
-                                            <label class="text-dark m-3">Incredients : </label>
-                                            <p class="d-inline">
-                                                <i>
-                                                    <%= product.incredients %>
-                                                </i>
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="product-review-tab" role="tabpanel"
-                                        aria-labelledby="product-review-link">
-                                        <p>Reviews information content goes here.</p>
-                                    </div>
-                                    <div class="tab-pane fade" id="product-delivery-tab" role="tabpanel"
-                                        aria-labelledby="product-delivery-link">
-                                        <div class="m-5">
-                                            <img class="d-inline-block" src="/assets/images/icons/with 2 hour.svg"
-                                                alt="">
-                                            <h6 class="d-inline ml-4" style="color: gray;">Within 2 hours delivery</h6>
-                                        </div>
-                                        <div class="m-5">
-                                            <img class="d-inline-block" src="/assets/images/icons/delivery.svg" alt="">
-                                            <h6 class="d-inline ml-4" style="color: gray;">Cash on delivery</h6>
-                                        </div>
-                                        <div class="m-5">
-                                            <img class="d-inline-block" src="/assets/images/icons/refund.svg" alt="">
-                                            <h6 class="d-inline ml-4" style="color: gray;">Refund policy</h6>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-
-                        </div><!-- End .product-details-tab -->
+                        </div><!-- End .row -->
                     </div><!-- End .container -->
+        </div><!-- End .dashboard -->
         </div><!-- End .page-content -->
         </main><!-- End .main -->
 
@@ -230,10 +234,10 @@
                     <div class="row">
                         <div class="col-sm-6 col-lg-3">
                             <div class="widget widget-about">
-                                <img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105"
+                                <img src="/assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105"
                                     height="25">
-                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu
-                                    vulputate magna eros eu erat. </p>
+                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate
+                                    magna eros eu erat. </p>
 
                                 <div class="social-icons">
                                     <a href="#" class="social-icon" target="_blank" title="Facebook"><i
@@ -301,7 +305,7 @@
                     <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
                     <!-- End .footer-copyright -->
                     <figure class="footer-payments">
-                        <img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
+                        <img src="/assets/images/payments.png" alt="Payment methods" width="272" height="20">
                     </figure><!-- End .footer-payments -->
                 </div><!-- End .container -->
             </div><!-- End .footer-bottom -->
@@ -610,68 +614,107 @@
                 </div><!-- End .modal-content -->
             </div><!-- End .modal-dialog -->
         </div><!-- End .modal -->
+        <!-- Plugins JS File -->
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/bootstrap.bundle.min.js"></script>
+        <script src="/assets/js/jquery.hoverIntent.min.js"></script>
+        <script src="/assets/js/jquery.waypoints.min.js"></script>
+        <script src="/assets/js/superfish.min.js"></script>
+        <script src="/assets/js/owl.carousel.min.js"></script>
+        <!-- Main JS File -->
+        <script src="/assets/js/main.js"></script>
 
-
-        <!-- --------product images-------- -->
         <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                const productMainImage = document.getElementById('product-main-image');
-                const galleryItems = document.querySelectorAll('.product-gallery-item');
+            function displayImage() {
+                var fileInput = document.getElementById('fileInput');
+                var profileImage = document.getElementById('profileImage');
 
-                galleryItems.forEach(function (item) {
-                    item.addEventListener('click', function (event) {
-                        event.preventDefault();
+                // Check if a file is selected
+                if (fileInput.files && fileInput.files[0]) {
+                    var reader = new FileReader();
 
-                        // Remove the 'active' class from all gallery items
-                        galleryItems.forEach(function (item) {
-                            item.classList.remove('active');
-                        });
+                    reader.onload = function (e) {
+                        // Set the source of the image to the selected file
+                        profileImage.src = e.target.result;
+                    };
 
-                        // Set the 'active' class for the clicked gallery item
-                        this.classList.add('active');
-
-                        const newImageSrc = this.querySelector('img').getAttribute('src');
-                        productMainImage.querySelector('img').setAttribute('src', newImageSrc);
-                    });
-                });
-            });
-        </script>
-
-        <!-- Add this script at the end of your HTML body -->
-        <script>
-            $(document).ready(function () {
-                $('.nav-link').on('click', function (e) {
-                    e.preventDefault();
-
-                    // Remove active class from all tabs and tab content
-                    $('.nav-link').removeClass('active');
-                    $('.tab-pane').removeClass('show active');
-
-                    // Add active class to the clicked tab and corresponding tab content
-                    $(this).addClass('active');
-                    $($(this).attr('href')).addClass('show active')
-                });
-            });
-        </script>
-
-
-        <!-- ------qnty---- -->
-        <script>
-            function incrementQuantity() {
-                var quantityInput = document.getElementById('qty');
-                var currentValue = parseInt(quantityInput.value, 10);
-                if (currentValue < 10) { // Assuming the maximum quantity is 10
-                    quantityInput.value = currentValue + 1;
-                }
-            }
-
-            function decrementQuantity() {
-                var quantityInput = document.getElementById('qty');
-                var currentValue = parseInt(quantityInput.value, 10);
-                if (currentValue > 1) {
-                    quantityInput.value = currentValue - 1;
+                    // Read the data URL of the selected file
+                    reader.readAsDataURL(fileInput.files[0]);
                 }
             }
         </script>
 
+        <!-- JavaScript Validation -->
+        <script>
+            function validateForm() {
+                var form = document.getElementById('editform');
+                var name = document.getElementById('name');
+                var email = document.getElementById('email');
+                var phone = document.getElementById('phone');
+                var nameError = document.getElementById('nameError');
+                var emailError = document.getElementById('emailError');
+                var phoneError = document.getElementById('phoneError');
+
+                // Regular expressions for validation
+                var nameRegex = /^[A-Za-z\s]{4,}$/;
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                var phoneRegex = /^\d{10}$/;
+
+                // Validate Name
+                if (!nameRegex.test(name.value)) {
+                    nameError.textContent = 'Name should contain at least 4 letters and no digits.';
+                    return false;
+                } else {
+                    nameError.textContent = ''; // Clear the error message
+                }
+
+                // Validate Email
+                if (!emailRegex.test(email.value)) {
+                    emailError.textContent = 'Invalid email format.';
+                    return false;
+                } else {
+                    emailError.textContent = ''; // Clear the error message
+                }
+
+                // Validate Phone
+                if (!phoneRegex.test(phone.value)) {
+                    phoneError.textContent = 'Phone should contain 10 digits.';
+                    return false;
+                } else {
+                    phoneError.textContent = ''; // Clear the error message
+                }
+
+                return true;
+            }
+        </script>
+
+
+        <script>
+            // Assuming you have a function to display notifications
+            function showNotification(message, type = 'success') {
+                // Implement your notification display logic here
+                alert(message); // You can replace this with a more sophisticated notification library
+            }
+
+            // Add this script to handle form submission and display notifications
+            document.getElementById('editform').addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                // Assuming you are using the fetch API to send form data to the server
+                const formData = new FormData(this);
+                const response = await fetch('/account/editUser', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                const result = await response.json();
+
+                // Check the success status and display the appropriate notification
+                if (result.success) {
+                    showNotification(result.message, 'success');
+                } else {
+                    showNotification(result.message, 'error');
+                }
+            });
+        </script>
         <%-include('../layouts/user/footer')-%>

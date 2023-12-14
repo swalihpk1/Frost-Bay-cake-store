@@ -1,4 +1,7 @@
-// Require modules
+const multer = require("multer");
+const path = require("path");
+
+//  Require modules
 const express = require("express");
 const app = express();
 
@@ -7,6 +10,24 @@ const app = express();
 const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
 const cartControllers = require("../controllers/cartController");
+
+
+// Static path set
+app.use(
+    express.static(path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages'))
+)
+
+// Multer Configuration
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        return cb(null, path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages'));
+    },
+    filename: function (req, file, cb) {
+        return cb(null, `${Date.now()}-${file.originalname}`)
+    }
+});
+const upload = multer({ storage: storage, });
+
 
 
 
@@ -44,18 +65,21 @@ app.get('/logout',authUser.isLogin,userController.logout);
 
 // --------------------Product-listing------------------
 app.get('/shop',authUser.noAuth,productController.shop);
-
-// --------------------------------------Product-Details-----------------------------------
 app.get('/shop/productDetails/:productId',authUser.noAuth,productController.productDetails);
+app.get('/shop/addProductCart/:productId',authUser.isLogin,cartControllers.addProductCart);
 
-// ---------------------------------Add-Product-Cart---------------------------------
-app.get('/addProductCart/:productId',authUser.isLogin,cartControllers.addProductCart);
-
-// -------------------view-Cart-page--------------------
+// -------------------CART-MANAGEMENT---------------------
 app.get('/cart',authUser.isLogin,cartControllers.viewCart);
-
-// -------------------Remove-product--------------------
 app.delete('/cart/removeProduct',authUser.isLogin,cartControllers.removeProduct);
+app.patch('/cart/updateQuantity',authUser.isLogin,cartControllers.updateQuantity);
+
+// -----------------------CHECKOUT---------------------------
+app.get('/checkout',authUser.isLogin,userController.checkout);
+
+
+// ---------------------USER-ACCOUNT-----------------------
+app.get('/account',authUser.isLogin,userController.userAccount);
+app.post('/account/editUser',upload.single('userImage'),authUser.isLogin,userController.editUserData);
 
 
 

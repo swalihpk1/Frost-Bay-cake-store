@@ -8,6 +8,9 @@ const { REFUSED } = require("dns");
 const { ObjectId } = require("bson");
 const { emit } = require("process");
 const { statfsSync } = require("fs");
+const path = require("path");
+const Sharp = require("sharp");
+const { findByIdAndUpdate } = require("../models/productModel");
 
 
 // nodemailer stuffs
@@ -18,7 +21,7 @@ const transporter = nodemailer.createTransport({
         pass: 'ketl pkrp qftk mqeb'
     },
 });
-   
+
 
 // ----------Signup-&-Login------------
 const authentication = async (req, res) => {
@@ -196,18 +199,86 @@ const sendOtp = async (req, res) => {
 
 // -----Render-Home------
 const home = async (req, res) => {
-    try{
+    try {
 
-       const message = req.query.message;
+        const message = req.query.message;
         const id = req.session.user_id
-        const user = await User.findOne({_id:id});
+        const user = await User.findOne({ _id: id });
         const userCart = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('home', { user:userCart,message:message});
+        res.render('home', { user: userCart, message: message });
         // res.render('home',{user:user,message:message});
     } catch (error) {
-       console.log(error.message);
+        console.log(error.message);
     }
 }
+
+// -----------CheckOut--------------
+const checkout = async (req, res) => {
+    try {
+        const userId = req.session.user_id
+        const user = await User.findOne({ _id: userId })
+        const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
+        res.render('checkout', { user: userDetails })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//  ----------Render-User-Account-----
+const userAccount = async (req, res) => {
+    try {
+        const userId = req.session.user_id;
+        const user = await User.findOne({ _id: userId })
+        const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
+        res.render('userAccount', { user: userDetails });
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+//  -------Edit-User-Data--------
+const editUserData = async (req, res) => {
+    try {
+        let imageName;
+
+        const file = req.file;
+
+        if (file) {
+            const imagePath = path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages', file.filename);
+            const resizedImagePath = path.join(__dirname, '..', 'public', 'assets', 'userImages', 'croppedImages', file.filename);
+
+            await Sharp(imagePath)
+                .resize({ width: 100, height: 100 })
+                .toFile(resizedImagePath);
+
+            imageName = path.basename(file.filename);
+        } else {
+            const userId = req.session.user_id;
+            const existingUser = await User.findById(userId);
+            imageName = existingUser.userImage;
+        }
+
+        const userId = req.session.user_id;
+
+        const updatedUser = await User.findByIdAndUpdate(userId, {
+            name: req.body.name,
+            email: req.body.email,
+            phone: req.body.phone,
+            userImage: imageName,
+            location: req.body.location
+        });
+
+        if (updatedUser) {
+            res.json({ success: true, message: 'Update successful!' });
+            return;
+        }
+        res.json({ success: false, message: 'Update failed!' });
+    } catch (error) {
+        console.log(error.message);
+    }
+};
+
+
 
 // -------Logout-----
 const logout = async (req, res) => {
@@ -223,6 +294,7 @@ const logout = async (req, res) => {
 
 
 
+
 module.exports = {
     authentication,
     home,
@@ -232,5 +304,8 @@ module.exports = {
     verifyLogin,
     logOtp,
     sendOtp,
-    logout,
+    checkout,
+    userAccount,
+    editUserData,
+    logout
 }

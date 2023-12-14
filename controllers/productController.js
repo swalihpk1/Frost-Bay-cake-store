@@ -32,7 +32,10 @@ const productDetails = async(req,res)=>{
     }
 }
 
+
+
 module.exports={
     shop,
-    productDetails
+    productDetails,
+  
 }
