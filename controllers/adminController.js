@@ -18,7 +18,6 @@ const login = async (req, res) => {
 //--Admin-Login-verification-----
 const verifyLogin = async (req, res) => {
     try {
-        console.log(req.body);
         const adminEmail = process.env.ADMIN_EMAIL.trim();
         const adminPass = process.env.ADMIN_PASSWORD.trim();
 
@@ -185,13 +184,20 @@ const category = async (req, res) => {
 // ------Insert-Category-----
 const insertCategory = async (req, res) => {
     try {
-        //    console.log(req.body);
+
+        const { categoryName } = req.body;
+        const categoryCheck = await Category.findOne({ categoryName: categoryName });
+        if (categoryCheck) {
+            const categoryName = await Category.find({})
+            return res.render('category', { message: 'Category exist',category:categoryName});
+        }
+
         const category = new Category({
             categoryName: req.body.categoryName
         })
         await category.save();
-
-        res.redirect('/admin/category');
+        const categorys = await Category.find({})
+        return res.render('category', { message: 'Category added',category:categorys });
 
     } catch (error) {
         console.log(error.message);

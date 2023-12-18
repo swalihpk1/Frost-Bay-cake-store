@@ -442,7 +442,7 @@
                 <!-- Card -->
                 <div class="card">
                     <!-- Header -->
-                    <div class="card-header card-header-content-md-between">
+                    <div class="card-header card-header-content">
                         <div class="mb-2 mb-md-0">
                             <form>
                                 <!-- Search -->
@@ -456,6 +456,14 @@
                                 <!-- End Search -->
                             </form>
                         </div>
+                        
+                         <% if(typeof message !== 'undefined'){ %>
+                            <% if( message == 'Category added'){ %>
+                            <h5 class="text-center text-success"><%= message %></h5>
+                            <%  }else{ %>
+                                <h5 class="text-center text-danger"><%= message %></h5>
+                          <%  } %>
+                        <%  } %>
                     </div>
                     <!-- End Header -->
 
@@ -466,7 +474,6 @@
                             data-hs-datatables-options>
                             <thead class="thead-light text-center">
                                 <tr>
-
                                     <th>Sl.No</th>
                                     <th>Category Name</th>
                                     <th>Total Cakes</th>
@@ -517,6 +524,7 @@
                                     <!-- Pagination Quantity -->
 
                                     <form method="post" class="my-4" id="addCategoryForm" style="display: none;">
+                                        
                                         <input type="text" class="form-control w-25" name="categoryName"
                                             placeholder="Enter the category name">
                                         <button type="submit" class="btn btn-primary">Add</button>
@@ -2228,8 +2236,8 @@
 
               const text = listButtton.innerHTML
 
-            //   listCategory(categoryId);
-            if (text.trim() === "List" ) {
+             //   listCategory(categoryId);
+                if (text.trim() === "List" ) {
                     console.log("1ith");
                     fetch(`/admin/category/listCategory`, {
                         method: 'PUT',
@@ -2267,7 +2275,6 @@
 
         <!-- Your JavaScript to handle the modal -->
        <script>
-
         var categoryId;
         // Function to set the input value and show the edit category modal
         function editCategory(categoryName,categoryId) {

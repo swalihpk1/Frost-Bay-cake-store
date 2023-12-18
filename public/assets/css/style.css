@@ -65,4 +65,49 @@ border-style:double;
 
     color: #c96;
 }
+#notification-container {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    /* Adjust left position */
+    max-width: 300px;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.6);
+    /* Shadow */
+    animation: slideInLeft 0.5s, slideOutLeft 0.5s 2.5s;
+    display: none;
+}
 
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-100%);
+    }
+}
+.delete{
+    color: gray;
+    transition: all .35s ease;
+    margin: 1rem;
+    margin-top: 0;
+    height: 2.5rem;
+    border: 0;
+    background-color: #fff;
+}
+.delete:hover {
+    color: #ff0000;
+  }

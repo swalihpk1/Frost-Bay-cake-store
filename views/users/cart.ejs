@@ -149,18 +149,13 @@
 
                                                     <tr class="summary-shipping-row">
                                                         <td>
-                                                            <div class="custom-control custom-radio">
-                                                                <label class="custom-control-label"
-                                                                    for="free-shipping">Free Shipping</label>
+                                                            <div class="custom-control">
+                                                                <label for="free-shipping">Free Shipping</label>
                                                             </div><!-- End .custom-control -->
                                                         </td>
                                                         <td>$0.00</td>
                                                     </tr><!-- End .summary-shipping-row -->
-                                                    <tr class="summary-shipping-estimate">
-                                                        <td>Estimate for Your Country<br> <a
-                                                                href="dashboard.html">Change address</a></td>
-                                                        <td>&nbsp;</td>
-                                                    </tr><!-- End .summary-shipping-estimate -->
+
 
                                                     <tr class="summary-total">
                                                         <td>Total:</td>
@@ -421,12 +416,6 @@
             </div>
         </div>
 
-        <script>
-
-
-
-
-        </script>
 
 
         <!-- ---------------------Remove cart Products------------------ -->
@@ -504,7 +493,7 @@
                 totalElement.innerText = '$' + newTotal.toFixed(2);
 
                 updateSubtotal(); // Call the function to update the subtotal
-                
+
             }
 
             function decreaseQuantity(productId, productPrice) {
@@ -541,8 +530,8 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                      console.log(data.status);
-                       
+                        console.log(data.status);
+
                     })
                     .catch(error => {
                         console.error('Error updating quantity:', error);

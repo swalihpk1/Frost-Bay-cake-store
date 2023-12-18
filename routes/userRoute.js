@@ -47,7 +47,7 @@ app.get('/home',authUser.isLogin, userController.home);
 
 // --------------------------------Signup--------------------------------
 app.get('/authentication',authUser.isLogout,userController.authentication);
-app.post('/authentication',validation.validateForm,userController.insertUser);
+app.post('/authentication',userController.insertUser);
 
 // --------------------------OTP-verification-------------------
 app.get('/otpVerify',authUser.isLogout,userController.renderOtp);
@@ -74,12 +74,15 @@ app.delete('/cart/removeProduct',authUser.isLogin,cartControllers.removeProduct)
 app.patch('/cart/updateQuantity',authUser.isLogin,cartControllers.updateQuantity);
 
 // -----------------------CHECKOUT---------------------------
-app.get('/checkout',authUser.isLogin,userController.checkout);
+app.get('/cart/checkout',authUser.isLogin,userController.checkout);
 
 
 // ---------------------USER-ACCOUNT-----------------------
 app.get('/account',authUser.isLogin,userController.userAccount);
 app.post('/account/editUser',upload.single('userImage'),authUser.isLogin,userController.editUserData);
+app.post('/account/addAddress',authUser.isLogin,userController.addAddress);
+app.delete('/account/deleteAddress',authUser.isLogin,userController.deleteAddress);
+app.patch('/account/editAddress',authUser.isLogin,userController.editAddress);
 
 
 

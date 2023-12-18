@@ -149,12 +149,12 @@
                             </ul>
                             <div class="tab-content">
                                 <div class="tab-pane fade " id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
-                                    <% if(typeof message !== 'undefined'){ %>
+                                    <% if(typeof logMessage !== 'undefined'){ %>
 
-                                        <h6 class="text-danger"><%= message %></h6>
+                                        <h6 class="text-danger"><%= logMessage %></h6>
                   
                                         <%  } %>
-                                    <form action="/login" method="post">
+                                    <form action="/login" method="post" >
                                         <div class="form-group">
                                             <label for="singin-email-2">Email address *</label>
                                             <input type="email" class="form-control" id="singin-email-2"
@@ -181,28 +181,31 @@
                                 </div><!-- .End .tab-pane -->
                                 <div class="tab-pane fade show active" id="register-2" role="tabpanel"
                                     aria-labelledby="register-tab-2">
-                                    <% if(typeof message !== 'undefined'){ %>
+                                    <% if(typeof signMessage !== 'undefined'){ %>
 
-                                        <h6 class="text-danger"><%= message %></h6>
+                                        <h6 class="text-danger"><%= signMessage %></h6>
                   
                                         <%  } %>
-                                    <form method="POST">
+                                    <form method="POST" onsubmit="return validation();">
                                         <div class="form-group">
-                                            <label for="register-email-2">Name *</label>
-                                            <input type="text" class="form-control" id="register-name"
+                                            <label for="register-email-2">Name *</label>  
+                                            <p class="m-0 text-danger d-inline" id="nameError"></p>  
+                                            <input type="text" class="form-control m-0" id="name"
                                                 name="name" >
                                         </div>
 
                                         <div class="form-group">
                                             <label for="register-email-2">Email address *</label>
-                                            <input type="" class="form-control" id="register-emal"
+                                            <p class="m-0 text-danger d-inline" id="emailError"></p>  
+                                            <input type="" class="form-control m-0" id="email"
                                                 name="signupEmail" >
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
                                             <label for="register-password-2">Password *</label>
-                                            <input type="password" class="form-control" id="register-password-2"
-                                                name="signupPassword" required>
+                                            <p class="m-0 text-danger d-inline" id="passError"></p>  
+                                            <input type="password" class="form-control m-0" id="password"
+                                                name="signupPassword" >
                                                 <!-- <span toggle="#password-field"
 									            class="fa fa-fw fa-eye field-icon toggle-password"></span> -->
                                         </div><!-- End .form-group -->
@@ -210,14 +213,16 @@
 
                                         <div class="form-group">
                                             <label for="register-password-2">Confirm password *</label>
-                                            <input type="password" class="form-control" id="register-password"
-                                                name="confirmPassword" required>
+                                            <p class="m-0 text-danger d-inline" id="confirmError"></p>  
+                                            <input type="password" class="form-control m-0" id="confirmPass"
+                                                name="confirmPassword" >
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
                                             <label for="">Phone*</label>
-                                            <input type="text" class="form-control" id=""
-                                                name="phone" required>
+                                            <p class="m-0 text-danger d-inline" id="phoneError"></p>  
+                                            <input type="text" class="form-control m-0" id="phone"
+                                                name="phone" >
                                         </div><!-- End .form-group -->
 
                                         <div class="form-group">
@@ -344,5 +349,68 @@
     <script src="/assets/js/main.js"></script>
     <!-- ------Eye toggler js------ -->
     <script src="/assets/js/popper.js"></script>
+
+
+
+    <script>
+      function validation() {
+  var name = document.getElementById('name').value;
+  var email = document.getElementById('email').value; 
+  var phone = document.getElementById('phone').value;
+  var password = document.getElementById('password').value;
+  var confirmPassword = document.getElementById('confirmPass').value; 
+
+  var nameError = document.getElementById('nameError');
+  var emailError = document.getElementById('emailError');
+  var phoneError = document.getElementById('phoneError');
+  var passwordError = document.getElementById('passError'); 
+  var confirmError = document.getElementById('confirmError');
+
+  var trimmedName = name.trim();
+
+  // Regular expressions for validation
+  var nameRegex = /^[A-Za-z\s]{4,}$/;
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  var phoneRegex = /^\d{10}$/;
+  let regexPassword = /^(?=.*\d)(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
+
+  if (!nameRegex.test(trimmedName)) {
+    nameError.textContent = 'Name should contain at least 4 letters and no digits.';
+    return false;
+  } else {
+    nameError.textContent = '';
+  }
+
+  if (!emailRegex.test(email)) {
+    emailError.textContent = 'Invalid email format.';
+    return false;
+  } else {
+    emailError.textContent = '';
+  }
+
+  if (!phoneRegex.test(phone)) {
+    phoneError.textContent = 'Phone should contain 10 digits.';
+    return false;
+  } else {
+    phoneError.textContent = '';
+  }
+
+  if (password !== confirmPassword) { 
+    confirmError.textContent = 'Passwords not match';
+    return false;
+  } else {
+    confirmError.textContent = '';
+  }
+
+  if (!regexPassword.test(password)) {
+    passwordError.textContent = 'Password must contain at least 6 characters, at least one uppercase, and one digit';
+    return false;
+  } else {
+    passwordError.textContent = '';
+  }
+
+  return true;
+}
+    </script>
 
     <%-include('../layouts/user/footer')-%>

@@ -10,6 +10,7 @@ const { emit } = require("process");
 const { statfsSync } = require("fs");
 const path = require("path");
 const Sharp = require("sharp");
+const Address = require("../models/addressModel")
 const { findByIdAndUpdate } = require("../models/productModel");
 
 
@@ -33,6 +34,8 @@ const authentication = async (req, res) => {
         res.render('404');
     }
 }
+
+
 // ----------Secure-password(bcrypt)------------
 const securePassword = async (password) => {
     try {
@@ -44,7 +47,6 @@ const securePassword = async (password) => {
     }
 }
 
-
 // ----------Insert-Userdata------------
 const insertUser = async (req, res) => {
     try {
@@ -53,7 +55,7 @@ const insertUser = async (req, res) => {
         const userCheck = await User.findOne({ email: signupEmail });
         if (userCheck) {
             return res.render("signup-&-login", {
-                message: "User already exist, please login"
+                signMessage: "User already exist, please login"
             });
         }
 
@@ -162,7 +164,7 @@ const verifyLogin = async (req, res) => {
                 res.redirect('/home');
 
             } else {
-                res.render('signup-&-login', { message: "Incorrect username or password" });
+                res.render('signup-&-login', { logMessage: "Incorrect username or password" });
             }
 
         } else {
@@ -227,10 +229,12 @@ const checkout = async (req, res) => {
 //  ----------Render-User-Account-----
 const userAccount = async (req, res) => {
     try {
+
         const userId = req.session.user_id;
         const user = await User.findOne({ _id: userId })
+        const address = await Address.find({user:userId})
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('userAccount', { user: userDetails });
+        res.render('userAccount', { user: userDetails, address: address });
     } catch (error) {
         console.log(error.message);
     }
@@ -239,9 +243,11 @@ const userAccount = async (req, res) => {
 //  -------Edit-User-Data--------
 const editUserData = async (req, res) => {
     try {
-        let imageName; 
+        let imageName;
 
         const file = req.file;
+        console.log(file);
+        
 
         if (file) {
             const imagePath = path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages', file.filename);
@@ -270,7 +276,6 @@ const editUserData = async (req, res) => {
 
         if (updatedUser) {
             res.json({ success: true, message: 'Update successful!' });
-            return;
         }
         res.json({ success: false, message: 'Update failed!' });
     } catch (error) {
@@ -278,6 +283,98 @@ const editUserData = async (req, res) => {
     }
 };
 
+// --------------Add-ddress------------
+const addAddress = async (req, res) => {
+    try {
+        console.log(req.body)
+        const userId = req.session.user_id;
+        const address = new Address({
+            user: userId,
+            name: req.body.name,
+            companyName: req.body.companyName,
+            country: req.body.country,
+            houseName: req.body.houseName,
+            appartmentNumber: req.body.appartment,
+            city: req.body.city,
+            state: req.body.state,
+            zipcode: req.body.postcode,
+            phone: req.body.phone,
+            email: req.body.email,
+            default: req.body.isDefault
+        });
+
+
+        if (address.default == true) {
+            await Address.updateMany(
+                { user: userId, _id: { $ne: address._id } },
+                { $set: { default: false } }
+            );
+        }
+
+        const newAddress = await address.save()
+
+        if (newAddress) {
+            res.json({ success: true, message: 'Address addedd!' });
+            return;
+        }
+
+        res.json({ success: false, message: ' something went wrong' });
+        return;
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const deleteAddress = async (req, res) => {
+    try {
+        const addressId = req.body.addressId;
+        const deleteAddress = await Address.findByIdAndDelete({ _id: addressId });
+
+        if (deleteAddress) {
+            res.json({ success: true, message: 'Address deleted!' });
+        }
+        res.json({ success: false, message: 'Deletion failed!' });
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const editAddress = async (req, res) => {
+    try {
+        const userId = req.session.user_id;
+        console.log(req.body);
+        const addressId = req.body.addressId;
+
+        await Address.updateMany(
+            { user: userId },
+            { $set: { default: false } }
+        );
+
+        const updateAddress = await Address.findByIdAndUpdate(addressId, {
+            name: req.body.name,
+            companyName: req.body.companyName,
+            country: req.body.country,
+            houseName: req.body.houseName,
+            appartmentNumber: req.body.appartment,
+            city: req.body.city,
+            state: req.body.state,
+            zipcode: req.body.postcode,
+            phone: req.body.phone,
+            email: req.body.email,
+            default: Boolean(req.body.isDefault)
+        });
+
+        if (updateAddress) {
+            res.json({ success: true, message: 'Address edited !' });
+        } else {
+            res.json({ success: false, message: 'Editing failed!' });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 // -------Logout-----
@@ -293,8 +390,6 @@ const logout = async (req, res) => {
 }
 
 
-
-
 module.exports = {
     authentication,
     home,
@@ -307,5 +402,8 @@ module.exports = {
     checkout,
     userAccount,
     editUserData,
+    addAddress,
+    deleteAddress,
+    editAddress,
     logout
 }
