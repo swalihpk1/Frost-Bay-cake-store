@@ -214,17 +214,6 @@ const home = async (req, res) => {
     }
 }
 
-// -----------CheckOut--------------
-const checkout = async (req, res) => {
-    try {
-        const userId = req.session.user_id
-        const user = await User.findOne({ _id: userId })
-        const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('checkout', { user: userDetails })
-    } catch (error) {
-        console.log(error.message);
-    }
-}
 
 //  ----------Render-User-Account-----
 const userAccount = async (req, res) => {
@@ -232,7 +221,7 @@ const userAccount = async (req, res) => {
 
         const userId = req.session.user_id;
         const user = await User.findOne({ _id: userId })
-        const address = await Address.find({user:userId})
+        const address = await Address.find({ user: userId })
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
         res.render('userAccount', { user: userDetails, address: address });
     } catch (error) {
@@ -247,7 +236,7 @@ const editUserData = async (req, res) => {
 
         const file = req.file;
         console.log(file);
-        
+
 
         if (file) {
             const imagePath = path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages', file.filename);
@@ -286,7 +275,6 @@ const editUserData = async (req, res) => {
 // --------------Add-ddress------------
 const addAddress = async (req, res) => {
     try {
-        console.log(req.body)
         const userId = req.session.user_id;
         const address = new Address({
             user: userId,
@@ -346,12 +334,10 @@ const editAddress = async (req, res) => {
         const userId = req.session.user_id;
         console.log(req.body);
         const addressId = req.body.addressId;
-
         await Address.updateMany(
             { user: userId },
             { $set: { default: false } }
         );
-
         const updateAddress = await Address.findByIdAndUpdate(addressId, {
             name: req.body.name,
             companyName: req.body.companyName,
@@ -365,12 +351,26 @@ const editAddress = async (req, res) => {
             email: req.body.email,
             default: Boolean(req.body.isDefault)
         });
-
         if (updateAddress) {
             res.json({ success: true, message: 'Address edited !' });
         } else {
             res.json({ success: false, message: 'Editing failed!' });
         }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// -----------CheckOut--------------
+const checkout = async (req, res) => {
+    try {
+
+        const userId = req.session.user_id
+        const user = await User.findOne({ _id: userId })
+        const address = await Address.find({ user: userId })
+        const populatedCart = await User.populate(user, { path: 'cart.productId', model: 'products' });
+        const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
+        res.render('checkout', { user: userDetails, address: address, products: populatedCart })
     } catch (error) {
         console.log(error.message);
     }

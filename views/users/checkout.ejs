@@ -1,15 +1,20 @@
 <%-include('../layouts/user/header')-%>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
 
     </head>
 
     <body>
         <div class="page-wrapper">
             <%-include('../layouts/user/navbar')-%>
-
-
                 <main class="main">
                     <div class="page-header text-center"
-                        style="background-image: url('assets/images/page-header-bg.jpg')">
+                        style="background-image: url('/assets/images/page-header-bg.jpg')">
                         <div class="container">
                             <h1 class="page-title">Checkout<span>Shop</span></h1>
                         </div><!-- End .container -->
@@ -34,199 +39,228 @@
                                             <span>Click here to enter your code</span></label>
                                     </form>
                                 </div><!-- End .checkout-discount -->
-                                <form action="#">
-                                    <div class="row">
-                                        <div class="col-lg-9">
-                                            <div class="col-lg-6">
-                                                <div class="card card-dashboard">
-                                                    <div class="card-body pr-0 py-0">
-                                                        <h3 class="card-title d-inline">Address 
-                                                               
-                                                                    <span class="text-info"
-                                                                        style="font-size: x-small;">default</span>
-                                                                   
-                                                        </h3>
-                                                        <button class="float-right delete p-0"><i class="fas fa-trash"
-                                                                onclick="showConfirmationModal()"></i></button>
-                                                        <p class="m-0">
-                                                            <br> swalih pk
-                                                            paruhtikuna h
-                                                            440 <br>
-                                                            vazhikkadavu ,
-                                                            kerala
-                                                            india
-                                                            <br>
-                                                            679333
-                                                            <br>
-                                                            nisisnasAgmail.com
-                                                            <br>
-                                                            702343523452345
-                                                            <br>
-                                                            <a href="#"
-                                                                <i class="fa-sharp fa-solid fa-pen"
-                                                                    style="color: #cc9966;"></i></a>
+                                <div class="row">
+                                    <div class="col-lg-9">
+                                        <p class="m-3">Select your preferable address
+                                        <p>
+                                        <div class="row">
+                                            <% for( let i=0 ; i < address.length ; i++) { %>
+                                                <div class="col-lg-6">
+                                                    <div class="card card-dashboard" onclick="selectAddress(this)">
+                                                        <div class="card-body p-0 m-1">
+                                                            <input type="radio" class="pl-4 ml-3 mr-1"
+                                                                name="addressRadioButton" id="<%= address[i]._id %>">
+                                                            <h6 class="m-0 d-inline">
+                                                                <%= address[i].name %>
+                                                            </h6>
+                                                            <%if(address[i].default==true){%>
+                                                                <span class="text-info"
+                                                                    style="font-size: small;">(default)</span>
+                                                                <%}%>
+                                                                    <br>
+                                                                    <div class="pl-5">
+                                                                        <%= address[i].houseName %>,
+                                                                            <%= address[i].appartmentNumber %>,
+                                                                                <%=address[i].city %>
+                                                                                    <%= address[i].zipcode%>,
+                                                                                        <%= address[i].state%>,
+                                                                                            <%=address[i].country %>
+                                                                                                <br>
+                                                                                                <%= address[i].email%>
+                                                                                                    ,
+                                                                                                    <%=address[i].phone%>
+                                                                                                        <br>
+                                                                                                        <%= address[i].company
+                                                                                                            %><br>
+                                                                                                            <a href="#"
+                                                                                                                onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
+                                                                                                                <i class="fa-sharp fa-solid fa-pen"
+                                                                                                                    style="color: #cc9966;"></i></a>
+                                                                    </div>
+                                                        </div><!-- End .card-body -->
+                                                    </div><!-- End .card-dashboard -->
+                                                </div><!-- End .col-lg-6 -->
+                                                <%}%>
+                                                    <div class="col-lg-12">
+                                                        <label>Order notes (optional)</label>
+                                                        <textarea class="form-control"
+                                                            placeholder="Notes about your order, e.g. special notes for delivery"
+                                                            id="orderNotes" name="orderNotes"></textarea>
+                                                    </div>
 
-                                                    </div><!-- End .card-body -->
-                                                </div><!-- End .card-dashboard -->
-                                            </div><!-- End .col-lg-6 -->
 
-                                        </div><!-- End .col-lg-9 -->
-                                        <aside class="col-lg-3">
-                                            <div class="summary">
-                                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+                                        </div><!-- ------Row- end----- -->
+                                        <button class="btn btn-primary" id="addBtn"> Ship to another address</button>
 
-                                                <table class="table table-summary">
-                                                    <thead>
+                                        <form action="#" id="addAddressForm" style="display: none;">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <hr>
+                                                    <h2 class="checkout-title text-center">Address Details</h2>
+                                                    <!-- End .checkout-title -->
+                                                    <div class="">
+                                                        <label>First Name *</label>
+                                                        <p class="text-danger d-inline" id="nameError"></p>
+                                                        <input type="text" class="form-control" name="name" id="name">
+                                                    </div><!-- End .col-sm-6 -->
+
+
+                                                    <label>Company Name (Optional)</label>
+                                                    <input type="text" class="form-control" name="company" id="company">
+
+                                                    <label>Country *</label>
+                                                    <p class="text-danger d-inline" id="countryError"></p>
+                                                    <input type="text" class="form-control" name="country" id="country">
+
+                                                    <label>Street address *</label>
+                                                    <input type="text" class="form-control"
+                                                        placeholder="House number and Street name" id="houseName"
+                                                        name="houseName">
+                                                    <input type="text" class="form-control"
+                                                        placeholder="Appartments, suite, unit etc ..." id="appartment"
+                                                        name="appartment">
+
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <label>Town / City *</label>
+                                                            <input type="text" class="form-control" id="city"
+                                                                name="city">
+                                                        </div><!-- End .col-sm-6 -->
+
+                                                        <div class="col-sm-6">
+                                                            <label>State</label>
+                                                            <input type="text" class="form-control" id="state"
+                                                                name="state">
+                                                        </div><!-- End .col-sm-6 -->
+                                                    </div><!-- End .row -->
+
+                                                    <div class="row">
+                                                        <div class="col-sm-6">
+                                                            <label>Postcode / ZIP *</label>
+                                                            <p class="text-danger d-inline" id="postcodeError"></p>
+                                                            <input type="text" class="form-control" name="postcode"
+                                                                id="postcode">
+                                                        </div><!-- End .col-sm-6 -->
+
+                                                        <div class="col-sm-6">
+                                                            <label>Phone *</label>
+                                                            <p class="text-danger d-inline" id="phoneError"></p>
+                                                            <input type="tel" class="form-control" id="phone"
+                                                                name="phone">
+                                                        </div><!-- End .col-sm-6 -->
+                                                    </div><!-- End .row -->
+
+                                                    <label>Email address *</label>
+                                                    <p class="text-danger d-inline" id="emailError"></p>
+                                                    <input type="" class="form-control" id="email" name="email">
+
+                                                </div><!-- End .col-lg-9 -->
+                                            </div><!-- End .row -->
+
+
+
+
+                                    </div><!-- End .col-lg-9 -->
+                                    <aside class="col-lg-3">
+                                        <div class="summary">
+                                            <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+
+                                            <table class="table table-summary">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Product</th>
+                                                        <th>Total</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    <% user.cart.forEach(cartItem=> { %>
                                                         <tr>
-                                                            <th>Product</th>
-                                                            <th>Total</th>
+                                                            <td><a href="#">
+                                                                    <%= cartItem.productId.productName %> <span>X</span>
+                                                                        <%= cartItem.quantity %>
+                                                                </a></td>
+                                                            <td id="productTotal">$ <%= cartItem.productId.price *
+                                                                    cartItem.quantity %>
+                                                            </td>
                                                         </tr>
-                                                    </thead>
+                                                        <%})%>
 
-                                                    <tbody>
-                                                        <tr>
-                                                            <td><a href="#">Beige knitted elastic runner shoes</a></td>
-                                                            <td>$84.00</td>
-                                                        </tr>
+                                                            <tr class="summary-subtotal">
+                                                                <td>Subtotal:</td>
+                                                                <td id="subTotal"> </td>
+                                                            </tr><!-- End .summary-subtotal -->
+                                                            <tr>
+                                                                <td>Shipping:</td>
+                                                                <td>Free shipping</td>
+                                                            </tr>
+                                                            <tr class="summary-total">
+                                                                <td>Total:</td>
+                                                                <td id="total">$</td>
+                                                            </tr><!-- End .summary-total -->
 
-                                                        <tr>
-                                                            <td><a href="#">Blue utility pinafore denimdress</a></td>
-                                                            <td>$76,00</td>
-                                                        </tr>
-                                                        <tr class="summary-subtotal">
-                                                            <td>Subtotal:</td>
-                                                            <td>$160.00</td>
-                                                        </tr><!-- End .summary-subtotal -->
-                                                        <tr>
-                                                            <td>Shipping:</td>
-                                                            <td>Free shipping</td>
-                                                        </tr>
-                                                        <tr class="summary-total">
-                                                            <td>Total:</td>
-                                                            <td>$160.00</td>
-                                                        </tr><!-- End .summary-total -->
-                                                    </tbody>
-                                                </table><!-- End .table table-summary -->
+                                                </tbody>
+                                            </table><!-- End .table table-summary -->
+                                            <hr class="mt-0">
 
-                                                <div class="accordion-summary" id="accordion-payment">
-                                                    <div class="card">
-                                                        <div class="card-header" id="heading-1">
-                                                            <h2 class="card-title">
-                                                                <a role="button" data-toggle="collapse"
-                                                                    href="#collapse-1" aria-expanded="true"
-                                                                    aria-controls="collapse-1">
-                                                                    Direct bank transfer
-                                                                </a>
-                                                            </h2>
-                                                        </div><!-- End .card-header -->
-                                                        <div id="collapse-1" class="collapse show"
-                                                            aria-labelledby="heading-1"
-                                                            data-parent="#accordion-payment">
-                                                            <div class="card-body">
-                                                                Make your payment directly into our bank account. Please
-                                                                use your Order ID as the payment reference. Your order
-                                                                will not be shipped until the funds have cleared in our
-                                                                account.
-                                                            </div><!-- End .card-body -->
-                                                        </div><!-- End .collapse -->
-                                                    </div><!-- End .card -->
+                                            <div class="accordion-summary" id="accordion-payment">
+                                                <div>
+                                                    <h6>Payment methods</h6>
+                                                    <div class="mobile-nav">
+                                                        <ul class="mobile-menu payment-methods-dropdown">
+                                                            <li class="active">
+                                                                <a class="sf-with-ul p-0 text-dark">Online Payments</a>
+                                                                <ul>
+                                                                    <li>
+                                                                        <input type="radio" class="mx-4"
+                                                                            name="paymentMethod" id="paypal">
+                                                                        <i class="fa-brands fa-paypal fa-xl mr-2"
+                                                                            style="color: #0561ff;"></i>
+                                                                        <label for="paypal">PayPal</label>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="active">
+                                                                <a class="sf-with-ul p-0 text-dark">Wallet</a>
+                                                                <ul>
+                                                                    <li>
+                                                                        <input type="radio" class="mx-4"
+                                                                            name="paymentMethod" id="wallet">
+                                                                        <i class="fa-solid fa-wallet fa-lg mr-2"
+                                                                            style="color: #121b2b;"></i>
+                                                                        <label for="wallet">Wallet </label>
+                                                                        <p class="mx-5">Wallet amount: $453 </p>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                            <li class="active">
+                                                                <a class="sf-with-ul p-0">Other payments</a>
+                                                                <ul>
+                                                                    <li>
+                                                                        <input type="radio" class="mx-4"
+                                                                            name="paymentMethod" id="cashOnDelivery">
+                                                                        <i class="fa-solid fa-hand-holding-dollar fa-lg mr-2"
+                                                                            style="color: #06090e;"></i>
+                                                                        <label for="cashOnDelivery">Cash on
+                                                                            delivery</label>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div><!-- End .accordion -->
 
-                                                    <div class="card">
-                                                        <div class="card-header" id="heading-2">
-                                                            <h2 class="card-title">
-                                                                <a class="collapsed" role="button"
-                                                                    data-toggle="collapse" href="#collapse-2"
-                                                                    aria-expanded="false" aria-controls="collapse-2">
-                                                                    Check payments
-                                                                </a>
-                                                            </h2>
-                                                        </div><!-- End .card-header -->
-                                                        <div id="collapse-2" class="collapse"
-                                                            aria-labelledby="heading-2"
-                                                            data-parent="#accordion-payment">
-                                                            <div class="card-body">
-                                                                Ipsum dolor sit amet, consectetuer adipiscing elit.
-                                                                Donec odio. Quisque volutpat mattis eros. Nullam
-                                                                malesuada erat ut turpis.
-                                                            </div><!-- End .card-body -->
-                                                        </div><!-- End .collapse -->
-                                                    </div><!-- End .card -->
 
-                                                    <div class="card">
-                                                        <div class="card-header" id="heading-3">
-                                                            <h2 class="card-title">
-                                                                <a class="collapsed" role="button"
-                                                                    data-toggle="collapse" href="#collapse-3"
-                                                                    aria-expanded="false" aria-controls="collapse-3">
-                                                                    Cash on delivery
-                                                                </a>
-                                                            </h2>
-                                                        </div><!-- End .card-header -->
-                                                        <div id="collapse-3" class="collapse"
-                                                            aria-labelledby="heading-3"
-                                                            data-parent="#accordion-payment">
-                                                            <div class="card-body">Quisque volutpat mattis eros. Lorem
-                                                                ipsum dolor sit amet, consectetuer adipiscing elit.
-                                                                Donec odio. Quisque volutpat mattis eros.
-                                                            </div><!-- End .card-body -->
-                                                        </div><!-- End .collapse -->
-                                                    </div><!-- End .card -->
-
-                                                    <div class="card">
-                                                        <div class="card-header" id="heading-4">
-                                                            <h2 class="card-title">
-                                                                <a class="collapsed" role="button"
-                                                                    data-toggle="collapse" href="#collapse-4"
-                                                                    aria-expanded="false" aria-controls="collapse-4">
-                                                                    PayPal <small class="float-right paypal-link">What
-                                                                        is PayPal?</small>
-                                                                </a>
-                                                            </h2>
-                                                        </div><!-- End .card-header -->
-                                                        <div id="collapse-4" class="collapse"
-                                                            aria-labelledby="heading-4"
-                                                            data-parent="#accordion-payment">
-                                                            <div class="card-body">
-                                                                Nullam malesuada erat ut turpis. Suspendisse urna nibh,
-                                                                viverra non, semper suscipit, posuere a, pede. Donec nec
-                                                                justo eget felis facilisis fermentum.
-                                                            </div><!-- End .card-body -->
-                                                        </div><!-- End .collapse -->
-                                                    </div><!-- End .card -->
-
-                                                    <div class="card">
-                                                        <div class="card-header" id="heading-5">
-                                                            <h2 class="card-title">
-                                                                <a class="collapsed" role="button"
-                                                                    data-toggle="collapse" href="#collapse-5"
-                                                                    aria-expanded="false" aria-controls="collapse-5">
-                                                                    Credit Card (Stripe)
-                                                                    <img src="assets/images/payments-summary.png"
-                                                                        alt="payments cards">
-                                                                </a>
-                                                            </h2>
-                                                        </div><!-- End .card-header -->
-                                                        <div id="collapse-5" class="collapse"
-                                                            aria-labelledby="heading-5"
-                                                            data-parent="#accordion-payment">
-                                                            <div class="card-body"> Donec nec justo eget felis facilisis
-                                                                fermentum.Lorem ipsum dolor sit amet, consectetuer
-                                                                adipiscing elit. Donec odio. Quisque volutpat mattis
-                                                                eros. Lorem ipsum dolor sit ame.
-                                                            </div><!-- End .card-body -->
-                                                        </div><!-- End .collapse -->
-                                                    </div><!-- End .card -->
-                                                </div><!-- End .accordion -->
-
-                                                <button type="submit"
-                                                    class="btn btn-outline-primary-2 btn-order btn-block">
-                                                    <span class="btn-text">Place Order</span>
-                                                    <span class="btn-hover-text">Proceed to Checkout</span>
-                                                </button>
-                                            </div><!-- End .summary -->
-                                        </aside><!-- End .col-lg-3 -->
-                                    </div><!-- End .row -->
-                                </form>
+                                            <button type="submit" id="placeOrderBtn"
+                                                class="btn btn-outline-primary-2 btn-order btn-block">
+                                                <span class="btn-text">Place Order</span>
+                                                <span class="btn-hover-text">Proceed to Checkout</span>
+                                            </button>
+                                        </div><!-- End .summary -->
+                                    </aside><!-- End .col-lg-3 -->
+                                    </form>
+                                </div><!-- End .row -->
                             </div><!-- End .container -->
                         </div><!-- End .checkout -->
                     </div><!-- End .page-content -->
@@ -238,7 +272,7 @@
                             <div class="row">
                                 <div class="col-sm-6 col-lg-3">
                                     <div class="widget widget-about">
-                                        <img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo"
+                                        <img src="/assets/images/logo.png" class="footer-logo" alt="Footer Logo"
                                             width="105" height="25">
                                         <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu
                                             vulputate magna eros eu erat. </p>
@@ -309,13 +343,14 @@
                             <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
                             <!-- End .footer-copyright -->
                             <figure class="footer-payments">
-                                <img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
+                                <img src="/assets/images/payments.png" alt="Payment methods" width="272" height="20">
                             </figure><!-- End .footer-payments -->
                         </div><!-- End .container -->
                     </div><!-- End .footer-bottom -->
                 </footer><!-- End .footer -->
         </div><!-- End .page-wrapper -->
-        <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+        <button id="scroll-top" title="Back to Top"><i class="fa-solid fa-arrow-up fa-la"
+                style="color: #cc9966;"></i></button>
 
         <!-- Mobile Menu -->
         <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
@@ -619,13 +654,442 @@
             </div><!-- End .modal-dialog -->
         </div><!-- End .modal -->
 
+        <!-- Edit Address Modal -->
+        <div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editAddressModalLabel">Edit Address</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <!-- Form fields for editing address details go here -->
+                        <form id="editAddressForm">
+                            <div class="mb-3">
+                                <label for="editName" class="form-label">Name*</label>
+                                <p class="text-danger d-inline" id="nameError"></p>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editCompany" class="form-label">Company Name (optional)</label>
+                                <input type="text" class="form-control" id="company" name="company">
+                            </div>
+                            <div class="mb-3">
+                                <label for="editCountry" class="form-label">Country*</label>
+                                <p class="text-danger d-inline" id="countryError"></p>
+                                <input type="text" class="form-control" id="country" name="country">
+                            </div>
+                            <!-- Repeat for other address fields -->
+                            <div class="mb-3">
+                                <!-- Add other fields as needed -->
+                                <label for="editStreet" class="form-label">Street Address*</label>
+                                <input type="text" class="form-control" id="houseName" name="houseName"
+                                    placeholder="House number and street name">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="appartment" name="appartment"
+                                    placeholder="Apartments, suite, unit, etc..">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="editCity">Town/City*</label>
+                                    <input type="text" class="form-control" id="city" name="city">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="editState">State*</label>
+                                    <input type="text" class="form-control" id="state" name="state">
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="editPostcode">Postcode/ZIP*</label>
+                                    <p class="text-danger d-inline" id="postcodeError"></p>
+                                    <input type="text" class="form-control" id="postcode" name="postcode">
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="editPhone">Phone*</label>
+                                    <p class="text-danger d-inline" id="phoneError"></p>
+                                    <input type="text" class="form-control" id="phone" name="addressId">
+                                </div>
+
+                                <input type="text" class="form-control" style="display: none;" id="addressId"
+                                    name="addressId">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="editEmail">Email Address*</label>
+                                <p class="text-danger d-inline" id="emailError"></p>
+                                <input type="email" class="form-control" id="email" name="email">
+                            </div>
+
+                            <div class="form-group">
+                                <input type="checkbox" id="isdefault" name="isDefault">
+                                <label for="default">Default address</label>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary rounded"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary rounded">Save Changes</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="notification-container"></div>
+
+        <!-- ----------Select address and send datas when click placeOder---------- -->
+      <!-- -- Include jQuery library --> 
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
+    <script>
+        document.getElementById('placeOrderBtn').addEventListener('click', function () {
+            event.preventDefault();
+            const selectedRadioButton = document.querySelector('input[name="addressRadioButton"]:checked');
+            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+            const orderNotes = document.getElementById('orderNotes').value;
+            const totalValue = parseFloat(document.getElementById('total').textContent.replace('$', ''));
+
+            if (selectedRadioButton) {
+                // Radio button is selected, send data to /cart/placeOrder route
+                const formData = new FormData();
+                formData.append('selectedAddressId', selectedRadioButton.id);
+
+                if (paymentMethod) {
+                    formData.append('paymentMethod', paymentMethod.id);
+                }
+
+                formData.append('orderNotes', orderNotes);
+                formData.append('total', totalValue);
+
+                $.ajax({
+                     url: '/cart/placeOrder',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(Object.fromEntries(formData.entries())),
+                    success: function (data) {
+
+                        showSuccessAlert(data.result)
+                            .then((clickedButton) => {
+                                console.log('Clicked Button:', clickedButton);
+
+                                if (clickedButton == 'OK') {
+                                    window.location.href = '/home';
+                                } else {
+                                    window.location.href = '/account';
+                                }
+                            });
+                    },
+                    error: function (error) {
+                        console.error('Error:', error);
+                    }
+                });
+
+            } else {
+                if (validateForm('addAddressForm')) {
+                    const formData = new FormData(document.getElementById('addAddressForm'));
+
+                    if (paymentMethod) {
+                        formData.append('paymentMethod', paymentMethod.id);
+                    }
+
+                    formData.append('orderNotes', orderNotes);
+                    formData.append('total', totalValue);
+
+                    $.ajax({
+                        url: '/cart/placeOrder',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(Object.fromEntries(formData.entries())),
+                        success: function (data) {
+                            // Handle the server response
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+
+
+
+        <!-- -------------sweet Alerts------------------- -->
+        <script>
+            function showSuccessAlert(result) {
+                return new Promise((resolve) => {
+                    Swal.fire({
+                        title: 'Order Success!',
+                        text: 'Your order has been placed successfully.',
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonText: 'Orders',
+                        cancelButtonText: 'OK',
+                        allowOutsideClick: false,
+                    }).then((swalResult) => {
+                        if (swalResult.isConfirmed) {
+                            resolve('Orders');
+                        } else if (swalResult.dismiss === Swal.DismissReason.cancel) {
+                            resolve('OK');
+                        }
+                    });
+                });
+            }
+        </script>
+
+        <!--  ------For edit ADdress------ -->
+        <script>
+            document.getElementById('editAddressForm').addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                if (!validateForm('editAddressForm')) {
+                    return;
+                }
+
+                const formData = new FormData(this);
+                const formObj = Object.fromEntries(Array.from(formData.entries()));
+
+                const defaultAddressCheckbox = document.getElementById('isdefault');
+                console.log("Checkbox checked:", defaultAddressCheckbox.checked);
+                formObj.isDefault = defaultAddressCheckbox.checked;
+
+                const response = await fetch('/account/editAddress', {
+                    method: 'PATCH',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formObj)
+                });
+
+
+                const result = await response.json();
+
+                console.log(result);
+
+                if (result.success) {
+                    showNotification(result.message, true);
+                    setTimeout(() => {
+                        window.location.href = '/cart/checkout'
+                    }, 1000);
+
+                } else {
+                    showNotification(result.message, false);
+                }
+            });
+        </script>
+
+        <!------------showing notification------------->
+        <script>
+            function showNotification(message, success = true) {
+                const notificationContainer = document.getElementById('notification-container');
+                notificationContainer.innerHTML = message;
+
+                if (success) {
+                    notificationContainer.style.color = 'green';
+                } else {
+                    notificationContainer.style.color = 'red';
+                }
+
+                notificationContainer.style.display = 'block';
+
+                setTimeout(() => {
+                    notificationContainer.style.display = 'none';
+                }, 3000); // Adjust the time as needed
+            }
+        </script>
+
+        <!-- ------------ Edit Address------- -->
+        <script>
+            function showEditAddressModal(name, company, country, houseName, appartmentNumber, city, state, postcode, phone, email, addressId, isDefault) {
+
+                var form = document.getElementById('editAddressForm');
+                form.querySelector('#name').value = name;
+                form.querySelector('#email').value = email;
+                form.querySelector('#phone').value = phone;
+                form.querySelector('#city').value = city;
+                form.querySelector('#state').value = state;
+                form.querySelector('#postcode').value = postcode;
+                form.querySelector('#company').value = company;
+                form.querySelector('#country').value = country;
+                form.querySelector('#houseName').value = houseName
+                form.querySelector('#appartment').value = appartmentNumber;
+                form.querySelector('#addressId').value = addressId;
+
+
+                if (form == "editAddressForm") {
+                    form.querySelector('#addressId').value = addressId;
+                }
+
+
+                var defaultCheckbox = form.querySelector('#isdefault');
+
+                if (isDefault == "true") {
+                    defaultCheckbox.checked = true;
+                } else {
+                    defaultCheckbox.checked = false
+                }
+
+                // Show the modal
+                $('#editAddressModal').modal('show');
+            }
+        </script>
+
+        <script>
+            // -------Edit form validation-------
+            function validateForm(formId) {
+                var form = document.getElementById(formId);
+                console.log(form)
+
+                console.log("1")
+                var name = form.querySelector('#name');
+                console.log("2")
+                var email = form.querySelector('#email');
+                console.log("3")
+                var phone = form.querySelector('#phone');
+                console.log("4")
+                var country = form.querySelector('#country');
+                console.log("5")
+                var postcode = form.querySelector('#postcode');
+                console.log("6")
+                var nameError = form.querySelector('#nameError');
+                var emailError = form.querySelector('#emailError');
+                var phoneError = form.querySelector('#phoneError');
+                var postError = form.querySelector('#postcodeError');
+                var countryError = form.querySelector('#countryError');
+
+                // Regular expressions for validation
+                var nameRegex = /^[A-Za-z\s]{4,}$/;
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                var phoneRegex = /^\d{10}$/;
+                var countryRegex = /^\D*$/;
+                var postCodeRegex = /^\d{6}$/;
+
+                // Validate Name
+                if (!nameRegex.test(name.value)) {
+                    nameError.textContent = 'Name should contain at least 4 letters and no digits.';
+                    return false;
+                } else {
+                    nameError.textContent = '';
+                }
+
+                if (!emailRegex.test(email.value)) {
+                    emailError.textContent = 'Invalid email format.';
+                    return false;
+                } else {
+                    emailError.textContent = '';
+                }
+
+                if (!phoneRegex.test(phone.value)) {
+                    phoneError.textContent = 'Phone should contain 10 digits.';
+                    return false;
+                } else {
+                    phoneError.textContent = '';
+                }
+
+                if (!countryRegex.test(country.value)) {
+                    countryError.textContent = 'Invalid country name';
+                    return false;
+                } else {
+                    countryError.textContent = '';
+                }
+
+                if (!postCodeRegex.test(postcode.value)) {
+                    postError.textContent = 'It should only contain 6 digits';
+                    return false;
+                } else {
+                    postError.textContent = '';
+                }
+
+
+                return true;
+
+            }
+        </script>
+
+
+
+        <!-- ---------Radio active------------ -->
+        <script>
+            function selectAddress(card) {
+                const radioBtn = card.querySelector('input[type="radio"]');
+                const allCards = document.querySelectorAll('.card-dashboard');
+                const addAddressForm = document.getElementById('addAddressForm');
+
+                // Hide the addAddressForm
+                addAddressForm.style.display = 'none';
+
+                // Uncheck all radio buttons and remove 'selected' class
+                allCards.forEach((c) => {
+                    const otherRadioBtn = c.querySelector('input[type="radio"]');
+                    otherRadioBtn.checked = false;
+                    c.classList.remove('selected');
+                });
+
+                // Check the selected radio button and add 'selected' class
+                radioBtn.checked = true;
+                card.classList.add('selected');
+            }
+
+            document.getElementById('addBtn').addEventListener('click', (event) => {
+                event.preventDefault();
+
+                const allRadioButtons = document.querySelectorAll('input[name="addressRadioButton"]');
+                const allCards = document.querySelectorAll('.card-dashboard');
+                const addAddressForm = document.getElementById('addAddressForm');
+
+                // Uncheck all radio buttons and remove 'selected' class
+                allRadioButtons.forEach((radioBtn) => {
+                    radioBtn.checked = false;
+                });
+
+                allCards.forEach((card) => {
+                    card.classList.remove('selected');
+                });
+
+                // Display the addAddressForm
+                addAddressForm.style.display = 'block';
+            });
+        </script>
+
+
+        <!-- for display totals -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var productTotalElements = document.querySelectorAll('#productTotal');
+
+                var subTotal = 0;
+                var total = 0;
+
+                productTotalElements.forEach(function (productTotalElement) {
+                    var productTotalValue = parseFloat(productTotalElement.innerText.replace('$', ''));
+
+                    subTotal += productTotalValue;
+                    total += productTotalValue;
+                });
+
+                var subTotalElement = document.getElementById('subTotal');
+                var totalElement = document.getElementById('total');
+                subTotalElement.innerText = '$' + subTotal.toFixed(2);
+                totalElement.innerText = '$' + total.toFixed(2);
+            });
+        </script>
+
+
+
+
+
+
+
         <!-- Plugins JS File -->
-        <script src="assets/js/jquery.min.js"></script>
-        <script src="assets/js/bootstrap.bundle.min.js"></script>
-        <script src="assets/js/jquery.hoverIntent.min.js"></script>
-        <script src="assets/js/jquery.waypoints.min.js"></script>
-        <script src="assets/js/superfish.min.js"></script>
-        <script src="assets/js/owl.carousel.min.js"></script>
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/jquery.hoverIntent.min.js"></script>
+        <script src="/assets/js/jquery.waypoints.min.js"></script>
+        <script src="/assets/js/superfish.min.js"></script>
+        <script src="/assets/js/owl.carousel.min.js"></script>
         <!-- Main JS File -->
-        <script src="assets/js/main.js"></script>
+        <script src="/assets/js/main.js"></script>
         <%-include('../layouts/user/footer')-%>

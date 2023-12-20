@@ -1,11 +1,6 @@
 <%-include('../layouts/user/header')-%>
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Bootstrap JS -->
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
 
     </head>
 
@@ -30,8 +25,6 @@
                         </div><!-- End .container -->
                     </nav><!-- End .breadcrumb-nav -->
 
-
-
                     <div class="page-content">
                         <div class="dashboard">
                             <div class="container">
@@ -39,14 +32,14 @@
                                     <aside class="col-md-4 col-lg-3">
                                         <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
-                                                    href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
-                                                    aria-selected="true">Edit profile</a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="tab-orders-link" data-toggle="tab"
+                                                <a class="nav-link active" id="tab-orders-link" data-toggle="tab"
                                                     href="#tab-orders" role="tab" aria-controls="tab-orders"
                                                     aria-selected="false">Orders</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link " id="tab-dashboard-link" data-toggle="tab"
+                                                    href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
+                                                    aria-selected="true">Edit profile</a>
                                             </li>
                                             <li class="nav-item">
                                                 <a class="nav-link" id="tab-address-link" data-toggle="tab"
@@ -63,11 +56,11 @@
 
                                     <div class="col-md-8 col-lg-9">
                                         <div class="tab-content">
-                                            <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                            <div class="tab-pane fade " id="tab-dashboard" role="tabpanel"
                                                 aria-labelledby="tab-dashboard-link">
                                                 <!-- Content specific to the Edit Profile tab -->
                                                 <form class="form" action="/account/editUser" method="post"
-                                                    id="editform" enctype="multipart/form-data" >
+                                                    id="editform" enctype="multipart/form-data">
                                                     <div class="d-flex flex-column align-items-center">
                                                         <div class="profile-image-container">
                                                             <img id="profileImage"
@@ -172,12 +165,140 @@
                                                 <hr>
                                             </div><!--/tab-pane-->
 
+                                            <div class="col-md-8 col-lg-9">
+                                                <div class="tab-pane fade show active" id="tab-orders" role="tabpanel"
+                                                    aria-labelledby="tab-orders-link">
+                                                    <div class="page-content ">
+                                                        <div class="container">
+                                                            <table class="table table-wishlist table-mobile">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>Product</th>
+                                                                        <th>Price</th>
+                                                                        <th>Stock Status</th>
+                                                                        <th></th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
 
-                                            <div class="tab-pane fade" id="tab-orders" role="tabpanel"
-                                                aria-labelledby="tab-orders-link">
-                                                <p>No order has been made yet.</p>
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <td class="product-col">
+                                                                            <div class="product">
+                                                                                <figure class="product-media">
+                                                                                    <a href="#">
+                                                                                        <img src="assets/images/products/table/product-1.jpg"
+                                                                                            alt="Product image">
+                                                                                    </a>
+                                                                                </figure>
+
+                                                                                <h3 class="product-title">
+                                                                                    <a href="#">Beige knitted elastic
+                                                                                        runner shoes</a>
+                                                                                </h3><!-- End .product-title -->
+                                                                            </div><!-- End .product -->
+                                                                        </td>
+                                                                        <td class="price-col">$84.00</td>
+                                                                        <td class="stock-col"><span class="in-stock">In
+                                                                                stock</span></td>
+                                                                        <td class="action-col">
+                                                                            <div class="dropdown">
+                                                                                <button
+                                                                                    class="btn btn-block btn-outline-primary-2"
+                                                                                    data-toggle="dropdown"
+                                                                                    aria-haspopup="true"
+                                                                                    aria-expanded="false">
+                                                                                    <i class="icon-list-alt"></i>Select
+                                                                                    Options
+                                                                                </button>
+
+                                                                                <div class="dropdown-menu">
+                                                                                    <a class="dropdown-item"
+                                                                                        href="#">First option</a>
+                                                                                    <a class="dropdown-item"
+                                                                                        href="#">Another option</a>
+                                                                                    <a class="dropdown-item"
+                                                                                        href="#">The best option</a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td class="remove-col"><button
+                                                                                class="btn-remove"><i
+                                                                                    class="icon-close"></i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="product-col">
+                                                                            <div class="product">
+                                                                                <figure class="product-media">
+                                                                                    <a href="#">
+                                                                                        <img src="assets/images/products/table/product-2.jpg"
+                                                                                            alt="Product image">
+                                                                                    </a>
+                                                                                </figure>
+
+                                                                                <h3 class="product-title">
+                                                                                    <a href="#">Blue utility pinafore
+                                                                                        denim dress</a>
+                                                                                </h3><!-- End .product-title -->
+                                                                            </div><!-- End .product -->
+                                                                        </td>
+                                                                        <td class="price-col">$76.00</td>
+                                                                        <td class="stock-col"><span class="in-stock">In
+                                                                                stock</span></td>
+                                                                        <td class="action-col">
+                                                                            <button
+                                                                                class="btn btn-block btn-outline-primary-2"><i
+                                                                                    class="icon-cart-plus"></i>Add to
+                                                                                Cart</button>
+                                                                        </td>
+                                                                        <td class="remove-col"><button
+                                                                                class="btn-remove"><i
+                                                                                    class="icon-close"></i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="product-col">
+                                                                            <div class="product">
+                                                                                <figure class="product-media">
+                                                                                    <a href="#">
+                                                                                        <img src="assets/images/products/table/product-3.jpg"
+                                                                                            alt="Product image">
+                                                                                    </a>
+                                                                                </figure>
+
+                                                                                <h3 class="product-title">
+                                                                                    <a href="#">Orange saddle lock front
+                                                                                        chain cross body bag</a>
+                                                                                </h3><!-- End .product-title -->
+                                                                            </div><!-- End .product -->
+                                                                        </td>
+                                                                        <td class="price-col">$52.00</td>
+                                                                        <td class="stock-col"><span
+                                                                                class="out-of-stock">Out of stock</span>
+                                                                        </td>
+                                                                        <td class="action-col">
+                                                                            <button
+                                                                                class="btn btn-block btn-outline-primary-2 disabled">Out
+                                                                                of Stock</button>
+                                                                        </td>
+                                                                        <td class="remove-col"><button
+                                                                                class="btn-remove"><i
+                                                                                    class="icon-close"></i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table><!-- End .table table-wishlist -->
+
+                                                        </div><!-- End .container -->
+                                                    </div><!-- End .page-content -->
+
+
+
+                                                    <!-- <p>No order has been made yet.</p>
                                                 <a href="category.html" class="btn btn-outline-primary-2"><span>GO
-                                                        SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                                        SHOP</span><i class="icon-long-arrow-right"></i></a> -->
+                                                </div>
                                             </div>
 
                                             <div class="tab-pane fade" id="tab-downloads" role="tabpanel"
@@ -190,56 +311,65 @@
 
                                             <div class="tab-pane fade" id="tab-address" role="tabpanel"
                                                 aria-labelledby="tab-address-link">
-                                   <div class="d-flex justify-content-end">
-                                                    <p>
-                                                        <button class="text-dark border-0 shadow" data-toggle="modal"
-                                                            data-target="#addAddressModal">
-                                                            <i class="fa-sharp fa-solid fa-circle-plus"
-                                                                style="color: #2bc752;"></i> Add address
-                                                        </button>
-                                                    </p>
-                                                </div>
-                                                <div class="row">
-                                                    <% for( let i=0 ; i < address.length ; i++) { %>
-                                                        <div class="col-lg-6">
-                                                            <div class="card card-dashboard">
-                                                                <div class="card-body pr-0 py-0">
-                                                                    <h3 class="card-title d-inline">Address <%= i+1 %>
-                                                                        <%if(address[i].default == true){%>
-                                                                           <span class="text-info" style="font-size: x-small;">default</span>
-                                                                        <%}%>
-                                                                    </h3>
-                                                                    <button class="float-right delete p-0"><i
-                                                                            class="fas fa-trash"
-                                                                            onclick="showConfirmationModal('<%= address[i]._id %>')"></i></button>
-                                                                    <p class="m-0">
-                                                                        <%= address[i].name %><br>
-                                                                            <%= address[i].company %>
-                                                                                <%= address[i].houseName %> <br>
-                                                                                    <%= address[i].appartmentNumber %>,
-                                                                                        <%=address[i].city %><br>
-                                                                                            <%= address[i].state%>,
-                                                                                                <%=address[i].country %>
-                                                                                                    <br>
-                                                                                                    <%= address[i].zipcode%>
+                                                <div id="addressTab">
+                                                    <div class="d-flex justify-content-end">
+                                                        <p>
+                                                            <button class="text-dark border-0 shadow"
+                                                                data-toggle="modal" data-target="#addAddressModal">
+                                                                <i class="fa-sharp fa-solid fa-circle-plus"
+                                                                    style="color: #2bc752;"></i> Add address
+                                                            </button>
+                                                        </p>
+                                                    </div>
+                                                    <div class="row">
+                                                        <% for( let i=0 ; i < address.length ; i++) { %>
+                                                            <div class="col-lg-6">
+                                                                <div class="card card-dashboard">
+                                                                    <div class="card-body pr-0 py-0">
+                                                                        <h3 class="card-title d-inline">Address <%= i+1
+                                                                                %>
+                                                                                <%if(address[i].default==true){%>
+                                                                                    <span class="text-info"
+                                                                                        style="font-size: x-small;">default</span>
+                                                                                    <%}%>
+                                                                        </h3>
+                                                                        <button class="float-right delete p-0"><i
+                                                                                class="fas fa-trash"
+                                                                                onclick="showConfirmationModal('<%= address[i]._id %>')"></i></button>
+                                                                        <p class="m-0">
+                                                                            <%= address[i].name %><br>
+                                                                                <%= address[i].company %>
+                                                                                    <%= address[i].houseName %> <br>
+                                                                                        <%= address[i].appartmentNumber
+                                                                                            %>,
+                                                                                            <%=address[i].city %><br>
+                                                                                                <%= address[i].state%>,
+                                                                                                    <%=address[i].country
+                                                                                                        %>
                                                                                                         <br>
-                                                                                                        <%= address[i].email%>
+                                                                                                        <%=
+                                                                                                            address[i].zipcode%>
                                                                                                             <br>
-                                                                                                            <%=address[i].phone%>
+                                                                                                            <%=
+                                                                                                                address[i].email%>
                                                                                                                 <br>
-                                                                                                                <a href="#"
-                                                                                                                    onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
-                                                                                                                    <i class="fa-sharp fa-solid fa-pen"
-                                                                                                                        style="color: #cc9966;"></i></a>
+                                                                                                                <%=address[i].phone%>
+                                                                                                                    <br>
+                                                                                                                    <a href="#"
+                                                                                                                        onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
+                                                                                                                        <i class="fa-sharp fa-solid fa-pen"
+                                                                                                                            style="color: #cc9966;"></i></a>
 
-                                                                </div><!-- End .card-body -->
-                                                            </div><!-- End .card-dashboard -->
-                                                        </div><!-- End .col-lg-6 -->
+                                                                    </div><!-- End .card-body -->
+                                                                </div><!-- End .card-dashboard -->
+                                                            </div><!-- End .col-lg-6 -->
+                                                            <%}%>
+                                                    </div>
+                                                    <% if(address.length < 1){ %>
+                                                        <h6 style="color: gray;" class="text-center"></h6>No
+                                                        addressess..!</h6>
                                                         <%}%>
                                                 </div>
-                                                <% if(address.length < 1){ %>
-                                                    <h6 style="color: gray;" class="text-center"></h6>No addressess..!</h6>
-                                                    <%}%>
                                             </div>
                                         </div><!-- .End .tab-pane -->
                                     </div> <!-- col -->
@@ -733,7 +863,7 @@
                             </div>
 
                             <div class="form-group">
-                                <input type="checkbox" id="default" value="true"  name="default" class="bg-primary">
+                                <input type="checkbox" id="default" value="true" name="default" class="bg-primary">
                                 <label for="">Default address</label>
                             </div>
 
@@ -805,20 +935,21 @@
                                     <input type="text" class="form-control" id="phone" name="addressId">
                                 </div>
 
-                                <input type="text" class="form-control" style="display: none;" id="addressId" name="addressId">
+                                <input type="text" class="form-control" style="display: none;" id="addressId"
+                                    name="addressId">
 
                             </div>
 
                             <div class="form-group">
                                 <label for="editEmail">Email Address*</label>
                                 <p class="text-danger d-inline" id="emailError"></p>
-                                <input type="email" class="form-control" id="email" name="email">
+                                <input type="" class="form-control" id="email" name="email">
                             </div>
 
-                        <div class="form-group">
-                            <input type="checkbox" id="isdefault" name="isDefault">
-                            <label for="default">Default address</label>
-                        </div>
+                            <div class="form-group">
+                                <input type="checkbox" id="isdefault" name="isDefault">
+                                <label for="default">Default address</label>
+                            </div>
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary rounded"
@@ -862,14 +993,14 @@
                 form.querySelector('#addressId').value = addressId;
 
 
-               var defaultCheckbox = form.querySelector('#isdefault');
+                var defaultCheckbox = form.querySelector('#isdefault');
 
-               if(isDefault == "true"){
-                 defaultCheckbox.checked = true;
-               }else{
-                 defaultCheckbox.checked = false
-               }
-                
+                if (isDefault == "true") {
+                    defaultCheckbox.checked = true;
+                } else {
+                    defaultCheckbox.checked = false
+                }
+
                 // Show the modal
                 $('#editAddressModal').modal('show');
             }
@@ -879,14 +1010,11 @@
         <!-- -------------------DeleteAddress------------- -->
         <script>
             function showConfirmationModal(addressId) {
-
                 $('#confirmationModal').data('addressId', addressId);
-
                 $('#confirmationModal').modal('show');
             }
 
             function confirmDeleteAddress() {
-
                 const addressId = $('#confirmationModal').data('addressId');
 
                 fetch(`/account/deleteAddress`, {
@@ -897,22 +1025,23 @@
                     body: JSON.stringify({ addressId })
                 })
                     .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            showNotification(data.message, true);
-                        } else {
-                            showNotification(data.message, false);
-                        }
+                    .then(result => { // Change 'data' to 'result' here
+                        console.log(result);
 
-                        setTimeout(() => {
-                            window.location.href = '/account'
-                        }, 1000);
+                        $('#addressTab').load('/account #addressTab', function () {
+                            if (result.success) {
+                                showNotification(result.message, true);
+                            } else {
+                                showNotification(result.message, false);
+                            }
+                        });
                     })
-                    .catch(error => console.error('Error Listing Category:', error));
+                    .catch(error => console.error('Error Deleting Address:', error));
 
                 $('#confirmationModal').modal('hide');
             }
         </script>
+
 
 
         <!-- ------------------display USer Dp----------------- -->
@@ -1026,16 +1155,16 @@
             }
 
 
-    // ------------for Edit User-----------
-    document.getElementById('editform').addEventListener('submit', async function (event) {
-            event.preventDefault();
+            // ------------for Edit User-----------
+            document.getElementById('editform').addEventListener('submit', async function (event) {
+                event.preventDefault();
 
-             if (!validateForm('editform')) {
-                return;
-             }
+                if (!validateForm('editform')) {
+                    return;
+                }
 
-            const form = event.target;
-            const formData = new FormData(form);
+                const form = event.target;
+                const formData = new FormData(form);
 
                 const response = await fetch(form.action, {
                     method: form.method,
@@ -1049,50 +1178,52 @@
                 } else {
                     showNotification(result.message, false);
                 }
-        });
+            });
 
             // ------------for add address-----------
-            document.getElementById('addressForm').addEventListener('submit', async function (event) {
-                    event.preventDefault();
+            $('#addressForm').submit(async function (event) {
+                event.preventDefault();
 
-                    if (!validateForm('addressForm')) {
-                        return;
-                    }
+                if (!validateForm('addressForm')) {
+                    return;
+                }
 
-                    const formData = new FormData(this);
-                    const formObj = Object.fromEntries(Array.from(formData.entries()));
+                const formData = new FormData(this);
+                const formObj = Object.fromEntries(Array.from(formData.entries()));
 
-                    const defaultAddressCheckbox = document.getElementById('default');
-                    formObj.isDefault = defaultAddressCheckbox.checked;
+                const defaultAddressCheckbox = $('#default');
+                formObj.isDefault = defaultAddressCheckbox.prop('checked');
 
-                    const response = await fetch('/account/addAddress', {
+                try {
+                    const response = await $.ajax({
+                        url: '/account/addAddress',
                         method: 'POST',
-                        body: JSON.stringify(formObj),
-                        headers: {
-                            "Content-Type": "application/json"
-                        }
+                        contentType: 'application/json',
+                        data: JSON.stringify(formObj),
                     });
 
-                    const result = await response.json();
+                    const result = response;
 
                     if (result.success) {
-                        showNotification(result.message, true);
-
-                        $('#addAddressModal').modal('hide');
-
-                        setTimeout(() => {
-                            window.location.href = '/account';
-                        }, 1000);
+                        $('#addressTab').load('/account #addressTab', function () {
+                            $('#addAddressModal').modal('hide');
+                            showNotification(result.message, true);
+                        });
                     } else {
-                        showNotification(result.message, false);
+                        $('#addressTab').load('/account #addressTab', function () {
+                            $('#addAddressModal').modal('hide');
+                            showNotification(result.message, false);
+                        });
                     }
-                });
-
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
 
 
             //  ------For edit ADdress------
-            document.getElementById('editAddressForm').addEventListener('submit', async function (event) {
-                event.preventDefault(); 
+            $('#editAddressForm').submit(async function (event) {
+                event.preventDefault();
 
                 if (!validateForm('editAddressForm')) {
                     return;
@@ -1101,36 +1232,35 @@
                 const formData = new FormData(this);
                 const formObj = Object.fromEntries(Array.from(formData.entries()));
 
-               const defaultAddressCheckbox = document.getElementById('isdefault');
-                console.log("Checkbox checked:", defaultAddressCheckbox.checked);
-                formObj.isDefault = defaultAddressCheckbox.checked;
+                const defaultAddressCheckbox = $('#isdefault');
+                console.log("Checkbox checked:", defaultAddressCheckbox.is(':checked'));
+                formObj.isDefault = defaultAddressCheckbox.is(':checked');
 
-                const response = await fetch('/account/editAddress', {
-                    method: 'PATCH',
-                      headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(formObj)
-                });
+                try {
+                    const response = await $.ajax({
+                        url: '/account/editAddress',
+                        method: 'PATCH',
+                        contentType: 'application/json',
+                        data: JSON.stringify(formObj),
+                    });
 
+                    const result = response;
 
-                const result = await response.json();
-
-                if (result.success) {
-                    showNotification(result.message, true);
-                     $('#addAddressModal').modal('hide');
-
-                    setTimeout(() => {
-                        window.location.href = '/account'
-                    }, 1000);
-
-                } else {
-                    showNotification(result.message, false);
+                    if (result.success) {
+                        $('#addressTab').load('/account #addressTab', function () {
+                            $('#editAddressModal').modal('hide');
+                            showNotification(result.message, true);
+                        });
+                    } else {
+                        $('#addressTab').load('/account #addressTab', function () {
+                            $('#editAddressModal').modal('hide');
+                            showNotification(result.message, false);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
                 }
             });
-
-
-
 
         </script>
 

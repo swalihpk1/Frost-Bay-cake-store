@@ -10,7 +10,7 @@ const app = express();
 const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
 const cartControllers = require("../controllers/cartController");
-
+const orderController = require("../controllers/orderController")
 
 // Static path set
 app.use(
@@ -73,16 +73,19 @@ app.get('/cart',authUser.isLogin,cartControllers.viewCart);
 app.delete('/cart/removeProduct',authUser.isLogin,cartControllers.removeProduct);
 app.patch('/cart/updateQuantity',authUser.isLogin,cartControllers.updateQuantity);
 
-// -----------------------CHECKOUT---------------------------
-app.get('/cart/checkout',authUser.isLogin,userController.checkout);
+// -----------------------CHECKOUT-----------------------------
+app.get('/cart/checkout', authUser.isLogin, userController.checkout);
+app.post('/cart/placeOrder', authUser.isLogin, orderController.addOrder);
 
 
-// ---------------------USER-ACCOUNT-----------------------
+// ---------------------USER-ACCOUNT--------------------------
 app.get('/account',authUser.isLogin,userController.userAccount);
 app.post('/account/editUser',upload.single('userImage'),authUser.isLogin,userController.editUserData);
 app.post('/account/addAddress',authUser.isLogin,userController.addAddress);
 app.delete('/account/deleteAddress',authUser.isLogin,userController.deleteAddress);
-app.patch('/account/editAddress',authUser.isLogin,userController.editAddress);
+app.patch('/account/editAddress', authUser.isLogin, userController.editAddress);
+
+
 
 
 

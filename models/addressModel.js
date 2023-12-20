@@ -11,7 +11,8 @@ const addressSchema = new mongoose.Schema({
     },
     companyName: {
         type: String,
-        required:false
+        required: false,
+        default:""
     },
     country: {
         type: String,
