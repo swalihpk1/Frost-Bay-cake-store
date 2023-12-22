@@ -8,7 +8,7 @@ const isLogin = async (req, res, next) => {
             req.userId = userId;
             next();
         } else {
-            res.redirect(`/?message=${encodeURIComponent("Please Login")}`);
+            res.redirect(`/authentication?message=${encodeURIComponent("Please Login")}`);
         }
     } catch (error) {
         console.log(error.message);

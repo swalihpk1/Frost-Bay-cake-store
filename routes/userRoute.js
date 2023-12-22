@@ -85,6 +85,9 @@ app.post('/account/addAddress',authUser.isLogin,userController.addAddress);
 app.delete('/account/deleteAddress',authUser.isLogin,userController.deleteAddress);
 app.patch('/account/editAddress', authUser.isLogin, userController.editAddress);
 
+// -----------------Orders---------------------
+app.delete('/account/deleteOrderItem', authUser.isLogin, orderController.cancelOrder);
+
 
 
 

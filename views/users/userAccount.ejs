@@ -2,6 +2,9 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     </head>
 
     <body>
@@ -24,6 +27,8 @@
                             </ol>
                         </div><!-- End .container -->
                     </nav><!-- End .breadcrumb-nav -->
+
+
 
                     <div class="page-content">
                         <div class="dashboard">
@@ -165,149 +170,110 @@
                                                 <hr>
                                             </div><!--/tab-pane-->
 
-                                            <div class="col-md-8 col-lg-9">
-                                                <div class="tab-pane fade show active" id="tab-orders" role="tabpanel"
-                                                    aria-labelledby="tab-orders-link">
-                                                    <div class="page-content ">
-                                                        <div class="container">
-                                                            <table class="table table-wishlist table-mobile">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>Product</th>
-                                                                        <th>Price</th>
-                                                                        <th>Stock Status</th>
-                                                                        <th></th>
-                                                                        <th></th>
-                                                                    </tr>
-                                                                </thead>
 
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <td class="product-col">
-                                                                            <div class="product">
-                                                                                <figure class="product-media">
-                                                                                    <a href="#">
-                                                                                        <img src="assets/images/products/table/product-1.jpg"
-                                                                                            alt="Product image">
-                                                                                    </a>
-                                                                                </figure>
-
-                                                                                <h3 class="product-title">
-                                                                                    <a href="#">Beige knitted elastic
-                                                                                        runner shoes</a>
-                                                                                </h3><!-- End .product-title -->
-                                                                            </div><!-- End .product -->
-                                                                        </td>
-                                                                        <td class="price-col">$84.00</td>
-                                                                        <td class="stock-col"><span class="in-stock">In
-                                                                                stock</span></td>
-                                                                        <td class="action-col">
-                                                                            <div class="dropdown">
-                                                                                <button
-                                                                                    class="btn btn-block btn-outline-primary-2"
-                                                                                    data-toggle="dropdown"
-                                                                                    aria-haspopup="true"
-                                                                                    aria-expanded="false">
-                                                                                    <i class="icon-list-alt"></i>Select
-                                                                                    Options
-                                                                                </button>
-
-                                                                                <div class="dropdown-menu">
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">First option</a>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">Another option</a>
-                                                                                    <a class="dropdown-item"
-                                                                                        href="#">The best option</a>
+                                            <div class="tab-pane fade show active" id="tab-orders" role="tabpanel"
+                                                aria-labelledby="tab-orders-link">
+                                                <h5 class="text-center">Orders</h5>
+                                                <table class="table table-wishlist table-no-padding">
+                                                    <thead>
+                                                        <tr>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% orders.forEach(function(order) {
+                                                            order.orderedProducts.forEach(function(product) { %>
+                                                            <tr class="text-center">
+                                                                <td class="p-0">
+                                                                    <div class="">
+                                                                        <figure class="d-inline-block">
+                                                                            <a href="#">
+                                                                                <div class="p-2"
+                                                                                    style="height:60px ; width: 60px;">
+                                                                                    <img src="/assets/productImages/uploadImages/<%= product.productDetails.productImage%>"
+                                                                                        alt="<%= product.productDetails.name %>">
                                                                                 </div>
-                                                                            </div>
-                                                                        </td>
-                                                                        <td class="remove-col"><button
-                                                                                class="btn-remove"><i
-                                                                                    class="icon-close"></i></button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="product-col">
-                                                                            <div class="product">
-                                                                                <figure class="product-media">
-                                                                                    <a href="#">
-                                                                                        <img src="assets/images/products/table/product-2.jpg"
-                                                                                            alt="Product image">
-                                                                                    </a>
-                                                                                </figure>
+                                                                            </a>
+                                                                        </figure>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <h6>
+                                                                        <%= product.productDetails.name %>
+                                                                    </h6>
+                                                                </td>
+                                                                <td>
+                                                                    <%= order.paymentMethod %>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="text-info">
+                                                                    <%= order.purchaseDate %>
+                                                                    </span>
+                                                                </td>
+                                                                <td><button
+                                                                        class="small border-0 shadow btn view-more-btn"
+                                                                        data-toggle="modal"
+                                                                        data-target="#orderDetailsModal"
+                                                                        data-product-image="<%= product.productDetails.productImage%>"
+                                                                        data-product-quantity="<%= product.quantity %>"
+                                                                        data-product-name="<%= product.productDetails.name %>"
+                                                                        data-purchase-date="<%= order.purchaseDate  %>"
+                                                                        data-total-amount="<%= order.totalAmount %>"
+                                                                        data-payment-method="<%= order.paymentMethod %>"
+                                                                        data-status="<%= order.status %>">View
+                                                                        More</button>
+                                                                 </td>
+                                                                 <td>
+                                                                    <i class="fa-regular fa-x fa-xs xbtn" onclick="showConfirmation('<%= product.productId %>')"></i>
+                                                                 </td>
+                                                            </tr>
+                                                            <% }); %>
 
-                                                                                <h3 class="product-title">
-                                                                                    <a href="#">Blue utility pinafore
-                                                                                        denim dress</a>
-                                                                                </h3><!-- End .product-title -->
-                                                                            </div><!-- End .product -->
-                                                                        </td>
-                                                                        <td class="price-col">$76.00</td>
-                                                                        <td class="stock-col"><span class="in-stock">In
-                                                                                stock</span></td>
-                                                                        <td class="action-col">
-                                                                            <button
-                                                                                class="btn btn-block btn-outline-primary-2"><i
-                                                                                    class="icon-cart-plus"></i>Add to
-                                                                                Cart</button>
-                                                                        </td>
-                                                                        <td class="remove-col"><button
-                                                                                class="btn-remove"><i
-                                                                                    class="icon-close"></i></button>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td class="product-col">
-                                                                            <div class="product">
-                                                                                <figure class="product-media">
-                                                                                    <a href="#">
-                                                                                        <img src="assets/images/products/table/product-3.jpg"
-                                                                                            alt="Product image">
-                                                                                    </a>
-                                                                                </figure>
+                                                                <% }); %>
+                                                                    <!-- Add more rows as needed -->
+                                                    </tbody>
+                                                </table>
+                                                <!-- End .table table-wishlist -->
+                                            </div>
 
-                                                                                <h3 class="product-title">
-                                                                                    <a href="#">Orange saddle lock front
-                                                                                        chain cross body bag</a>
-                                                                                </h3><!-- End .product-title -->
-                                                                            </div><!-- End .product -->
-                                                                        </td>
-                                                                        <td class="price-col">$52.00</td>
-                                                                        <td class="stock-col"><span
-                                                                                class="out-of-stock">Out of stock</span>
-                                                                        </td>
-                                                                        <td class="action-col">
-                                                                            <button
-                                                                                class="btn btn-block btn-outline-primary-2 disabled">Out
-                                                                                of Stock</button>
-                                                                        </td>
-                                                                        <td class="remove-col"><button
-                                                                                class="btn-remove"><i
-                                                                                    class="icon-close"></i></button>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table><!-- End .table table-wishlist -->
-
-                                                        </div><!-- End .container -->
-                                                    </div><!-- End .page-content -->
-
-
-
-                                                    <!-- <p>No order has been made yet.</p>
-                                                <a href="category.html" class="btn btn-outline-primary-2"><span>GO
-                                                        SHOP</span><i class="icon-long-arrow-right"></i></a> -->
+                                            <!-- -------------Modal for Order Details-------------- -->
+                                            <div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog"
+                                                aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="orderDetailsModalLabel">Order
+                                                                Details</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body m-3">
+                                                            <!-- Order details content using data attributes -->
+                                     
+                                                            <p><strong>Product Image:</strong> 
+                                                             <div class="product-image">
+                                                                    <img id="modal-product-image" class="w-25 m-4" src="" alt="Product Image">
+                                                              </div>
+                                                            </p>
+                                                            <p><strong>Product Name:</strong> <span id="modal-product-name"></span></p>
+                                                            <p><strong>Product Quantity:</strong> <span id="modal-product-quantity"></span></p>
+                                                            <p><strong>Purchase Date:</strong> <span id="modal-purchase-date"></span></p>
+                                                            <p><strong>Total Amount:</strong> $<span id="modal-total-amount"></span></p>
+                                                            <p><strong>Payment Method:</strong> <span id="modal-payment-method"></span></p>
+                                                            <p><strong>Status:</strong> <span id="modal-status"></span></p>
+                                                            <!-- Add more order details as needed -->
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <div class="tab-pane fade" id="tab-downloads" role="tabpanel"
-                                                aria-labelledby="tab-downloads-link">
-                                                <!-- Content specific to the Downloads tab -->
-                                                <p>No downloads available yet.</p>
-                                                <a href="category.html" class="btn btn-outline-primary-2"><span>GO
-                                                        SHOP</span><i class="icon-long-arrow-right"></i></a>
-                                            </div>
 
                                             <div class="tab-pane fade" id="tab-address" role="tabpanel"
                                                 aria-labelledby="tab-address-link">
@@ -975,6 +941,67 @@
         <!-- Main JS File -->
         <script src="/assets/js/main.js"></script>
 
+
+        <script>
+            function showConfirmation(productId) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'Do you wan\'t  cancel this order!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#7ac093',
+                        confirmButtonText: 'Yes, cancel Orde!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+
+                             fetch(`/account/deleteOrderItem`,{
+                                method:'DELETE',
+                                headers:{
+                                    "Content-Type":"application/json"
+                                },
+                                body: JSON.stringify({productId})
+                            })
+                               .then(response => response.json())
+                               .then(data =>{
+                                   
+                                if(data.success){
+                                    $('#tab-orders').load('/account #tab-orders');
+                                }
+                               })
+                                Swal.fire('Cancelled!','Your order has been cancelled.','success');
+                        }
+                    });
+                }
+
+            
+        </script>
+
+
+        <!--  set the modal with orders content dynamically -->
+   <script>
+    $(document).on('click', '.view-more-btn', function () {
+        var productImage = $(this).data('product-image');
+        var productName = $(this).data('product-name');
+        var productQuantity = $(this).data('product-quantity');
+        var purchaseDate = $(this).data('purchase-date');
+        var totalAmount = $(this).data('total-amount');
+        var paymentMethod = $(this).data('payment-method');
+        var status = $(this).data('status');
+
+        console.log(productImage);
+
+        // Set the modal content dynamically
+       $('#modal-product-image').attr('src', "/assets/productImages/uploadImages/" + productImage);
+        $('#modal-product-quantity').text(productQuantity);
+        $('#modal-product-name').text(productName);
+        $('#modal-purchase-date').text(purchaseDate);
+        $('#modal-total-amount').text(totalAmount);
+        $('#modal-payment-method').text(paymentMethod);
+        $('#modal-status').text(status);
+    });
+</script>
+
         <!-- ----------------Edit Addres-------------------- -->
         <script>
             function showEditAddressModal(name, company, country, houseName, appartmentNumber, city, state, postcode, phone, email, addressId, isDefault) {
@@ -1025,7 +1052,7 @@
                     body: JSON.stringify({ addressId })
                 })
                     .then(response => response.json())
-                    .then(result => { // Change 'data' to 'result' here
+                    .then(result => { 
                         console.log(result);
 
                         $('#addressTab').load('/account #addressTab', function () {
@@ -1263,6 +1290,15 @@
             });
 
         </script>
+
+        <!-- -----show date on orders------ -->
+        <script>
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString('en-US', options);
+            }
+        </script>
+
 
 
 

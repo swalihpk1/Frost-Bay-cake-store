@@ -11,7 +11,8 @@
               <button class="btn btn-primary" type="submit">
                 <i class="icon-search"></i>
               </button>
-              <input type="search" class="form-control" name="q" id="q" ̦ placeholder="Search product ..." required />
+              <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..."
+                value="<%= searchTerm || '' %>" required />
             </div>
             <!-- End .header-search-wrapper -->
           </form>
@@ -155,13 +156,7 @@
       </div>
       <!-- End .header-left -->
       <h6 class="text-danger">
-        <% if(typeof message !=='undefined' ){ %>
-
-          <h5 class="text-danger position-absolute" style="left: 45%">
-            <%= message %>
-          </h5>
-
-          <% } %>
+        
       </h6>
     </div>
     <!-- End .container -->

@@ -742,8 +742,6 @@
         <div id="notification-container"></div>
 
         <!-- ----------Select address and send datas when click placeOder---------- -->
-      <!-- -- Include jQuery library --> 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     
     <script>
         document.getElementById('placeOrderBtn').addEventListener('click', function () {
@@ -805,7 +803,17 @@
                         contentType: 'application/json',
                         data: JSON.stringify(Object.fromEntries(formData.entries())),
                         success: function (data) {
-                            // Handle the server response
+                            
+                            showSuccessAlert(data.result)
+                                .then((clickedButton) => {
+                                    console.log('Clicked Button:', clickedButton);
+
+                                    if (clickedButton == 'OK') {
+                                        window.location.href = '/home';
+                                    } else {
+                                        window.location.href = '/account';
+                                    }
+                                });
                         },
                         error: function (error) {
                             console.error('Error:', error);

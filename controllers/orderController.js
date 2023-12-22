@@ -25,7 +25,7 @@ const addOrder = async (req, res) => {
                 email: req.body.email,
                 default: false
             });
-            await address.save()
+            // await shipAddress.save()
         } else {
             const addressId = req.body.selectedAddressId
             shipAddress = await Address.findOne({ _id: addressId })
@@ -37,12 +37,28 @@ const addOrder = async (req, res) => {
             productDetails: {
                 name: item.productId.productName,
                 price: item.productId.price,
-                productImage:item.productId.productImages[0]
+                productImage: item.productId.productImages[0]
             }
         }));
-        
+
+        // --------to Date formating-------------
+        const currentDate = new Date();
+        const formattedDate = currentDate.toLocaleDateString('en-US', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        });
+
+        // ----------- to time 12hr formatting----------------
+        const formattedTime = currentDate.toLocaleTimeString('en-US', {
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        });
+
         const orders = new Order({
             userId: userId,
+            userName: user.name,
             shipAddress: [
                 {
                     name: shipAddress.name,
@@ -57,18 +73,30 @@ const addOrder = async (req, res) => {
                     email: shipAddress.email
                 }
             ],
-            orderedProducts:products,
+            orderedProducts: products,
             oderNote: req.body.orderNotes,
-            purchaseDate: Date.now(),
-            totalAmount:req.body.total,
+            purchaseDate: formattedDate,
+            purchaseTime: formattedTime,
+            totalAmount: req.body.total,
             status: 'pending',
             paymentMethod: req.body.paymentMethod,
         });
-
         const newOrders = await orders.save()
-          
+
         if (newOrders) {
-            console.log("aayi");
+            //-------------for-deleting----------
+            for (const product of products) {
+                const productId = product.productId;
+                const quantityToDecrease = product.quantity;
+
+                await Products.updateOne(
+                    { _id: productId },
+                    { $inc: { totalQuantity: -quantityToDecrease } }
+                );
+            }
+
+            await Products.updateMany()
+            await User.updateOne({ _id: userId }, { $set: { cart: [] } });
             res.json({ success: true, message: 'Order success' });
         } else {
             res.json({ success: false, message: 'please select address and payment method!' });
@@ -80,6 +108,29 @@ const addOrder = async (req, res) => {
     }
 }
 
+const cancelOrder = async (req, res) => {
+    try {
+        const productId = req.body.productId
+        const deleteOrder = await Order.findOneAndUpdate(
+            { 'orderedProducts.productId': productId },
+            {
+                $pull: {
+                    orderedProducts: {
+                        productId: productId
+                    }
+                }
+            },
+            { new: true }
+        );
+        if (deleteOrder) {
+            res.json({ success: true, message: 'Order deleted successfully.' });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 module.exports = {
-    addOrder
+    addOrder,
+    cancelOrder
 }

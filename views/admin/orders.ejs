@@ -1,0 +1,2750 @@
+<%-include('../layouts/admin/header')-%>
+    <style data-hs-appearance-onload-styles>
+        * {
+            transition: unset !important;
+        }
+
+        body {
+            opacity: 0;
+        }
+    </style>
+
+    <!-- ONLY DEV -->
+
+    <style>
+        body {
+            opacity: 0;
+        }
+    </style>
+
+    <!-- END ONLY DEV -->
+
+    <script>
+        window.hs_config = { "autopath": "@@autopath", "deleteLine": "hs-builder:delete", "deleteLine:build": "hs-builder:build-delete", "deleteLine:dist": "hs-builder:dist-delete", "previewMode": false, "startPath": "/index.html", "vars": { "themeFont": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap", "version": "?v=1.0" }, "layoutBuilder": { "extend": { "switcherSupport": true }, "header": { "layoutMode": "default", "containerMode": "container-fluid" }, "sidebarLayout": "default" }, "themeAppearance": { "layoutSkin": "default", "sidebarSkin": "default", "styles": { "colors": { "primary": "#377dff", "transparent": "transparent", "white": "#fff", "dark": "132144", "gray": { "100": "#f9fafc", "900": "#1e2022" } }, "font": "Inter" } }, "languageDirection": { "lang": "en" }, "skipFilesFromBundle": { "dist": ["/assets/admin/js/hs.theme-appearance.js", "/assets/admin/js/hs.theme-appearance-charts.js", "/assets/admin/js/demo.js"], "build": ["/assets/admin/css/theme.css", "/assets/admin/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside-mini-cache.js", "/assets/admin/js/demo.js", "/assets/admin/css/theme-dark.html", "/assets/admin/css/docs.css", "/assets/admin/vendor/icon-set/style.html", "/assets/admin/js/hs.theme-appearance.js", "/assets/admin/js/hs.theme-appearance-charts.js", "node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.html", "/assets/admin/js/demo.js"] }, "minifyCSSFiles": ["/assets/admin/css/theme.css", "/assets/admin/css/theme-dark.css"], "copyDependencies": { "dist": { "*/assets/admin/js/theme-custom.js": "" }, "build": { "*/assets/admin/js/theme-custom.js": "", "node_modules/bootstrap-icons/font/*fonts/**": "/assets/admin/css" } }, "buildFolder": "", "replacePathsToCDN": {}, "directoryNames": { "src": "./src", "dist": "./dist", "build": "./build" }, "fileNames": { "dist": { "js": "theme.min.js", "css": "theme.min.css" }, "build": { "css": "theme.min.css", "js": "theme.min.js", "vendorCSS": "vendor.min.css", "vendorJS": "vendor.min.js" } }, "fileTypes": "jpg|png|svg|mp4|webm|ogv|json" }
+        window.hs_config.gulpRGBA = (p1) => {
+            const options = p1.split(',')
+            const hex = options[0].toString()
+            const transparent = options[1].toString()
+
+            var c;
+            if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
+                c = hex.substring(1).split('');
+                if (c.length == 3) {
+                    c = [c[0], c[0], c[1], c[1], c[2], c[2]];
+                }
+                c = '0x' + c.join('');
+                return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + transparent + ')';
+            }
+            throw new Error('Bad Hex');
+        }
+        window.hs_config.gulpDarken = (p1) => {
+            const options = p1.split(',')
+
+            let col = options[0].toString()
+            let amt = -parseInt(options[1])
+            var usePound = false
+
+            if (col[0] == "#") {
+                col = col.slice(1)
+                usePound = true
+            }
+            var num = parseInt(col, 16)
+            var r = (num >> 16) + amt
+            if (r > 255) {
+                r = 255
+            } else if (r < 0) {
+                r = 0
+            }
+            var b = ((num >> 8) & 0x00FF) + amt
+            if (b > 255) {
+                b = 255
+            } else if (b < 0) {
+                b = 0
+            }
+            var g = (num & 0x0000FF) + amt
+            if (g > 255) {
+                g = 255
+            } else if (g < 0) {
+                g = 0
+            }
+            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
+        }
+        window.hs_config.gulpLighten = (p1) => {
+            const options = p1.split(',')
+
+            let col = options[0].toString()
+            let amt = parseInt(options[1])
+            var usePound = false
+
+            if (col[0] == "#") {
+                col = col.slice(1)
+                usePound = true
+            }
+            var num = parseInt(col, 16)
+            var r = (num >> 16) + amt
+            if (r > 255) {
+                r = 255
+            } else if (r < 0) {
+                r = 0
+            }
+            var b = ((num >> 8) & 0x00FF) + amt
+            if (b > 255) {
+                b = 255
+            } else if (b < 0) {
+                b = 0
+            }
+            var g = (num & 0x0000FF) + amt
+            if (g > 255) {
+                g = 255
+            } else if (g < 0) {
+                g = 0
+            }
+            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
+        }
+    </script>
+
+
+    </head>
+
+    <body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl   footer-offset">
+
+        <script src="/assets/admin/js/hs.theme-appearance.js"></script>
+
+        <script
+            src="/assets/admin/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside-mini-cache.js"></script>
+
+        <!-- ========== HEADER ========== -->
+
+        <header id="header"
+            class="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white">
+            <div class="navbar-nav-wrap">
+                <!-- Logo -->
+                <a class="navbar-brand" href="index.html" aria-label="Front">
+                    <img class="navbar-brand-logo" src="/assets/admin/logos/logo.svg" alt="Logo"
+                        data-hs-theme-appearance="default">
+                    <img class="navbar-brand-logo" src="/assets/admin/logos-light/logo.svg" alt="Logo"
+                        data-hs-theme-appearance="dark">
+                    <img class="navbar-brand-logo-mini" src="/assets/admin/logos/logo-short.svg" alt="Logo"
+                        data-hs-theme-appearance="default">
+                    <img class="navbar-brand-logo-mini" src="/assets/admin/logos-light/logo-short.svg" alt="Logo"
+                        data-hs-theme-appearance="dark">
+                </a>
+                <!-- End Logo -->
+
+                <div class="navbar-nav-wrap-content-start">
+                    <!-- Navbar Vertical Toggle -->
+                    <button type="button" class="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler">
+                        <i class="bi-arrow-bar-left navbar-toggler-short-align"
+                            data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+                            data-bs-toggle="tooltip" data-bs-placement="right" title="Collapse"></i>
+                        <i class="bi-arrow-bar-right navbar-toggler-full-align"
+                            data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+                            data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
+                    </button>
+
+                    <!-- End Navbar Vertical Toggle -->
+
+                    <!-- Search Form -->
+                    <div class="dropdown ms-2">
+                        <!-- Input Group -->
+                        <div class="d-none d-lg-block">
+                            <div
+                                class="input-group input-group-merge input-group-borderless input-group-hover-light navbar-input-group">
+                                <div class="input-group-prepend input-group-text">
+                                    <i class="bi-search"></i>
+                                </div>
+
+                                <input type="search" class="js-form-search form-control" placeholder="Search in front"
+                                    aria-label="Search in front" data-hs-form-search-options='{
+                       "clearIcon": "#clearSearchResultsIcon",
+                       "dropMenuElement": "#searchDropdownMenu",
+                       "dropMenuOffset": 20,
+                       "toggleIconOnFocus": true,
+                       "activeClass": "focus"
+                     }'>
+                                <a class="input-group-append input-group-text" href="javascript:;">
+                                    <i id="clearSearchResultsIcon" class="bi-x-lg" style="display: none;"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <button
+                            class="js-form-search js-form-search-mobile-toggle btn btn-ghost-secondary btn-icon rounded-circle d-lg-none"
+                            type="button" data-hs-form-search-options='{
+                       "clearIcon": "#clearSearchResultsIcon",
+                       "dropMenuElement": "#searchDropdownMenu",
+                       "dropMenuOffset": 20,
+                       "toggleIconOnFocus": true,
+                       "activeClass": "focus"
+                     }'>
+                            <i class="bi-search"></i>
+                        </button>
+                        <!-- End Input Group -->
+
+                        <!-- Card Search Content -->
+                        <div id="searchDropdownMenu"
+                            class="hs-form-search-menu-content dropdown-menu dropdown-menu-form-search navbar-dropdown-menu-borderless">
+
+                        </div>
+                        <!-- End Card Search Content -->
+
+                    </div>
+
+                    <!-- End Search Form -->
+                </div>
+
+                <div class="navbar-nav-wrap-content-end">
+                    <!-- Navbar -->
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <!-- Account -->
+                            <div class="dropdown">
+                                <a class="navbar-dropdown-account-wrapper" href="javascript:;"
+                                    id="accountNavbarDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                    data-bs-auto-close="outside" data-bs-dropdown-animation>
+                                    <div class="avatar avatar-sm avatar-circle">
+                                        <img class="avatar-img" src="/assets/admin/img/160x160/img6.jpg"
+                                            alt="Image Description">
+                                        <span class="avatar-status avatar-sm-status avatar-status-success"></span>
+                                    </div>
+                                </a>
+
+                                <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-account"
+                                    aria-labelledby="accountNavbarDropdown" style="width: 16rem;">
+                                    <div class="dropdown-item-text">
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar avatar-sm avatar-circle">
+                                                <img class="avatar-img" src="/assets/admin/img/160x160/img6.jpg"
+                                                    alt="Image Description">
+                                            </div>
+                                            <div class="flex-grow-1 ms-3">
+                                                <h5 class="mb-0">Mark Williams</h5>
+                                                <p class="card-text text-body">mark@site.com</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="dropdown-divider"></div>
+
+                                    <!-- Dropdown -->
+                                    <div class="dropdown">
+                                        <a class="navbar-dropdown-submenu-item dropdown-item dropdown-toggle"
+                                            href="javascript:;" id="navSubmenuPagesAccountDropdown1"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Set status</a>
+
+                                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-sub-menu"
+                                            aria-labelledby="navSubmenuPagesAccountDropdown1">
+                                            <a class="dropdown-item" href="#">
+                                                <span class="legend-indicator bg-success me-1"></span> Available
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <span class="legend-indicator bg-danger me-1"></span> Busy
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                <span class="legend-indicator bg-warning me-1"></span> Away
+                                            </a>
+                                            <div class="dropdown-divider"></div>
+                                            <a class="dropdown-item" href="#"> Reset status
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- End Dropdown -->
+
+                                    <a class="dropdown-item" href="#">Profile &amp; account</a>
+                                    <a class="dropdown-item" href="#">Settings</a>
+
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item" href="#">
+                                        <div class="d-flex align-items-center">
+                                            <div class="flex-shrink-0">
+                                                <div class="avatar avatar-sm avatar-dark avatar-circle">
+                                                    <span class="avatar-initials">HS</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex-grow-1 ms-2">
+                                                <h5 class="mb-0">Htmlstream <span
+                                                        class="badge bg-primary rounded-pill text-uppercase ms-1">PRO</span>
+                                                </h5>
+                                                <span class="card-text">hs.example.com</span>
+                                            </div>
+                                        </div>
+                                    </a>
+
+                                    <div class="dropdown-divider"></div>
+
+                                    <!-- Dropdown -->
+                                    <div class="dropdown">
+                                        <a class="navbar-dropdown-submenu-item dropdown-item dropdown-toggle"
+                                            href="javascript:;" id="navSubmenuPagesAccountDropdown2"
+                                            data-bs-toggle="dropdown" aria-expanded="false">Customization</a>
+
+                                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-sub-menu"
+                                            aria-labelledby="navSubmenuPagesAccountDropdown2">
+                                            <a class="dropdown-item" href="#">
+                                                Invite people
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Analytics
+                                                <i class="bi-box-arrow-in-up-right"></i>
+                                            </a>
+                                            <a class="dropdown-item" href="#">
+                                                Customize Front
+                                                <i class="bi-box-arrow-in-up-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!-- End Dropdown -->
+
+                                    <a class="dropdown-item" href="#">Manage team</a>
+
+                                    <div class="dropdown-divider"></div>
+
+                                    <a class="dropdown-item" href="#">Sign out</a>
+                                </div>
+                            </div>
+                            <!-- End Account -->
+                        </li>
+                    </ul>
+                    <!-- End Navbar -->
+                </div>
+            </div>
+        </header>
+
+        <!-- ========== END HEADER ========== -->
+
+        <!-- ========== MAIN CONTENT ========== -->
+        <!-- Navbar Vertical -->
+
+        <aside
+            class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered bg-white  ">
+            <div class="navbar-vertical-container">
+                <div class="navbar-vertical-footer-offset">
+                    <!-- Logo -->
+
+                    <a class="navbar-brand" href="index.html" aria-label="Front">
+                        <img class="navbar-brand-logo" src="/assets/admin/logos/logo.svg" alt="Logo"
+                            data-hs-theme-appearance="default">
+                        <img class="navbar-brand-logo" src="/assets/admin/logos-light/logo.svg" alt="Logo"
+                            data-hs-theme-appearance="dark">
+                        <img class="navbar-brand-logo-mini" src="/assets/admin/logos/logo-short.svg" alt="Logo"
+                            data-hs-theme-appearance="default">
+                        <img class="navbar-brand-logo-mini" src="/assets/admin/logos-light/logo-short.svg" alt="Logo"
+                            data-hs-theme-appearance="dark">
+                    </a>
+
+                    <!-- End Logo -->
+
+                    <!-- Navbar Vertical Toggle -->
+                    <button type="button" class="js-navbar-vertical-aside-toggle-invoker navbar-aside-toggler">
+                        <i class="bi-arrow-bar-left navbar-toggler-short-align"
+                            data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+                            data-bs-toggle="tooltip" data-bs-placement="right" title="Collapse"></i>
+                        <i class="bi-arrow-bar-right navbar-toggler-full-align"
+                            data-bs-template='<div class="tooltip d-none d-md-block" role="tooltip"><div class="arrow"></div><div class="tooltip-inner"></div></div>'
+                            data-bs-toggle="tooltip" data-bs-placement="right" title="Expand"></i>
+                    </button>
+
+                    <!-- End Navbar Vertical Toggle -->
+
+                    <!-- Content -->
+
+                    <div class="navbar-vertical-content">
+                        <div id="navbarVerticalMenu" class="nav nav-pills nav-vertical card-navbar-nav">
+                            <!-- Collapse -->
+                            <div class="nav-item">
+                                <a class="nav-link" href="/admin/dashboard">
+                                    <i class="bi-house-door nav-icon"></i>
+                                    <span class="nav-link-title">Dashboards</span>
+                                </a>
+                            </div>
+                            <!-- End Collapse -->
+
+                            <span class="dropdown-header mt-4">Actions</span>
+                            <small class="bi-three-dots nav-subtitle-replacer"></small>
+
+                            <!-- Collapse -->
+                            <div class="navbar-nav nav-compact">
+
+                            </div>
+                            <div id="navbarVerticalMenuPagesMenu">
+                                <!-- Collapse -->
+                                <div class="nav-item">
+                                    <a class="nav-link" href="/admin/products">
+                                        <i class="bi-people nav-icon"></i>
+                                        <span class="nav-link-title">Cakes</span>
+                                    </a>
+                                </div>
+
+                                <div class="nav-item">
+                                    <a class="nav-link " href="/admin/users">
+                                        <i class="bi-people nav-icon"></i>
+                                        <span class="nav-link-title">Users</span>
+                                    </a>
+                                </div>
+
+                                <div class="nav-item">
+                                    <a class="nav-link active" href="/admin/orders">
+                                        <i class="bi-people nav-icon"></i>
+                                        <span class="nav-link-title">Orders</span>
+                                    </a>
+                                </div>
+
+                                <div class="nav-item">
+                                    <a class="nav-link" href="/admin/category">
+                                        <i class="bi-people nav-icon"></i>
+                                        <span class="nav-link-title">Category</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- End Content -->
+
+                        <!-- Footer -->
+                        <div class="navbar-vertical-footer">
+                            <ul class="navbar-vertical-footer-list">
+                                <li class="navbar-vertical-footer-list-item">
+                                    <!-- Style Switcher -->
+                                    <div class="dropdown dropup">
+                                        <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle"
+                                            id="selectThemeDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                            data-bs-dropdown-animation>
+
+                                        </button>
+
+                                        <div class="dropdown-menu navbar-dropdown-menu navbar-dropdown-menu-borderless"
+                                            aria-labelledby="selectThemeDropdown">
+                                            <a class="dropdown-item" href="#" data-icon="bi-moon-stars"
+                                                data-value="auto">
+                                                <i class="bi-moon-stars me-2"></i>
+                                                <span class="text-truncate" title="Auto (system default)">Auto (system
+                                                    default)</span>
+                                            </a>
+                                            <a class="dropdown-item" href="#" data-icon="bi-brightness-high"
+                                                data-value="default">
+                                                <i class="bi-brightness-high me-2"></i>
+                                                <span class="text-truncate" title="Default (light mode)">Default (light
+                                                    mode)</span>
+                                            </a>
+                                            <a class="dropdown-item active" href="#" data-icon="bi-moon"
+                                                data-value="dark">
+                                                <i class="bi-moon me-2"></i>
+                                                <span class="text-truncate" title="Dark">Dark</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <!-- End Style Switcher -->
+                                </li>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- End Footer -->
+                    </div>
+                </div>
+        </aside>
+
+        <main id="content" role="main" class="main">
+            <!-- Content -->
+            <div class="content container-fluid">
+                <div class="card">
+                    <h3 class="text-center p-4">Orders</h3>
+
+                    <!-- Table -->
+                    <div class="table-responsive datatable-custom position-relative">
+                        <table id="datatable"
+                            class="table table-lg table-borderless table-thead-bordered table-nowrap table-align-middle card-table text-center"
+                            data-hs-datatables-options='{
+                               "columnDefs": [{
+                                  "targets": [0, 7],
+                                  "orderable": false
+                                }],
+                               "order": [],
+                               "info": {
+                                 "totalQty": "#datatableWithPaginationInfoTotalQty"
+                               },
+                               "search": "#datatableSearch",
+                               "entries": "#datatableEntries",
+                               "pageLength": 15,
+                               "isResponsive": false,
+                               "isShowPaging": false,
+                               "pagination": "datatablePagination"
+                             }'>
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="table-column-ps-0">Cake name </th>
+                                    <th>Customer name</th>
+                                    <th>Location</th>
+                                    <th>ORDER STATUs</th>
+                                    <th>ordered time</th>
+                                    <th>refund requests</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr>
+                                    <% orders.forEach(function(order) { order.orderedProducts.forEach(function(product)
+                                        { %>
+                                        <td class="table-column-ps-0">
+                                            <a class="d-flex align-items-center" href="user-profile.html">
+                                                <div class="avatar avatar-circle m-3 " style="height: 60px; width: 60px;">
+                                                <img class="w-100 rounded" src="/assets/productImages/uploadImages/<%= product.productDetails.productImage%>"
+                                                        alt="Image Description">
+                                                </div>
+                                                <div class="ms-3">
+                                                    <span class="d-block h5 text-inherit mb-0">
+                                                    <%= product.productDetails.name %>
+                                                    </span>
+                                                </div>
+                                            </a>
+                                        </td>
+
+                                        <td>
+                                        <%= order.userName %>
+                                        </td>
+                                        <td>
+                                            <%= order.shipAddress[0].city %>
+                                        </td>
+                                        <td>
+                                        <%= order.status %>
+                                        </td>
+                                        <td>
+                                            <%= order.purchaseTime %>
+                                            <%= order.purchaseDate %>
+                                        </td>
+                                        <!-- <td><button class="btn-btn primary">decline</button><button
+                                                class="btn-btn primary">accept</button></td> -->
+                                </tr>
+
+                                 <% }); %>
+                                    <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- End Table -->
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="confirmationModal" tabindex="-1"
+                        aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    Are you sure you want to block this user?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Cancel</button>
+                                    <button type="button" class="btn btn-danger"
+                                        onclick="confirmBlockUser()">Block</button>
+                                </div>
+                            </div>
+                        </div>x
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="card-footer">
+                        <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
+
+                            <!-- End Col -->
+
+                            <div class="col-sm-auto">
+                                <div class="d-flex justify-content-center justify-content-sm-end">
+                                    <!-- Pagination -->
+                                    <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+                                </div>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+                    <!-- End Footer -->
+                </div>
+                <!-- End Card -->
+            </div>
+            <!-- End Content -->
+
+            <!-- Footer -->
+
+            <div class="footer">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col">
+                        <p class="fs-6 mb-0">&copy; Front. <span class="d-none d-sm-inline-block">2022
+                                Htmlstream.</span></p>
+                    </div>
+                    <!-- End Col -->
+
+                    <div class="col-auto">
+                        <div class="d-flex justify-content-end">
+                            <!-- List Separator -->
+                            <ul class="list-inline list-separator">
+                                <li class="list-inline-item">
+                                    <a class="list-separator-link" href="#">FAQ</a>
+                                </li>
+
+                                <li class="list-inline-item">
+                                    <a class="list-separator-link" href="#">License</a>
+                                </li>
+
+                                <li class="list-inline-item">
+                                    <!-- Keyboard Shortcuts Toggle -->
+                                    <button
+                                        class="btn btn-ghost-secondary btn btn-icon btn-ghost-secondary rounded-circle"
+                                        type="button" data-bs-toggle="offcanvas"
+                                        data-bs-target="#offcanvasKeyboardShortcuts"
+                                        aria-controls="offcanvasKeyboardShortcuts">
+                                        <i class="bi-command"></i>
+                                    </button>
+                                    <!-- End Keyboard Shortcuts Toggle -->
+                                </li>
+                            </ul>
+                            <!-- End List Separator -->
+                        </div>
+                    </div>
+                    <!-- End Col -->
+                </div>
+                <!-- End Row -->
+            </div>
+
+            <!-- End Footer -->
+        </main>
+
+
+
+        <!-- ========== END MAIN CONTENT ========== -->
+
+        <!-- ONLY DEV -->
+
+        <!-- Builder -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasBuilder"
+            aria-labelledby="offcanvasBuilderLabel">
+
+
+            <div class="offcanvas-body">
+                <h4 class="mb-1">Theme Appearance Mode</h4>
+                <p>Check out all <a href="documentation/layout.html">Layout Options here</a></p>
+
+
+                <!-- End Row -->
+
+                <hr>
+
+                <div class="row gx-3">
+                    <!-- Check -->
+                    <div class="col-6">
+                        <div class="form-check form-check-label-highlighter text-center">
+                            <input type="radio" class="form-check-input" name="layout" id="navbarLayoutSkinsRadio1"
+                                checked value="default">
+                            <label class="form-check-label mb-2" for="navbarLayoutSkinsRadio1">
+                                <img class="form-check-img" src="/assets/admin/layouts-light/sidebar-default.svg"
+                                    alt="Image Description" data-hs-theme-appearance="dark">
+                                <img class="form-check-img" src="/assets/admin/layouts/sidebar-default.svg"
+                                    alt="Image Description" data-hs-theme-appearance="default">
+                            </label>
+                            <span class="form-check-text">Default</span>
+                        </div>
+                    </div>
+                    <!-- End Check -->
+
+                    <!-- Check -->
+                    <div class="col-6">
+                        <div class="form-check form-check-label-highlighter text-center">
+                            <input type="radio" class="form-check-input" name="layout" id="navbarLayoutSkinsRadio2"
+                                value="navbar-dark">
+                            <label class="form-check-label mb-2" for="navbarLayoutSkinsRadio2">
+                                <img class="form-check-img" src="/assets/admin/layouts-light/sidebar-dark.svg"
+                                    alt="Image Description" data-hs-theme-appearance="dark">
+                                <img class="form-check-img" src="/assets/admin/layouts/sidebar-dark.svg"
+                                    alt="Image Description" data-hs-theme-appearance="default">
+                            </label>
+                            <span class="form-check-text">Dark</span>
+                        </div>
+                    </div>
+                    <!-- End Check -->
+                </div>
+                <!-- End Row -->
+
+                <hr>
+
+                <h4 class="mb-1">Sidebar Nav</h4>
+                <p>Check out all <a href="documentation/layout.html">Layout Options here</a></p>
+
+                <div class="row gx-3">
+                    <!-- Check -->
+                    <div class="col-6">
+                        <div class="form-check form-check-label-highlighter text-center">
+                            <input type="radio" class="form-check-input" name="sidebarNavOptions"
+                                id="sidebarNavOptions1" value="pills" checked>
+                            <label class="form-check-label mb-2" for="sidebarNavOptions1">
+                                <img class="form-check-img"
+                                    src="/assets/admin/layouts-light/demo-layouts-default-classic.svg"
+                                    alt="Image Description" data-hs-theme-appearance="dark">
+                                <img class="form-check-img" src="/assets/admin/layouts/demo-layouts-default-classic.svg"
+                                    alt="Image Description" data-hs-theme-appearance="default">
+                            </label>
+                            <span class="form-check-text">Pills</span>
+                        </div>
+                    </div>
+                    <!-- End Check -->
+
+                    <!-- Check -->
+                    <div class="col-6">
+                        <div class="form-check form-check-label-highlighter text-center">
+                            <input type="radio" class="form-check-input" name="sidebarNavOptions"
+                                id="sidebarNavOptions2" value="tabs">
+                            <label class="form-check-label mb-2" for="sidebarNavOptions2">
+                                <img class="form-check-img" src="/assets/admin/layouts-light/demo-layouts-nav-tabs.svg"
+                                    alt="Image Description" data-hs-theme-appearance="dark">
+                                <img class="form-check-img" src="/assets/admin/layouts/demo-layouts-nav-tabs.svg"
+                                    alt="Image Description" data-hs-theme-appearance="default">
+                            </label>
+                            <span class="form-check-text">Tabs</span>
+                        </div>
+                    </div>
+                    <!-- End Check -->
+                </div>
+                <!-- End Row -->
+
+                <hr>
+
+                <!-- Form Switch -->
+                <label class="row form-check form-switch mb-3" for="builderFluidSwitch">
+                    <span class="col-10 ms-0">
+                        <span class="d-block h4 mb-1">Header Layout Options</span>
+                        <span class="d-block fs-5">Toggle to container-fluid layout</span>
+                    </span>
+                    <span class="col-2 text-end">
+                        <input type="checkbox" class="form-check-input" id="builderFluidSwitch">
+                    </span>
+                </label>
+                <!-- End Form Switch -->
+
+                <div class="row gx-3">
+                    <!-- Check -->
+                    <div class="col-6">
+                        <div class="form-check form-check-label-highlighter text-center">
+                            <input type="radio" class="form-check-input" name="layout" id="headerLayoutOptions1"
+                                value="single-header">
+                            <label class="form-check-label mb-2" for="headerLayoutOptions1">
+                                <img class="form-check-img" src="/assets/admin/layouts/header-default-container.svg"
+                                    alt="Image Description" data-hs-theme-appearance="default">
+                                <img class="form-check-img"
+                                    src="/assets/admin/layouts-light/header-default-container.svg"
+                                    alt="Image Description" data-hs-theme-appearance="dark">
+                            </label>
+                            <span class="form-check-text">Default</span>
+                        </div>
+                    </div>
+                    <!-- End Check -->
+
+                    <!-- Check -->
+                    <div class="col-6">
+                        <div class="form-check form-check-label-highlighter text-center">
+                            <input type="radio" class="form-check-input" name="layout" id="headerLayoutOptions2"
+                                value="double-header">
+                            <label class="form-check-label mb-2" for="headerLayoutOptions2">
+                                <img class="form-check-img" src="/assets/admin/layouts/header-double-line-container.svg"
+                                    alt="Image Description" data-hs-theme-appearance="default">
+                                <img class="form-check-img"
+                                    src="/assets/admin/layouts-light/header-double-line-container.svg"
+                                    alt="Image Description" data-hs-theme-appearance="dark">
+                            </label>
+                            <span class="form-check-text">Double line</span>
+                        </div>
+                    </div>
+                    <!-- End Check -->
+                </div>
+                <!-- End Row -->
+            </div>
+
+            <!-- Footer -->
+            <div class="offcanvas-footer">
+                <div class="row gx-3">
+
+
+                    <!-- End Col -->
+
+                    <div class="col">
+                        <div class="d-grid">
+                            <button type="button" id="js-builder-preview" class="btn btn-primary btn-lg">
+                                <i class="eye-visible"></i> Preview
+                            </button>
+                        </div>
+                    </div>
+                    <!-- End Col -->
+                </div>
+                <!-- End Row -->
+            </div>
+            <!-- End Footer -->
+        </div>
+
+        <!-- End Builder -->
+
+        <!-- Builder Toggle -->
+
+        <!-- End Builder Toggle -->
+
+        <div class="d-none js-build-layouts">
+            <div class="js-build-layout-header-default">
+                <!-- Single Header -->
+                <header id="header" class="navbar navbar-expand-lg navbar-bordered bg-white  ">
+                    <div class="container">
+                        <nav class="js-mega-menu navbar-nav-wrap">
+                            <!-- Logo -->
+
+                            <a class="navbar-brand" href="index.html" aria-label="Front">
+                                <img class="navbar-brand-logo" src="/assets/admin/logos/logo.svg" alt="Logo"
+                                    data-hs-theme-appearance="default">
+                                <img class="navbar-brand-logo" src="/assets/admin/logos-light/logo.svg" alt="Logo"
+                                    data-hs-theme-appearance="dark">
+                            </a>
+
+                            <!-- End Logo -->
+
+                            <!-- Secondary Content -->
+                            <div class="navbar-nav-wrap-secondary-content">
+                                <!-- Navbar -->
+                                <ul class="navbar-nav">
+
+
+
+                                    <li class="nav-item d-none d-sm-inline-block">
+                                        <!-- Activity -->
+                                        <button class="btn btn-ghost-secondary btn-icon rounded-circle" type="button"
+                                            data-bs-toggle="offcanvas" data-bs-target="#offcanvasActivityStream"
+                                            aria-controls="offcanvasActivityStream">
+                                            <i class="bi-x-diamond"></i>
+                                        </button>
+                                        <!-- Activity -->
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <!-- Style Switcher -->
+                                        <div class="dropdown ">
+                                            <button type="button"
+                                                class="btn btn-ghost-secondary btn-icon rounded-circle"
+                                                id="selectThemeDropdown" data-bs-toggle="dropdown" aria-expanded="false"
+                                                data-bs-dropdown-animation>
+
+                                            </button>
+
+                                            <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless"
+                                                aria-labelledby="selectThemeDropdown">
+                                                <a class="dropdown-item" href="#" data-icon="bi-moon-stars"
+                                                    data-value="auto">
+                                                    <i class="bi-moon-stars me-2"></i>
+                                                    <span class="text-truncate" title="Auto (system default)">Auto
+                                                        (system default)</span>
+                                                </a>
+                                                <a class="dropdown-item" href="#" data-icon="bi-brightness-high"
+                                                    data-value="default">
+                                                    <i class="bi-brightness-high me-2"></i>
+                                                    <span class="text-truncate" title="Default (light mode)">Default
+                                                        (light mode)</span>
+                                                </a>
+                                                <a class="dropdown-item active" href="#" data-icon="bi-moon"
+                                                    data-value="dark">
+                                                    <i class="bi-moon me-2"></i>
+                                                    <span class="text-truncate" title="Dark">Dark</span>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <!-- End Style Switcher -->
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <!-- Account -->
+                                        <div class="dropdown">
+                                            <a class="navbar-dropdown-account-wrapper" href="javascript:;"
+                                                id="accountNavbarDropdown" data-bs-toggle="dropdown"
+                                                aria-expanded="false" data-bs-auto-close="outside"
+                                                data-bs-dropdown-animation>
+                                                <div class="avatar avatar-sm avatar-circle">
+                                                    <img class="avatar-img" src="/assets/admin/img/160x160/img6.jpg"
+                                                        alt="Image Description">
+                                                    <span
+                                                        class="avatar-status avatar-sm-status avatar-status-success"></span>
+                                                </div>
+                                            </a>
+
+                                            <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-account"
+                                                aria-labelledby="accountNavbarDropdown" style="width: 16rem;">
+                                                <div class="dropdown-item-text">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="avatar avatar-sm avatar-circle">
+                                                            <img class="avatar-img"
+                                                                src="/assets/admin/img/160x160/img6.jpg"
+                                                                alt="Image Description">
+                                                        </div>
+                                                        <div class="flex-grow-1 ms-3">
+                                                            <h5 class="mb-0">Mark Williams</h5>
+                                                            <p class="card-text text-body">mark@site.com</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="dropdown-divider"></div>
+
+                                                <!-- Dropdown -->
+                                                <div class="dropdown">
+                                                    <a class="navbar-dropdown-submenu-item dropdown-item dropdown-toggle"
+                                                        href="javascript:;" id="navSubmenuPagesAccountDropdown1"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">Set status</a>
+
+                                                    <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-sub-menu"
+                                                        aria-labelledby="navSubmenuPagesAccountDropdown1">
+                                                        <a class="dropdown-item" href="#">
+                                                            <span class="legend-indicator bg-success me-1"></span>
+                                                            Available
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <span class="legend-indicator bg-danger me-1"></span> Busy
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            <span class="legend-indicator bg-warning me-1"></span> Away
+                                                        </a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item" href="#"> Reset status
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <!-- End Dropdown -->
+
+                                                <a class="dropdown-item" href="#">Profile &amp; account</a>
+                                                <a class="dropdown-item" href="#">Settings</a>
+
+                                                <div class="dropdown-divider"></div>
+
+                                                <a class="dropdown-item" href="#">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="flex-shrink-0">
+                                                            <div class="avatar avatar-sm avatar-dark avatar-circle">
+                                                                <span class="avatar-initials">HS</span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-grow-1 ms-2">
+                                                            <h5 class="mb-0">Htmlstream <span
+                                                                    class="badge bg-primary rounded-pill text-uppercase ms-1">PRO</span>
+                                                            </h5>
+                                                            <span class="card-text">hs.example.com</span>
+                                                        </div>
+                                                    </div>
+                                                </a>
+
+                                                <div class="dropdown-divider"></div>
+
+                                                <!-- Dropdown -->
+                                                <div class="dropdown">
+                                                    <a class="navbar-dropdown-submenu-item dropdown-item dropdown-toggle"
+                                                        href="javascript:;" id="navSubmenuPagesAccountDropdown2"
+                                                        data-bs-toggle="dropdown"
+                                                        aria-expanded="false">Customization</a>
+
+                                                    <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-sub-menu"
+                                                        aria-labelledby="navSubmenuPagesAccountDropdown2">
+                                                        <a class="dropdown-item" href="#">
+                                                            Invite people
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            Analytics
+                                                            <i class="bi-box-arrow-in-up-right"></i>
+                                                        </a>
+                                                        <a class="dropdown-item" href="#">
+                                                            Customize Front
+                                                            <i class="bi-box-arrow-in-up-right"></i>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                                <!-- End Dropdown -->
+
+                                                <a class="dropdown-item" href="#">Manage team</a>
+
+                                                <div class="dropdown-divider"></div>
+
+                                                <a class="dropdown-item" href="#">Sign out</a>
+                                            </div>
+                                        </div>
+                                        <!-- End Account -->
+                                    </li>
+                                </ul>
+                                <!-- End Navbar -->
+                            </div>
+                            <!-- End Secondary Content -->
+
+                            <!-- Toggler -->
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#navbarContainerNavDropdown" aria-controls="navbarContainerNavDropdown"
+                                aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-default">
+                                    <i class="bi-list"></i>
+                                </span>
+                                <span class="navbar-toggler-toggled">
+                                    <i class="bi-x"></i>
+                                </span>
+                            </button>
+                            <!-- End Toggler -->
+
+                            <!-- Collapse -->
+                            <div class="collapse navbar-collapse" id="navbarContainerNavDropdown">
+                                <ul class="navbar-nav">
+                                    <!-- Dashboards -->
+                                    <li class="hs-has-sub-menu nav-item">
+                                        <a id="dashboardsMegaMenu"
+                                            class="hs-mega-menu-invoker nav-link dropdown-toggle active" href="#"
+                                            role="button"><i class="bi-house-door dropdown-item-icon"></i>
+                                            Dashboards</a>
+
+                                        <!-- Mega Menu -->
+                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                            aria-labelledby="dashboardsMegaMenu" style="min-width: 14rem;">
+                                            <a class="dropdown-item active" href="index.html">Default</a>
+                                            <a class="dropdown-item " href="dashboard-alternative.html">Alternative</a>
+                                        </div>
+                                        <!-- End Mega Menu -->
+                                    </li>
+                                    <!-- End Dashboards -->
+
+                                    <!-- Pages -->
+                                    <li class="hs-has-sub-menu nav-item">
+                                        <a id="pagesMegaMenu" class="hs-mega-menu-invoker nav-link dropdown-toggle "
+                                            href="#" role="button"><i class="bi-files-alt dropdown-item-icon"></i>
+                                            Pages</a>
+
+                                        <!-- Mega Menu -->
+                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                            aria-labelledby="pagesMegaMenu" style="min-width: 14rem;">
+                                            <!-- Users -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="usersMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">Users</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="usersMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="users.html">Overview</a>
+                                                    <a class="dropdown-item "
+                                                        href="users-leaderboard.html">Leaderboard</a>
+                                                    <a class="dropdown-item " href="users-add-user.html">Add User <span
+                                                            class="badge bg-info rounded-pill ms-1">Hot</span></a>
+                                                </div>
+                                            </div>
+                                            <!-- End Users -->
+
+                                            <!-- User Profile -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="userProfileMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">User Profile <span
+                                                        class="badge bg-primary rounded-pill ms-1">5</span></a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="userProfileMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="user-profile.html">Profile</a>
+                                                    <a class="dropdown-item " href="user-profile-teams.html">Teams</a>
+                                                    <a class="dropdown-item "
+                                                        href="user-profile-projects.html">Projects</a>
+                                                    <a class="dropdown-item "
+                                                        href="user-profile-connections.html">Connections</a>
+                                                    <a class="dropdown-item " href="user-profile-my-profile.html">My
+                                                        Profile</a>
+                                                </div>
+                                            </div>
+                                            <!-- End User Profile -->
+
+                                            <!-- Account -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="accountMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">Account</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="accountMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="account-settings.html">Settings</a>
+                                                    <a class="dropdown-item " href="account-billing.html">Billing</a>
+                                                    <a class="dropdown-item " href="account-invoice.html">Invoice</a>
+                                                </div>
+                                            </div>
+                                            <!-- End Account -->
+
+                                            <!-- E-commerce -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="ecommerceMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">E-commerce</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="ecommerceMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="ecommerce.html">Overview</a>
+
+                                                    <!-- Products -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="productsMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Products</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="productsMegaMenu"
+                                                            style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-products.html">Products</a>
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-product-details.html">Product
+                                                                Details</a>
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-add-product.html">Add Product</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Products -->
+
+                                                    <!-- Products -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="ordersMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Orders</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="ordersMegaMenu" style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-orders.html">Orders</a>
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-order-details.html">Order Details</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Products -->
+
+                                                    <!-- Customers -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="customersMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Customers</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="customersMegaMenu"
+                                                            style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-customers.html">Customers</a>
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-customer-details.html">Customer
+                                                                Details</a>
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-add-customers.html">Add Customers</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Customers -->
+
+                                                    <a class="dropdown-item "
+                                                        href="ecommerce-referrals.html">Referrals</a>
+                                                    <a class="dropdown-item "
+                                                        href="ecommerce-manage-reviews.html">Manage Reviews</a>
+                                                    <a class="dropdown-item "
+                                                        href="ecommerce-checkout.html">Checkout</a>
+                                                </div>
+                                            </div>
+                                            <!-- End E-commerce -->
+
+                                            <!-- Projects -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="projectsMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">Projects</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="projectsMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="projects.html">Overview</a>
+                                                    <a class="dropdown-item " href="projects-timeline.html">Timeline</a>
+                                                </div>
+                                            </div>
+                                            <!-- End Projects -->
+
+                                            <!-- Project -->
+                                            ject -->
+
+                                            <!-- Authentication -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="authenticationMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">Authentication</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="authenticationMegaMenu" style="min-width: 14rem;">
+                                                    <!-- Log In -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="loginMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Log In</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="loginMegaMenu" style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="authentication-login-basic.html">Basic</a>
+                                                            <a class="dropdown-item "
+                                                                href="authentication-login-cover.html">Cover</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Log In -->
+
+                                                    <!-- Sign Up -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="signupMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Sign Up</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="signupMegaMenu" style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="authentication-signup-basic.html">Basic</a>
+                                                            <a class="dropdown-item "
+                                                                href="authentication-signup-cover.html">Cover</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Sign Up -->
+
+                                                    <!-- Reset Password -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="resetPasswordMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Reset Password</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="resetPasswordMegaMenu"
+                                                            style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="authentication-reset-password-basic.html">Basic</a>
+                                                            <a class="dropdown-item "
+                                                                href="authentication-reset-password-cover.html">Cover</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Reset Password -->
+
+                                                    <!-- Email Verification -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="emailVerificationMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Email Verification</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="emailVerificationMegaMenu"
+                                                            style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="authentication-email-verification-basic.html">Basic</a>
+                                                            <a class="dropdown-item "
+                                                                href="authentication-email-verification-cover.html">Cover</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Email Verification -->
+
+                                                    <!-- 2-step Verification -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="2stepVerificationMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">2-step Verification</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="2stepVerificationMegaMenu"
+                                                            style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="authentication-2-step-verification-basic.html">Basic</a>
+                                                            <a class="dropdown-item "
+                                                                href="authentication-2-step-verification-cover.html">Cover</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End 2-step Verification -->
+
+                                                    <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
+                                                        data-bs-target="#welcomeMessageModal">Welcome Message</a>
+                                                    <a class="dropdown-item " href="error-404.html">Error 404</a>
+                                                    <a class="dropdown-item " href="error-500.html">Error 500</a>
+                                                </div>
+                                            </div>
+                                            <!-- End Authentication -->
+
+                                            <a class="dropdown-item " href="api-keys.html" data-placement="left">API
+                                                Keys</a>
+                                            <a class="dropdown-item " href="welcome-page.html"
+                                                data-placement="left">Welcome Page</a>
+                                            <a class="dropdown-item " href="landing.html" data-placement="left">Landing
+                                                Page <span class="badge bg-info rounded-pill ms-1">New</span></a>
+                                        </div>
+                                        <!-- End Mega Menu -->
+                                    </li>
+                                    <!-- End Pages -->
+
+                                    <!-- Apps -->
+
+                                    <!-- End Apps -->
+
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="layouts/index.html">
+                                            <i class="bi-grid-1x2 dropdown-item-icon"></i> Layouts
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="documentation/index.html" data-placement="left">
+                                            <i class="bi-book dropdown-item-icon"></i> Docs
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <!-- End Collapse -->
+                        </nav>
+                    </div>
+                </header>
+
+                <!-- End Single Header -->
+            </div>
+            <div class="js-build-layout-header-double">
+                <!-- Double Header -->
+                <header id="header" class="navbar navbar-expand-lg navbar-bordered navbar-spacer-y-0 flex-lg-column">
+                    <div class="navbar-dark w-100 bg-dark py-2">
+                        <div class="container">
+                            <div class="navbar-nav-wrap">
+                                <!-- Logo -->
+                                <a class="navbar-brand" href="index.html" aria-label="Front">
+                                    <img class="navbar-brand-logo" src="/assets/admin/logos/logo-white.svg" alt="Logo">
+                                </a>
+                                <!-- End Logo -->
+
+                                <!-- Content Start -->
+                                <div class="navbar-nav-wrap-content-start">
+                                    <!-- Search Form -->
+                                    <div class="d-none d-lg-block">
+                                        <div class="dropdown ms-2">
+                                            <!-- Input Group -->
+                                            <div class="d-none d-lg-block">
+                                                <div
+                                                    class="input-group input-group-merge input-group-borderless input-group-hover-light navbar-input-group">
+                                                    <div class="input-group-prepend input-group-text">
+                                                        <i class="bi-search"></i>
+                                                    </div>
+
+                                                    <input type="search" class="js-form-search form-control"
+                                                        placeholder="Search in front" aria-label="Search in front"
+                                                        data-hs-form-search-options='{
+                               "clearIcon": "#clearSearchResultsIcon",
+                               "dropMenuElement": "#searchDropdownMenu",
+                               "dropMenuOffset": 20,
+                               "toggleIconOnFocus": true,
+                               "activeClass": "focus"
+                             }'>
+                                                    <a class="input-group-append input-group-text" href="javascript:;">
+                                                        <i id="clearSearchResultsIcon" class="bi-x-lg"
+                                                            style="display: none;"></i>
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            <button
+                                                class="js-form-search js-form-search-mobile-toggle btn btn-ghost-secondary btn-icon rounded-circle d-lg-none"
+                                                type="button" data-hs-form-search-options='{
+                               "clearIcon": "#clearSearchResultsIcon",
+                               "dropMenuElement": "#searchDropdownMenu",
+                               "dropMenuOffset": 20,
+                               "toggleIconOnFocus": true,
+                               "activeClass": "focus"
+                             }'>
+                                                <i class="bi-search"></i>
+                                            </button>
+                                            <!-- End Input Group -->
+
+                                            <!-- Card Search Content -->
+                                            <div id="searchDropdownMenu"
+                                                class="hs-form-search-menu-content dropdown-menu dropdown-menu-form-search navbar-dropdown-menu-borderless">
+                                                <div class="card">
+                                                    <!-- Body -->
+                                                    <div class="card-body-height">
+                                                        <div class="d-lg-none">
+                                                            <div
+                                                                class="input-group input-group-merge navbar-input-group mb-5">
+                                                                <div class="input-group-prepend input-group-text">
+                                                                    <i class="bi-search"></i>
+                                                                </div>
+
+                                                                <input type="search" class="form-control"
+                                                                    placeholder="Search in front"
+                                                                    aria-label="Search in front">
+                                                                <a class="input-group-append input-group-text"
+                                                                    href="javascript:;">
+                                                                    <i class="bi-x-lg"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+
+                                                        <span class="dropdown-header">Recent searches</span>
+
+                                                        <div class="dropdown-item bg-transparent text-wrap">
+                                                            <a class="btn btn-soft-dark btn-xs rounded-pill"
+                                                                href="index.html">
+                                                                Gulp <i class="bi-search ms-1"></i>
+                                                            </a>
+                                                            <a class="btn btn-soft-dark btn-xs rounded-pill"
+                                                                href="index.html">
+                                                                Notification panel <i class="bi-search ms-1"></i>
+                                                            </a>
+                                                        </div>
+
+                                                        <div class="dropdown-divider"></div>
+
+                                                        <span class="dropdown-header">Tutorials</span>
+
+                                                        <a class="dropdown-item" href="index.html">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="flex-shrink-0">
+                                                                    <span
+                                                                        class="icon icon-soft-dark icon-xs icon-circle">
+                                                                        <i class="bi-sliders"></i>
+                                                                    </span>
+                                                                </div>
+
+                                                                <div class="flex-grow-1 text-truncate ms-2">
+                                                                    <span>How to set up Gulp?</span>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+
+                                                        <a class="dropdown-item" href="index.html">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="flex-shrink-0">
+                                                                    <span
+                                                                        class="icon icon-soft-dark icon-xs icon-circle">
+                                                                        <i class="bi-paint-bucket"></i>
+                                                                    </span>
+                                                                </div>
+
+                                                                <div class="flex-grow-1 text-truncate ms-2">
+                                                                    <span>How to change theme color?</span>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+
+                                                        <div class="dropdown-divider"></div>
+
+                                                        <span class="dropdown-header">Members</span>
+
+                                                        <a class="dropdown-item" href="index.html">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="flex-shrink-0">
+                                                                    <img class="avatar avatar-xs avatar-circle"
+                                                                        src="/assets/admin/img/160x160/img10.jpg"
+                                                                        alt="Image Description">
+                                                                </div>
+                                                                <div class="flex-grow-1 text-truncate ms-2">
+                                                                    <span>Amanda Harvey <i
+                                                                            class="tio-verified text-primary"
+                                                                            data-toggle="tooltip" data-placement="top"
+                                                                            title="Top endorsed"></i></span>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+
+                                                        <a class="dropdown-item" href="index.html">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="flex-shrink-0">
+                                                                    <img class="avatar avatar-xs avatar-circle"
+                                                                        src="/assets/admin/img/160x160/img3.jpg"
+                                                                        alt="Image Description">
+                                                                </div>
+                                                                <div class="flex-grow-1 text-truncate ms-2">
+                                                                    <span>David Harrison</span>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+
+                                                        <a class="dropdown-item" href="index.html">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="flex-shrink-0">
+                                                                    <div
+                                                                        class="avatar avatar-xs avatar-soft-info avatar-circle">
+                                                                        <span class="avatar-initials">A</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex-grow-1 text-truncate ms-2">
+                                                                    <span>Anne Richard</span>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                    <!-- End Body -->
+
+                                                    <!-- Footer -->
+                                                    <a class="card-footer text-center" href="index.html">
+                                                        See all results <i class="bi-chevron-right small"></i>
+                                                    </a>
+                                                    <!-- End Footer -->
+                                                </div>
+                                            </div>
+                                            <!-- End Card Search Content -->
+
+                                        </div>
+
+                                    </div>
+                                    <!-- End Search Form -->
+                                </div>
+                                <!-- End Content Start -->
+
+                                <!-- Content End -->
+                                <div class="navbar-nav-wrap-content-end">
+                                    <!-- Navbar -->
+                                    <ul class="navbar-nav">
+                                        <li class="nav-item">
+                                            <!-- Account -->
+                                            <div class="dropdown">
+                                                <a class="navbar-dropdown-account-wrapper" href="javascript:;"
+                                                    id="accountNavbarDropdown" data-bs-toggle="dropdown"
+                                                    aria-expanded="false" data-bs-auto-close="outside"
+                                                    data-bs-dropdown-animation>
+                                                    <div class="avatar avatar-sm avatar-circle">
+                                                        <img class="avatar-img" src="/assets/admin/img/160x160/img6.jpg"
+                                                            alt="Image Description">
+                                                        <span
+                                                            class="avatar-status avatar-sm-status avatar-status-success"></span>
+                                                    </div>
+                                                </a>
+
+                                                <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-account"
+                                                    aria-labelledby="accountNavbarDropdown" style="width: 16rem;">
+                                                    <div class="dropdown-item-text">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="avatar avatar-sm avatar-circle">
+                                                                <img class="avatar-img"
+                                                                    src="/assets/admin/img/160x160/img6.jpg"
+                                                                    alt="Image Description">
+                                                            </div>
+                                                            <div class="flex-grow-1 ms-3">
+                                                                <h5 class="mb-0">Mark Williams</h5>
+                                                                <p class="card-text text-body">mark@site.com</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="dropdown-divider"></div>
+
+                                                    <!-- Dropdown -->
+                                                    <div class="dropdown">
+                                                        <a class="navbar-dropdown-submenu-item dropdown-item dropdown-toggle"
+                                                            href="javascript:;" id="navSubmenuPagesAccountDropdown1"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">Set
+                                                            status</a>
+
+                                                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-sub-menu"
+                                                            aria-labelledby="navSubmenuPagesAccountDropdown1">
+                                                            <a class="dropdown-item" href="#">
+                                                                <span class="legend-indicator bg-success me-1"></span>
+                                                                Available
+                                                            </a>
+                                                            <a class="dropdown-item" href="#">
+                                                                <span class="legend-indicator bg-danger me-1"></span>
+                                                                Busy
+                                                            </a>
+                                                            <a class="dropdown-item" href="#">
+                                                                <span class="legend-indicator bg-warning me-1"></span>
+                                                                Away
+                                                            </a>
+                                                            <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item" href="#"> Reset status
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Dropdown -->
+
+                                                    <a class="dropdown-item" href="#">Profile &amp; account</a>
+                                                    <a class="dropdown-item" href="#">Settings</a>
+
+                                                    <div class="dropdown-divider"></div>
+
+                                                    <a class="dropdown-item" href="#">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="flex-shrink-0">
+                                                                <div class="avatar avatar-sm avatar-dark avatar-circle">
+                                                                    <span class="avatar-initials">HS</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="flex-grow-1 ms-2">
+                                                                <h5 class="mb-0">Htmlstream <span
+                                                                        class="badge bg-primary rounded-pill text-uppercase ms-1">PRO</span>
+                                                                </h5>
+                                                                <span class="card-text">hs.example.com</span>
+                                                            </div>
+                                                        </div>
+                                                    </a>
+
+                                                    <div class="dropdown-divider"></div>
+
+                                                    <!-- Dropdown -->
+                                                    <div class="dropdown">
+                                                        <a class="navbar-dropdown-submenu-item dropdown-item dropdown-toggle"
+                                                            href="javascript:;" id="navSubmenuPagesAccountDropdown2"
+                                                            data-bs-toggle="dropdown"
+                                                            aria-expanded="false">Customization</a>
+
+                                                        <div class="dropdown-menu dropdown-menu-end navbar-dropdown-menu navbar-dropdown-menu-borderless navbar-dropdown-sub-menu"
+                                                            aria-labelledby="navSubmenuPagesAccountDropdown2">
+                                                            <a class="dropdown-item" href="#">
+                                                                Invite people
+                                                            </a>
+                                                            <a class="dropdown-item" href="#">
+                                                                Analytics
+                                                                <i class="bi-box-arrow-in-up-right"></i>
+                                                            </a>
+                                                            <a class="dropdown-item" href="#">
+                                                                Customize Front
+                                                                <i class="bi-box-arrow-in-up-right"></i>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Dropdown -->
+
+                                                    <a class="dropdown-item" href="#">Manage team</a>
+
+                                                    <div class="dropdown-divider"></div>
+
+                                                    <a class="dropdown-item" href="#">Sign out</a>
+                                                </div>
+                                            </div>
+                                            <!-- End Account -->
+                                        </li>
+
+                                        <li class="nav-item">
+                                            <!-- Toggler -->
+                                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                                                data-bs-target="#navbarDoubleLineContainerNavDropdown"
+                                                aria-controls="navbarDoubleLineContainerNavDropdown"
+                                                aria-expanded="false" aria-label="Toggle navigation">
+                                                <span class="navbar-toggler-default">
+                                                    <i class="bi-list"></i>
+                                                </span>
+                                                <span class="navbar-toggler-toggled">
+                                                    <i class="bi-x"></i>
+                                                </span>
+                                            </button>
+                                            <!-- End Toggler -->
+                                        </li>
+                                    </ul>
+                                    <!-- End Navbar -->
+                                </div>
+                                <!-- End Content End -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <nav class="js-mega-menu flex-grow-1">
+                            <!-- Collapse -->
+                            <div class="collapse navbar-collapse" id="navbarDoubleLineContainerNavDropdown">
+                                <ul class="navbar-nav">
+                                    <!-- Dashboards -->
+                                    <li class="hs-has-sub-menu nav-item">
+                                        <a id="dashboardsMegaMenu"
+                                            class="hs-mega-menu-invoker nav-link dropdown-toggle active" href="#"
+                                            role="button"><i class="bi-house-door dropdown-item-icon"></i>
+                                            Dashboards</a>
+
+                                        <!-- Mega Menu -->
+                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                            aria-labelledby="dashboardsMegaMenu" style="min-width: 14rem;">
+                                            <a class="dropdown-item active" href="index.html">Default</a>
+                                            <a class="dropdown-item " href="dashboard-alternative.html">Alternative</a>
+                                        </div>
+                                        <!-- End Mega Menu -->
+                                    </li>
+                                    <!-- End Dashboards -->
+
+                                    <!-- Pages -->
+                                    <li class="hs-has-sub-menu nav-item">
+                                        <a id="pagesMegaMenu" class="hs-mega-menu-invoker nav-link dropdown-toggle "
+                                            href="#" role="button"><i class="bi-files-alt dropdown-item-icon"></i>
+                                            Pages</a>
+
+                                        <!-- Mega Menu -->
+                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                            aria-labelledby="pagesMegaMenu" style="min-width: 14rem;">
+                                            <!-- Users -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="usersMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">Users</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="usersMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="users.html">Overview</a>
+                                                    <a class="dropdown-item "
+                                                        href="users-leaderboard.html">Leaderboard</a>
+                                                    <a class="dropdown-item " href="users-add-user.html">Add User <span
+                                                            class="badge bg-info rounded-pill ms-1">Hot</span></a>
+                                                </div>
+                                            </div>
+                                            <!-- End Users -->
+
+                                            <!-- User Profile -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="userProfileMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">User Profile <span
+                                                        class="badge bg-primary rounded-pill ms-1">5</span></a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="userProfileMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="user-profile.html">Profile</a>
+                                                    <a class="dropdown-item " href="user-profile-teams.html">Teams</a>
+                                                    <a class="dropdown-item "
+                                                        href="user-profile-projects.html">Projects</a>
+                                                    <a class="dropdown-item "
+                                                        href="user-profile-connections.html">Connections</a>
+                                                    <a class="dropdown-item " href="user-profile-my-profile.html">My
+                                                        Profile</a>
+                                                </div>
+                                            </div>
+                                            <!-- End User Profile -->
+
+                                            <!-- Account -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="accountMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">Account</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="accountMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="account-settings.html">Settings</a>
+                                                    <a class="dropdown-item " href="account-billing.html">Billing</a>
+                                                    <a class="dropdown-item " href="account-invoice.html">Invoice</a>
+                                                </div>
+                                            </div>
+                                            <!-- End Account -->
+
+                                            <!-- E-commerce -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="ecommerceMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">E-commerce</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="ecommerceMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="ecommerce.html">Overview</a>
+
+                                                    <!-- Products -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="productsMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Products</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="productsMegaMenu"
+                                                            style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-products.html">Products</a>
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-product-details.html">Product
+                                                                Details</a>
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-add-product.html">Add Product</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Products -->
+
+                                                    <!-- Products -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="ordersMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Orders</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="ordersMegaMenu" style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-orders.html">Orders</a>
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-order-details.html">Order Details</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Products -->
+
+                                                    <!-- Customers -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="customersMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Customers</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="customersMegaMenu"
+                                                            style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-customers.html">Customers</a>
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-customer-details.html">Customer
+                                                                Details</a>
+                                                            <a class="dropdown-item "
+                                                                href="ecommerce-add-customers.html">Add Customers</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Customers -->
+
+                                                    <a class="dropdown-item "
+                                                        href="ecommerce-referrals.html">Referrals</a>
+                                                    <a class="dropdown-item "
+                                                        href="ecommerce-manage-reviews.html">Manage Reviews</a>
+                                                    <a class="dropdown-item "
+                                                        href="ecommerce-checkout.html">Checkout</a>
+                                                </div>
+                                            </div>
+                                            <!-- End E-commerce -->
+
+                                            <!-- Projects -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="projectsMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">Projects</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="projectsMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="projects.html">Overview</a>
+                                                    <a class="dropdown-item " href="projects-timeline.html">Timeline</a>
+                                                </div>
+                                            </div>
+                                            <!-- End Projects -->
+
+                                            <!-- Project -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="projectMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">Project</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="projectMegaMenu" style="min-width: 14rem;">
+                                                    <a class="dropdown-item " href="project.html">Overview</a>
+                                                    <a class="dropdown-item " href="project-files.html">Files</a>
+                                                    <a class="dropdown-item " href="project-activity.html">Activity</a>
+                                                    <a class="dropdown-item " href="project-teams.html">Teams</a>
+                                                    <a class="dropdown-item " href="project-settings.html">Settings</a>
+                                                </div>
+                                            </div>
+                                            <!-- End Project -->
+
+                                            <!-- Authentication -->
+                                            <div class="hs-has-sub-menu nav-item">
+                                                <a id="authenticationMegaMenu"
+                                                    class="hs-mega-menu-invoker dropdown-item dropdown-toggle " href="#"
+                                                    role="button">Authentication</a>
+
+                                                <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                    aria-labelledby="authenticationMegaMenu" style="min-width: 14rem;">
+                                                    <!-- Log In -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="loginMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Log In</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="loginMegaMenu" style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="authentication-login-basic.html">Basic</a>
+                                                            <a class="dropdown-item "
+                                                                href="authentication-login-cover.html">Cover</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Log In -->
+
+                                                    <!-- Sign Up -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="signupMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Sign Up</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="signupMegaMenu" style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="authentication-signup-basic.html">Basic</a>
+                                                            <a class="dropdown-item "
+                                                                href="authentication-signup-cover.html">Cover</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Sign Up -->
+
+                                                    <!-- Reset Password -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="resetPasswordMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Reset Password</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="resetPasswordMegaMenu"
+                                                            style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="authentication-reset-password-basic.html">Basic</a>
+                                                            <a class="dropdown-item "
+                                                                href="authentication-reset-password-cover.html">Cover</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Reset Password -->
+
+                                                    <!-- Email Verification -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="emailVerificationMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">Email Verification</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="emailVerificationMegaMenu"
+                                                            style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="authentication-email-verification-basic.html">Basic</a>
+                                                            <a class="dropdown-item "
+                                                                href="authentication-email-verification-cover.html">Cover</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End Email Verification -->
+
+                                                    <!-- 2-step Verification -->
+                                                    <div class="hs-has-sub-menu nav-item">
+                                                        <a id="2stepVerificationMegaMenu"
+                                                            class="hs-mega-menu-invoker dropdown-item dropdown-toggle "
+                                                            href="#" role="button">2-step Verification</a>
+
+                                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                                            aria-labelledby="2stepVerificationMegaMenu"
+                                                            style="min-width: 14rem;">
+                                                            <a class="dropdown-item "
+                                                                href="authentication-2-step-verification-basic.html">Basic</a>
+                                                            <a class="dropdown-item "
+                                                                href="authentication-2-step-verification-cover.html">Cover</a>
+                                                        </div>
+                                                    </div>
+                                                    <!-- End 2-step Verification -->
+
+                                                    <a class="dropdown-item" href="javascript:;" data-bs-toggle="modal"
+                                                        data-bs-target="#welcomeMessageModal">Welcome Message</a>
+                                                    <a class="dropdown-item " href="error-404.html">Error 404</a>
+                                                    <a class="dropdown-item " href="error-500.html">Error 500</a>
+                                                </div>
+                                            </div>
+                                            <!-- End Authentication -->
+
+                                            <a class="dropdown-item " href="api-keys.html" data-placement="left">API
+                                                Keys</a>
+                                            <a class="dropdown-item " href="welcome-page.html"
+                                                data-placement="left">Welcome Page</a>
+                                            <a class="dropdown-item " href="landing.html" data-placement="left">Landing
+                                                Page <span class="badge bg-info rounded-pill ms-1">New</span></a>
+                                        </div>
+                                        <!-- End Mega Menu -->
+                                    </li>
+                                    <!-- End Pages -->
+
+                                    <!-- Apps -->
+                                    <li class="hs-has-sub-menu nav-item">
+                                        <a id="appsMegaMenu" class="hs-mega-menu-invoker nav-link dropdown-toggle "
+                                            href="#" role="button"><i class="bi-app-indicator dropdown-item-icon"></i>
+                                            Apps</a>
+
+                                        <div class="hs-sub-menu dropdown-menu navbar-dropdown-menu-borderless"
+                                            aria-labelledby="appsMegaMenu" style="min-width: 14rem;">
+                                            <a class="dropdown-item " href="apps-kanban.html">Kanban</a>
+                                            <a class="dropdown-item " href="apps-calendar.html">Calendar</a>
+                                            <a class="dropdown-item " href="apps-invoice-generator.html">Invoice
+                                                Generator</a>
+                                            <a class="dropdown-item " href="apps-file-manager.html">File Manager</a>
+                                        </div>
+                                    </li>
+                                    <!-- End Apps -->
+
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="layouts/index.html">
+                                            <i class="bi-grid-1x2 dropdown-item-icon"></i> Layouts
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link " href="documentation/index.html" data-placement="left">
+                                            <i class="bi-book dropdown-item-icon"></i> Docs
+                                        </a>
+                                    </li>
+                                </ul>
+
+                            </div>
+                            <!-- End Collapse -->
+                        </nav>
+                    </div>
+                </header>
+                <!-- End Double Header -->
+            </div>
+        </div>
+
+        <script src="/assets/admin/js/demo.js"></script>
+
+        <!-- END ONLY DEV -->
+
+        <!-- ========== SECONDARY CONTENTS ========== -->
+        <!-- Keyboard Shortcuts -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasKeyboardShortcuts"
+            aria-labelledby="offcanvasKeyboardShortcutsLabel">
+            <div class="offcanvas-header">
+                <h4 id="offcanvasKeyboardShortcutsLabel" class="mb-0">Keyboard shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
+                    <div class="list-group-item">
+                        <h5 class="mb-1">Formatting</h5>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span class="fw-semibold">Bold</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">b</kbd>
+                            </div>
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <em>italic</em>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">i</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <u>Underline</u>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">u</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <s>Strikethrough</s>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">Alt</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">s</kbd>
+                                <!-- End Col -->
+                            </div>
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span class="small">Small text</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">s</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <mark>Highlight</mark>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">e</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                </div>
+
+                <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
+                    <div class="list-group-item">
+                        <h5 class="mb-1">Insert</h5>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Mention person <a href="#">(@Brian)</a></span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">@</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Link to doc <a href="#">(+Meeting notes)</a></span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">+</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <a href="#">#hashtag</a>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">#hashtag</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Date</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">/date</kbd>
+                                <kbd class="d-inline-block mb-1">Space</kbd>
+                                <kbd class="d-inline-block mb-1">/datetime</kbd>
+                                <kbd class="d-inline-block mb-1">/datetime</kbd>
+                                <kbd class="d-inline-block mb-1">Space</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Time</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">/time</kbd>
+                                <kbd class="d-inline-block mb-1">Space</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Note box</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">/note</kbd>
+                                <kbd class="d-inline-block mb-1">Enter</kbd>
+                                <kbd class="d-inline-block mb-1">/note red</kbd>
+                                <kbd class="d-inline-block mb-1">/note red</kbd>
+                                <kbd class="d-inline-block mb-1">Enter</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                </div>
+
+                <div class="list-group list-group-sm list-group-flush list-group-no-gutters mb-5">
+                    <div class="list-group-item">
+                        <h5 class="mb-1">Editing</h5>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Find and replace</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">r</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Find next</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">n</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Find previous</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">p</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Indent</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Tab</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Un-indent</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Shift</kbd> <span class="text-muted small">+</span>
+                                <kbd class="d-inline-block mb-1">Tab</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Move line up</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">Shift</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1"><i class="bi-arrow-up-short"></i></kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Move line down</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">Shift</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1"><i class="bi-arrow-down-short fs-5"></i></kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Add a comment</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">Alt</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">m</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Undo</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">z</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Redo</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">y</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                </div>
+
+                <div class="list-group list-group-sm list-group-flush list-group-no-gutters">
+                    <div class="list-group-item">
+                        <h5 class="mb-1">Application</h5>
+                    </div>
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Create new doc</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">Alt</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">n</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Present</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">Shift</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">p</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Share</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">Shift</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">s</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Search docs</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">Shift</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">o</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                    <div class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col-5">
+                                <span>Keyboard shortcuts</span>
+                            </div>
+                            <!-- End Col -->
+
+                            <div class="col-7 text-end">
+                                <kbd class="d-inline-block mb-1">Ctrl</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">Shift</kbd> <span class="text-muted small">+</span> <kbd
+                                    class="d-inline-block mb-1">/</kbd>
+                            </div>
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- End Keyboard Shortcuts -->
+
+        <!-- Activity -->
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasActivityStream"
+            aria-labelledby="offcanvasActivityStreamLabel">
+            <div class="offcanvas-header">
+                <h4 id="offcanvasActivityStreamLabel" class="mb-0">Activity stream</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+                <!-- Step -->
+                <ul class="step step-icon-sm step-avatar-sm">
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <div class="step-avatar">
+                                <img class="step-avatar" src="/assets/admin/img/160x160/img9.jpg"
+                                    alt="Image Description">
+                            </div>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">Iana Robinson</h5>
+
+                                <p class="fs-5 mb-1">Added 2 files to task <a class="text-uppercase" href="#"><i
+                                            class="bi-journal-bookmark-fill"></i> Fd-7</a></p>
+
+                                <ul class="list-group list-group-sm">
+                                    <!-- List Item -->
+                                    <li class="list-group-item list-group-item-light">
+                                        <div class="row gx-1">
+                                            <div class="col-6">
+                                                <!-- Media -->
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0">
+                                                        <img class="avatar avatar-xs"
+                                                            src="/assets/admin/brands/excel-icon.svg"
+                                                            alt="Image Description">
+                                                    </div>
+                                                    <div class="flex-grow-1 text-truncate ms-2">
+                                                        <span class="d-block fs-6 text-dark text-truncate"
+                                                            title="weekly-reports.xls">weekly-reports.xls</span>
+                                                        <span class="d-block small text-muted">12kb</span>
+                                                    </div>
+                                                </div>
+                                                <!-- End Media -->
+                                            </div>
+                                            <!-- End Col -->
+
+                                            <div class="col-6">
+                                                <!-- Media -->
+                                                <div class="d-flex">
+                                                    <div class="flex-shrink-0">
+                                                        <img class="avatar avatar-xs"
+                                                            src="/assets/admin/brands/word-icon.svg"
+                                                            alt="Image Description">
+                                                    </div>
+                                                    <div class="flex-grow-1 text-truncate ms-2">
+                                                        <span class="d-block fs-6 text-dark text-truncate"
+                                                            title="weekly-reports.xls">weekly-reports.xls</span>
+                                                        <span class="d-block small text-muted">4kb</span>
+                                                    </div>
+                                                </div>
+                                                <!-- End Media -->
+                                            </div>
+                                            <!-- End Col -->
+                                        </div>
+                                        <!-- End Row -->
+                                    </li>
+                                    <!-- End List Item -->
+                                </ul>
+
+                                <span class="small text-muted text-uppercase">Now</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <span class="step-icon step-icon-soft-dark">B</span>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">Bob Dean</h5>
+
+                                <p class="fs-5 mb-1">Marked <a class="text-uppercase" href="#"><i
+                                            class="bi-journal-bookmark-fill"></i> Fr-6</a> as <span
+                                        class="badge bg-soft-success text-success rounded-pill"><span
+                                            class="legend-indicator bg-success"></span>"Completed"</span></p>
+
+                                <span class="small text-muted text-uppercase">Today</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <div class="step-avatar">
+                                <img class="step-avatar-img" src="/assets/admin/img/160x160/img3.jpg"
+                                    alt="Image Description">
+                            </div>
+
+                            <div class="step-content">
+                                <h5 class="h5 mb-1">Crane</h5>
+
+                                <p class="fs-5 mb-1">Added 5 card to <a href="#">Payments</a></p>
+
+                                <ul class="list-group list-group-sm">
+                                    <li class="list-group-item list-group-item-light">
+                                        <div class="row gx-1">
+                                            <div class="col">
+                                                <img class="img-fluid rounded" src="/assets/admin/components/card-1.svg"
+                                                    alt="Image Description">
+                                            </div>
+                                            <div class="col">
+                                                <img class="img-fluid rounded" src="/assets/admin/components/card-2.svg"
+                                                    alt="Image Description">
+                                            </div>
+                                            <div class="col">
+                                                <img class="img-fluid rounded" src="/assets/admin/components/card-3.svg"
+                                                    alt="Image Description">
+                                            </div>
+                                            <div class="col-auto align-self-center">
+                                                <div class="text-center">
+                                                    <a href="#">+2</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <span class="small text-muted text-uppercase">May 12</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <span class="step-icon step-icon-soft-info">D</span>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">David Lidell</h5>
+
+                                <p class="fs-5 mb-1">Added a new member to Front Dashboard</p>
+
+                                <span class="small text-muted text-uppercase">May 15</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <div class="step-avatar">
+                                <img class="step-avatar-img" src="/assets/admin/img/160x160/img7.jpg"
+                                    alt="Image Description">
+                            </div>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">Rachel King</h5>
+
+                                <p class="fs-5 mb-1">Marked <a class="text-uppercase" href="#"><i
+                                            class="bi-journal-bookmark-fill"></i> Fr-3</a> as <span
+                                        class="badge bg-soft-success text-success rounded-pill"><span
+                                            class="legend-indicator bg-success"></span>"Completed"</span></p>
+
+                                <span class="small text-muted text-uppercase">Apr 29</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <div class="step-avatar">
+                                <img class="step-avatar-img" src="/assets/admin/img/160x160/img5.jpg"
+                                    alt="Image Description">
+                            </div>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">Finch Hoot</h5>
+
+
+
+                                <span class="small text-muted text-uppercase">Apr 06</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+
+                    <!-- Step Item -->
+                    <li class="step-item">
+                        <div class="step-content-wrapper">
+                            <span class="step-icon step-icon-soft-primary">
+                                <i class="bi-person-fill"></i>
+                            </span>
+
+                            <div class="step-content">
+                                <h5 class="mb-1">Project status updated</h5>
+
+                                <p class="fs-5 mb-1">Marked <a class="text-uppercase" href="#"><i
+                                            class="bi-journal-bookmark-fill"></i> Fr-3</a> as <span
+                                        class="badge bg-soft-primary text-primary rounded-pill"><span
+                                            class="legend-indicator bg-primary"></span>"In progress"</span></p>
+
+                                <span class="small text-muted text-uppercase">Feb 10</span>
+                            </div>
+                        </div>
+                    </li>
+                    <!-- End Step Item -->
+                </ul>
+                <!-- End Step -->
+
+                <div class="d-grid">
+                    <a class="btn btn-white" href="javascript:;">View all <i class="bi-chevron-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <!-- End Activity -->
+
+        <!-- Welcome Message Modal -->
+        <div class="modal fade" id="welcomeMessageModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <!-- Header -->
+                    <div class="modal-close">
+                        <button type="button" class="btn btn-ghost-secondary btn-icon btn-sm" data-bs-dismiss="modal"
+                            aria-label="Close">
+                            <i class="bi-x-lg"></i>
+                        </button>
+                    </div>
+                    <!-- End Header -->
+
+                    <!-- Body -->
+                    <div class="modal-body p-sm-5">
+                        <div class="text-center">
+                            <div class="w-75 w-sm-50 mx-auto mb-4">
+                                <img class="img-fluid" src="/assets/admin/illustrations/oc-collaboration.svg"
+                                    alt="Image Description" data-hs-theme-appearance="default">
+                                <img class="img-fluid" src="/assets/admin/illustrations-light/oc-collaboration.svg"
+                                    alt="Image Description" data-hs-theme-appearance="dark">
+                            </div>
+
+                            <h4 class="h1">Welcome to Front</h4>
+
+                            <p>We're happy to see you in our community.</p>
+                        </div>
+                    </div>
+                    <!-- End Body -->
+
+                    <!-- Footer -->
+                    <div class="modal-footer d-block text-center py-sm-5">
+                        <small class="text-cap text-muted">Trusted by the world's best teams</small>
+
+                        <div class="w-85 mx-auto">
+                            <div class="row justify-content-between">
+                                <div class="col">
+                                    <img class="img-fluid" src="/assets/admin/brands/gitlab-gray.svg"
+                                        alt="Image Description">
+                                </div>
+                                <div class="col">
+                                    <img class="img-fluid" src="/assets/admin/brands/fitbit-gray.svg"
+                                        alt="Image Description">
+                                </div>
+                                <div class="col">
+                                    <img class="img-fluid" src="/assets/admin/brands/flow-xo-gray.svg"
+                                        alt="Image Description">
+                                </div>
+                                <div class="col">
+                                    <img class="img-fluid" src="/assets/admin/brands/layar-gray.svg"
+                                        alt="Image Description">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Footer -->
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Import Products Modal -->
+
+
+
+        // <!-- End Style Switcher JS -->
+
+        <%-include('../layouts/admin/footer')-%>

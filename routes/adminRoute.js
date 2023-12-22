@@ -76,6 +76,9 @@ app.put('/category/editCategory', adminController.editCategory);
 app.put('/category/listCategory', adminController.listCatogory);
 app.put('/category/UnListCategory', adminController.UnListCatogory);
 
+// --------------------------Users Orders--------------------
+app.get('/orders',authAdmin.isLogin,adminController.userOrders)
+
 // ---------------------------Logout-admin-------------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);
 

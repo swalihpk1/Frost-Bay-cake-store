@@ -4,6 +4,7 @@ const Products = require("../models/productModel");
 const Category = require("../models/categoryModel");
 const Sharp = require("sharp");
 const path = require("path")
+const Orders = require('../models/ordersModel')
  
 
 // --------Admin-login-------
@@ -350,6 +351,16 @@ const hideProduct = async (req, res) => {
     }
 };
 
+const userOrders = async (req, res) => {
+    try {
+        const orders = await Orders.find({});
+        res.render('orders',{orders:orders});
+    } catch (error) {
+        console.log(error.message);
+    }
+    
+}
+
 
 
 
@@ -372,6 +383,7 @@ module.exports = {
     inserEditedProduct,
     hideProduct,
     showProduct,
+    userOrders,
     logout
 
 }

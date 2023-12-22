@@ -5,6 +5,10 @@ const ordersSchema = new mongoose.Schema({
         type: mongoose.Types.ObjectId,
         required: true
     },
+    userName: {
+        type: String,
+        required:true
+    },
     shipAddress: [
         {
             name: {
@@ -80,8 +84,12 @@ const ordersSchema = new mongoose.Schema({
         type: String
     },
     purchaseDate: {
-        type: Date,
+        type: String,
         required: true
+    },
+    purchaseTime: {
+        type: String,
+        required:true
     },
     deliveredDate: {
         type: Date,

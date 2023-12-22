@@ -33,6 +33,7 @@
                         </nav><!-- End .main-nav -->
                     </div><!-- End .header-left -->
 
+
                     <div class="header-right">
                         <div class="header-search">
                             <a href="#" class="search-toggle" role="button" title="Search"><i
@@ -122,13 +123,20 @@
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Login</li>
+                        <% if(typeof message !=='undefined' ){ %>
+                        
+                            <h5 class="text-danger position-absolute" style="left: 45%">
+                            <%= message %>
+                            </h5>
+                        
+                            <% } %>
                     </ol>
                 </div><!-- End .container -->
             </nav><!-- End .breadcrumb-nav -->
 
 
   
-  
+
                 
             <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
                 style="background-image: url('/assets/images/Logo bg.jpg')">
