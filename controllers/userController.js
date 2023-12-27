@@ -169,7 +169,7 @@ const verifyLogin = async (req, res) => {
             }
 
         } else {
-            res.render('signup-&-login', { message: "Incorrect username or password" });
+            res.render('signup-&-login', { logMessage: "Incorrect username or password" });
         }
     } catch (error) {
         res.render('404');

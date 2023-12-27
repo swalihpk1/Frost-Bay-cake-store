@@ -32,7 +32,6 @@ const upload = multer({ storage: storage, });
 
 
 // Require custom middlewares
-const validation = require("../middlewares/validation");
 const authUser = require("../middlewares/AuthUser");
 
 
@@ -85,7 +84,7 @@ app.post('/account/addAddress',authUser.isLogin,userController.addAddress);
 app.delete('/account/deleteAddress',authUser.isLogin,userController.deleteAddress);
 app.patch('/account/editAddress', authUser.isLogin, userController.editAddress);
 
-// -----------------Orders---------------------
+// -----------------------------------Orders-----------------------------------------
 app.delete('/account/deleteOrderItem', authUser.isLogin, orderController.cancelOrder);
 
 

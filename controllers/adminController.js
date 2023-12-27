@@ -60,11 +60,8 @@ const dashboard = async (req, res) => {
 // --------Products-------
 const products = async (req, res) => {
     try {
-
-        const products = await Products.find({})
-        // console.log("Products"+products);
+        const products = await Products.find({}).populate('category');
         res.render('products', { products: products });
-
     } catch (error) {
         console.log(error.message);
     }
@@ -134,6 +131,7 @@ const addProduct = async (req, res) => {
 // -------Get-and-Store-all-products-in-DB-------
 const insertProduct = async (req, res) => {
     try {
+        console.log(req.body);
         // Resize the uploaded images using sharp
         const resizedImages = await Promise.all(req.files.map(async (file) => {
             const imagePath = path.join(__dirname, '..', 'public', 'assets', 'productImages', 'uploadImages', file.filename);
@@ -146,6 +144,8 @@ const insertProduct = async (req, res) => {
             return file.filename;
         }));
 
+        const category = await Category.findOne({ categoryName: req.body.category });
+
         const product = new Products({
             productName: req.body.productName,
             weights: req.body.weight.map(weightValue => ({ value: weightValue, selected: true })),
@@ -156,7 +156,7 @@ const insertProduct = async (req, res) => {
             description: req.body.description,
             price: parseFloat(req.body.price),
             totalQuantity: req.body.quantity,
-            category: req.body.category,
+            category: category._id,
             productImages: resizedImages,
         });
 

@@ -9,48 +9,70 @@ const shop = async (req, res) => {
         const userId = req.userId;
         const user = await User.findOne({ _id: userId });
         const currentPage = parseInt(req.query.page) || 1;
-        const searchTerm = req.query.q; // Retrieve the search term from the query parameters
+        const searchTerm = req.query.q;
+        const selectedCategories = req.query.categories || [];
 
         let query = {};
 
         if (searchTerm) {
-            // If there's a search term, add a case-insensitive search to the query
             query = {
                 $or: [
                     { productName: { $regex: searchTerm, $options: 'i' } },
                     { description: { $regex: searchTerm, $options: 'i' } },
-                    // Add more fields as needed for your search
                 ],
             };
+        }
+
+        if (selectedCategories.length > 0) {
+            query.category = { $in: selectedCategories };
         }
 
         const totalProducts = await Products.countDocuments(query);
         const totalPages = Math.ceil(totalProducts / 6);
 
         const products = await Products.find(query)
-            .populate('category')
+            .populate({ path: 'category', model: 'Categorys', select: 'categoryName' })
             .skip((currentPage - 1) * 6)
             .limit(6);
-
+        
         const category = await Category.find({});
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
 
-        res.render('shop', { category: category, products: products, user: userDetails, totalPages, currentPage, searchTerm: req.query.q });
+        // Create a response object
+        const response = {
+            category: category,
+            products: products,
+            user: userDetails,
+            totalPages,
+            currentPage,
+            searchTerm: searchTerm,
+            selectedCategories: selectedCategories,
+        };
+
+        // checking the client accept json resposes
+        if (req.xhr || req.headers.accept.indexOf('json') > -1) {
+            return res.json(response);
+        }
+        
+        res.render('shop', response);
+
     } catch (error) {
         console.log(error.message);
-        res.status(500).send('Internal Server Error');
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };
 
 
-const productDetails = async(req,res)=>{
+
+
+const productDetails = async (req, res) => {
     try {
         const userId = req.userId;
-        const user = await User.findOne({_id:userId})
+        const user = await User.findOne({ _id: userId })
         const productId = req.params.productId
-        const product =  await Products.findOne({_id:productId})
+        const product = await Products.findOne({ _id: productId })
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('productDetails',{product:product,user:userDetails})
+        res.render('productDetails', { product: product, user: userDetails })
     } catch (error) {
         console.log(error.message);
     }
@@ -58,8 +80,8 @@ const productDetails = async(req,res)=>{
 
 
 
-module.exports={
+module.exports = {
     shop,
     productDetails,
-  
+
 }

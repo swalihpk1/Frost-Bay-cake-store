@@ -1,5 +1,5 @@
 <%-include('../layouts/user/header')-%>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 	</head>
 
 	<body>
@@ -41,49 +41,6 @@
 													</select>
 												</div>
 											</div><!-- End .toolbox-sort -->
-											<div class="toolbox-layout">
-												<a href="category-list.html" class="btn-layout">
-													<svg width="16" height="10">
-														<rect x="0" y="0" width="4" height="4" />
-														<rect x="6" y="0" width="10" height="4" />
-														<rect x="0" y="6" width="4" height="4" />
-														<rect x="6" y="6" width="10" height="4" />
-													</svg>
-												</a>
-
-												<a href="category-2cols.html" class="btn-layout active">
-													<svg width="10" height="10">
-														<rect x="0" y="0" width="4" height="4" />
-														<rect x="6" y="0" width="4" height="4" />
-														<rect x="0" y="6" width="4" height="4" />
-														<rect x="6" y="6" width="4" height="4" />
-													</svg>
-												</a>
-
-												<a href="category.html" class="btn-layout">
-													<svg width="16" height="10">
-														<rect x="0" y="0" width="4" height="4" />
-														<rect x="6" y="0" width="4" height="4" />
-														<rect x="12" y="0" width="4" height="4" />
-														<rect x="0" y="6" width="4" height="4" />
-														<rect x="6" y="6" width="4" height="4" />
-														<rect x="12" y="6" width="4" height="4" />
-													</svg>
-												</a>
-
-												<a href="category-4cols.html" class="btn-layout">
-													<svg width="22" height="10">
-														<rect x="0" y="0" width="4" height="4" />
-														<rect x="6" y="0" width="4" height="4" />
-														<rect x="12" y="0" width="4" height="4" />
-														<rect x="18" y="0" width="4" height="4" />
-														<rect x="0" y="6" width="4" height="4" />
-														<rect x="6" y="6" width="4" height="4" />
-														<rect x="12" y="6" width="4" height="4" />
-														<rect x="18" y="6" width="4" height="4" />
-													</svg>
-												</a>
-											</div><!-- End .toolbox-layout -->
 										</div><!-- End .toolbox-right -->
 									</div><!-- End .toolbox -->
 
@@ -120,14 +77,14 @@
 														<div class="product-body">
 															<div class="product-cat">
 																<a href="#">
-																	<%= i.category %>
+																	<%= i.category.categoryName %>
 																</a>
 															</div><!-- End .product-cat -->
 															<h3 class="product-title"><a href="product.html">
 																	<%= i.productName %>
 																</a></h3><!-- End .product-title -->
 															<div class="product-price">
-																<%= i.price %>
+																$ <%= i.price %>
 															</div><!-- End .product-price -->
 														</div><!-- End .product-body -->
 													</div><!-- End .product -->
@@ -192,10 +149,11 @@
 													<div class="filter-items filter-items-count">
 														<div class="filter-item">
 															<% for(let i of category){ %>
-																<div class="custom-control custom-checkbox">
-																	<input type="checkbox" class="custom-control-input"
-																		id="cat-1">
-																	<label class="custom-control-label" for="cat-1">
+																<div class="custom-control">
+																	<input type="checkbox" class="category-filter"
+																		name="categories" id="<%= i._id %>"
+																		value="<%= i._id %>" />
+																	<label for="">
 																		<%= i.categoryName %>
 																	</label>
 																</div><!-- End .custom-checkbox -->
@@ -464,9 +422,9 @@
 		<script src="/assets/js/nouislider.min.js"></script>
 		<!-- Main JS File -->
 		<script src="/assets/js/main.js"></script>
-
-
 		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+		<!-- ----------searching--------- -->
 		<script>
 			$(document).ready(function () {
 				// Keep track of the original search term
@@ -487,6 +445,92 @@
 				});
 			});
 		</script>
+
+
+		<!-- ------------catogory filtering------------- -->
+		<script>
+			$(document).ready(function () {
+				$('.category-filter').on('change', function () {
+					updateProductList();
+				});
+
+				function updateProductList() {
+					const selectedCategories = $('.category-filter:checked').map(function () {
+						return $(this).val();
+					}).get();
+
+
+					$.ajax({
+						url: '/shop',
+						method: 'GET',
+						data: { categories: selectedCategories },
+						dataType: 'json',
+						success: function (data) {
+
+							const products = data.products;
+							
+							const productsContainer = $('.products');
+							productsContainer.empty();
+							 const rowContainer = $('<div class="row justify-content-center"></div>');
+							products.forEach(product => {
+
+								const productElement = $(
+									
+									`<div class="col-6">
+                    <div class="product product-7 text-center" data-product-id="${product._id}">
+                    <figure class="product-media">
+                        <span class="product-label label-new">New</span>
+                        <a href="/shop/productDetails/${product._id}">
+                            <img src="/assets/productImages/uploadImages/${product.productImages[0]}"
+                                alt="Product image" class="product-image">
+                        </a>
+
+                        <div class="product-action-vertical">
+                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable">
+                                <span>add to wishlist</span>
+                            </a>
+                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view">
+                                <span>Quick view</span>
+                            </a>
+                            <a href="#" class="btn-product-icon btn-compare" title="Compare">
+                                <span>Compare</span>
+                            </a>
+                        </div><!-- End .product-action-vertical -->
+
+                        <div class="product-action">
+                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                        </div><!-- End .product-action -->
+                    </figure><!-- End .product-media -->
+
+                    <div class="product-body">
+                        <div class="product-cat">
+                            <a href="#">
+                                ${product.category.categoryName}
+                            </a>
+                        </div><!-- End .product-cat -->
+                        <h3 class="product-title">
+                            <a href="product.html">${product.productName}</a>
+                        </h3><!-- End .product-title -->
+                        <div class="product-price">
+                            $ ${product.price}
+                        </div><!-- End .product-price -->
+                    </div><!-- End .product-body -->
+                </div><!-- End .product -->
+            </div><!-- End .col-6 -->`
+								);
+								 rowContainer.append(productElement);
+							});
+								productsContainer.append(rowContainer);
+
+						},
+						error: function (error) {
+							console.error('Error fetching products:', error);
+						}
+					});
+				}
+			});
+		</script>
+
 
 
 		<%-include('../layouts/user/footer')-%>

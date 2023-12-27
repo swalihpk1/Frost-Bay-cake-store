@@ -11,8 +11,7 @@
               <button class="btn btn-primary" type="submit">
                 <i class="icon-search"></i>
               </button>
-              <input type="search" class="form-control" name="q" id="q" placeholder="Search product ..."
-                value="<%= searchTerm || '' %>" required />
+              <input type="search" class="form-control" name="q" id="q" ̦ placeholder="Search product ..." required />
             </div>
             <!-- End .header-search-wrapper -->
           </form>
@@ -79,9 +78,9 @@
                         </a>
                       </div>
                       <!-- .End .tab-pane -->
-                    <% } %>
-                    <% if (user && user.cart.length> 0 ) { %>
-                      <div class="dropdown-cart-total">
+                      <% } %>
+                        <% if (user && user.cart.length> 0 ) { %>
+                          <div class="dropdown-cart-total">
                             <span>Total</span>
 
                             <span class="cart-total-price">$160.00</span>
@@ -90,36 +89,41 @@
 
                           <div class="dropdown-cart-action">
                             <a href="/cart" class="btn btn-secondary">View Cart</a>
-                            <a href="/cart/checkout" class="btn btn-outline-primary-2"><span>Checkout</span><i class="icon-long-arrow-right"></i></a>
+                            <a href="/cart/checkout" class="btn btn-outline-primary-2"><span>Checkout</span><i
+                                class="icon-long-arrow-right"></i></a>
                           </div>
                           <!-- End .dropdown-cart-total -->
-                    <% } %>
+                          <% } %>
             </div>
           </div>
         </div>
         <!-- End .cartDropdown -->
 
-        <% if (user) { %>
-          <h5 class="ml-5 pt-1">
-            <%= user.name %>
-          </h5>
-          <% } else { %>
-            <a href="/authentication" class="text-white text-center m-3 p-2" style="
-            width: 6rem;
-            height: 3rem;
-            border: none;
-            background-color: #cc9966;
-            color: aliceblue;
-          ">
-              <span>LOGIN</span>
-            </a>
-            <% } %>
+<% if (user) { %>
+  <% if (user.userImage) { %>
+    <a href="/account" class="bg-white border-0" dropdown-toggle type="button" id="" data-toggle="dropdown">
+      <div style="width: 50px;height: 50px;" class="ml-3">
+        <img class="rounded-circle" src="/assets/userImages/croppedImages/<%=user.userImage%>" alt="" />
+      </div>
+    </a>
+    <% } else { %>
+      <a href="/account" class="bg-white border-0" dropdown-toggle type="button" id="" data-toggle="dropdown">
 
-              <div class="dropdown">
-                <a href="/account" class="bg-white border-0" dropdown-toggle type="button" id="" data-toggle="dropdown">
-                  <img class="" src="/assets/images/icons/Profile.svg" alt="" />
-                </a>
-              </div>
+        <img class="" src="/assets/images/icons/Profile.svg" alt="" />
+      </a>
+      <% } %>
+        <% } else { %>
+          <a href="/authentication" class="text-white text-center m-3 p-2" style="
+    width: 6rem;
+    height: 3rem;
+    border: none;
+    background-color: #cc9966;
+    color: aliceblue;
+  ">
+            <span>LOGIN</span>
+          </a>
+          <% } %>
+
       </div>
       <!-- End .header.right -->
     </div>
@@ -156,7 +160,7 @@
       </div>
       <!-- End .header-left -->
       <h6 class="text-danger">
-        
+
       </h6>
     </div>
     <!-- End .container -->
