@@ -6,11 +6,13 @@ const session = require("express-session");
 
 const shop = async (req, res) => {
     try {
+
+        console.log(req.query);
         const userId = req.userId;
         const user = await User.findOne({ _id: userId });
         const currentPage = parseInt(req.query.page) || 1;
         const searchTerm = req.query.q;
-        const selectedCategories = req.query.categories || [];
+        const selectedCategories = req.query.category || [];
 
         let query = {};
 
@@ -48,6 +50,8 @@ const shop = async (req, res) => {
             searchTerm: searchTerm,
             selectedCategories: selectedCategories,
         };
+
+        // console.log("nvn "+response.selectedCategories);
 
         // checking the client accept json resposes
         if (req.xhr || req.headers.accept.indexOf('json') > -1) {

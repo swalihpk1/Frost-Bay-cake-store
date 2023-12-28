@@ -40,7 +40,7 @@ app.set('view engine','ejs');
 app.set('views','./views/users');
 app.use(express.static('public'));
 
-// ---------------------Home--------------------
+// ---------------------Home-----------------------
 app.get('/',authUser.isLogout,userController.home);
 app.get('/home',authUser.isLogin, userController.home);
 
@@ -86,9 +86,6 @@ app.patch('/account/editAddress', authUser.isLogin, userController.editAddress);
 
 // -----------------------------------Orders-----------------------------------------
 app.delete('/account/deleteOrderItem', authUser.isLogin, orderController.cancelOrder);
-
-
-
 
 
 module.exports = app;

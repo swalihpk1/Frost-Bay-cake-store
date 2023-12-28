@@ -1225,46 +1225,89 @@
                 </div>
             </div>
 
-            <script>
-                const fileInput = document.getElementById('fileInput');
-                const imageContainer = document.getElementById('imageContainer');
-            
-                let selectedFiles = [];
-            
-                fileInput.addEventListener('change', (event) => {
-                  const files = event.target.files;
-            
-                  if (files.length) {
+         <script>
+            const fileInput = document.getElementById('fileInput');
+            const imageContainer = document.getElementById('imageContainer');
+            let selectedFiles = [];
+
+            fileInput.addEventListener('change', (event) => {
+                const files = event.target.files;
+
+                if (files.length) {
                     for (const file of files) {
-                      selectedFiles.push(file);
-            
-                      const card = createCard(file);
-                      imageContainer.appendChild(card);
+                        selectedFiles.push(file);
+
+                        const card = createCard(file);
+                        insertCard(card);
                     }
 
-                  }
-                });
-            
-                function createCard(file) {
-                  let closeButtonCount = 0;
-                  const card = document.createElement('div');
-                  card.classList.add('card');
-            
-                  const cardImage = document.createElement('img');
-                  cardImage.classList.add('card-img-top');
-                  cardImage.src = URL.createObjectURL(file);
-            
-                  const closeButton = document.createElement('button');
-
-
-                  closeButtonCount++;
-                  card.appendChild(cardImage);
-                  card.appendChild(closeButton);
-                  return card;
+                    // Display the first image in a larger size
+                    displayLargeImage(selectedFiles[0]);
                 }
-            
+            });
 
-            </script>
+            function createCard(file) {
+                const card = document.createElement('div');
+                card.classList.add('card');
+
+                const cardImage = document.createElement('img');
+                cardImage.classList.add('card-img-top');
+                cardImage.src = URL.createObjectURL(file);
+
+                const closeButton = document.createElement('button');
+                closeButton.textContent = 'x';
+                closeButton.addEventListener('click', () => removeCard(card));
+
+                card.appendChild(cardImage);
+                card.appendChild(closeButton);
+
+                // Add click event to display the image in a larger size
+                card.addEventListener('click', () => displayLargeImage(file));
+
+                return card;
+            }
+
+            function insertCard(card) {
+                const totalPixels = getTotalPixels(card);
+                let index = 0;
+
+                // Find the correct index based on total pixels
+                for (const existingCard of imageContainer.children) {
+                    const existingPixels = getTotalPixels(existingCard);
+                    if (totalPixels > existingPixels) {
+                        break;
+                    }
+                    index++;
+                }
+
+                // Insert the card at the correct index
+                selectedFiles.splice(index, 0, card.lastChild.src);
+                imageContainer.insertBefore(card, imageContainer.children[index]);
+            }
+
+            function getTotalPixels(card) {
+                const image = card.firstChild;
+                return image.naturalWidth * image.naturalHeight;
+            }
+
+            function removeCard(card) {
+                const index = Array.from(imageContainer.children).indexOf(card);
+                selectedFiles.splice(index, 1);
+                imageContainer.removeChild(card);
+            }
+
+            function displayLargeImage(file) {
+                // Modify this function to display the selected image in a larger size
+                // You can use a modal or any other UI element for this purpose
+                console.log('Displaying large image:', file.name);
+            }
+        </script>
+
+
+
+
+
+
 
             <!-- JS Implementing Plugins -->
             <script src="/assets/admin/js/vendor.min.js"></script>
