@@ -161,42 +161,56 @@
 
 										<div class="widget widget-collapsible">
 											<h3 class="widget-title">
-												<a data-toggle="collapse" href="#widget-1" role="button"
-													aria-expanded="true" aria-controls="widget-1">
+												<h5>
 													Kilograms
-												</a>
+													</h6>
 											</h3><!-- End .widget-title -->
 
 											<div class="collapse show" id="widget-1">
 												<div class="widget-body">
-													<div class="filter-items filter-items-count">
-														<div class="filter-item">
-															<!-- <% for(let i of category){ %> -->
-															<div class="custom-control">
-																<input type="checkbox" class="Kilogram-filter"
-																	name="categories" id="" value="" />
-																<label for="">
-																	1.0 kg
-																</label>
-															</div><!-- End .custom-checkbox -->
-															<!-- <% } %> -->
-														</div><!-- End .filter-item -->
-													</div><!-- End .filter-items -->
+													<div class="filter-item">
+														<div class="custom-control">
+															<input type="checkbox" class="Kilogram-filter"
+																name="kilograms" id="kg-0.5"" value="0.5" />
+															<label for="">
+																0.5 kg
+															</label>
+														</div><!-- End .custom-checkbox -->
+														<div class="custom-control">
+															<input type="checkbox" class="Kilogram-filter"
+																name="kilograms" id="kg-1.0" value="1" />
+															<label for="">
+																1.0 kg
+															</label>
+														</div><!-- End .custom-checkbox -->
+														<div class="custom-control">
+															<input type="checkbox" class="Kilogram-filter"
+																name="kilograms" id="kg-1.5" value="1.5" />
+															<label for="">
+																1.5 kg
+															</label>
+														</div><!-- End .custom-checkbox -->
+														<div class="custom-control">
+															<input type="checkbox" class="Kilogram-filter"
+																name="kilograms" id="kg-2.0"value="2" />
+															<label for="">
+																2.0 kg
+															</label>
+														</div><!-- End .custom-checkbox -->
+													</div><!-- End .filter-item -->
 												</div><!-- End .widget-body -->
 											</div><!-- End .collapse -->
+
 										</div><!-- End .widget -->
 
 										<div class="widget widget-collapsible">
 											<h3 class="widget-title">
-												<a data-toggle="collapse" href="#widget-1" role="button"
-													aria-expanded="true" aria-controls="widget-1">
+												<h5>
 													Category
-												</a>
+												</h5>
 											</h3><!-- End .widget-title -->
 
 											<!-- Your existing EJS code -->
-
-
 											<div class="collapse show" id="widget-1">
 												<div class="widget-body">
 													<div class="filter-items filter-items-count">
@@ -492,24 +506,34 @@
 			$(document).ready(function () {
 				var currentPage;
 				var selectedCategory;
+				var selectedKilogram;
 				var selectedSort = 'popularity';
 
+
+				// --------searchTerm-----
 				$('#searchInput').on('keyup', function () {
-					// Trigger search on keyup after a short delay
 					setTimeout(sendRequests, 300);
 				});
 
+				// ------categoryFiltering------
 				$('.category-filter').on('change', function () {
 					selectedCategory = updateProductList();
 					sendRequests();
 				});
 
-
+                // ---------sorting-----
 				$('#sortby').on('change', function () {
 					selectedSort = $(this).val();
 					sendRequests();
 				});
 
+				// -------kilogram-filtering-----
+				 $('.Kilogram-filter').on('change', function () {
+					selectedKilogram = $(this).val()
+					sendRequests(); 
+				});
+
+                //   ---pagination----
 				$(document).on('click', '.pagination a.page-link', function (e) {
 					e.preventDefault();
 					currentPage = $(this).data('page');
@@ -518,7 +542,7 @@
 
 					$('html, body').animate({ scrollTop: 0 }, 'slow');
 				});
-
+                
 				function updateProductList() {
 					const selectedCategories = $('.category-filter:checked').map(function () {
 						return $(this).val();
@@ -526,12 +550,14 @@
 					return selectedCategories;
 				}
 
+				// -------Request Sending ajax for all--------
 				function sendRequests() {
 					var searchTerm = $('#searchInput').val();
 					var data = {
 						category: selectedCategory,
 						sort: selectedSort,
 						page: currentPage,
+						kilogram:selectedKilogram,
 						q: searchTerm
 					};
 					$.ajax({

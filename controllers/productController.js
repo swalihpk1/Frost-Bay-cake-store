@@ -6,14 +6,21 @@ const session = require("express-session");
 
 const shop = async (req, res) => {
     try {
+
         const userId = req.userId;
         const user = await User.findOne({ _id: userId });
         const currentPage = parseInt(req.query.page) || 1;
         const searchTerm = req.query.q;
         const selectedCategories = req.query.category || [];
         const sortOption = req.query.sort || 'popularity'; // Default sorting option
+        const selectedKilograms = req.query.kilogram || [];
+
 
         let query = {};
+
+        if (selectedKilograms.length > 0) {
+            query['weights.value'] = { $in: selectedKilograms };
+        }
 
         if (searchTerm) {
             query = {
@@ -45,7 +52,6 @@ const shop = async (req, res) => {
             .skip((currentPage - 1) * 6)
             .limit(6);
 
-
         const categoryProductCount = await Products.aggregate([
             { $match: query },
             { $group: { _id: '$category', count: { $sum: 1 } } },
@@ -69,6 +75,7 @@ const shop = async (req, res) => {
             searchTerm: searchTerm,
             selectedCategories: selectedCategories,
             categoryProductCount: categoryProductCountMap,
+            selectedKilograms: selectedKilograms,
         };
 
         console.log(response);
