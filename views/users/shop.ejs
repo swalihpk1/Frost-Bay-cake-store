@@ -163,9 +163,39 @@
 											<h3 class="widget-title">
 												<a data-toggle="collapse" href="#widget-1" role="button"
 													aria-expanded="true" aria-controls="widget-1">
+													Kilograms
+												</a>
+											</h3><!-- End .widget-title -->
+
+											<div class="collapse show" id="widget-1">
+												<div class="widget-body">
+													<div class="filter-items filter-items-count">
+														<div class="filter-item">
+															<!-- <% for(let i of category){ %> -->
+															<div class="custom-control">
+																<input type="checkbox" class="Kilogram-filter"
+																	name="categories" id="" value="" />
+																<label for="">
+																	1.0 kg
+																</label>
+															</div><!-- End .custom-checkbox -->
+															<!-- <% } %> -->
+														</div><!-- End .filter-item -->
+													</div><!-- End .filter-items -->
+												</div><!-- End .widget-body -->
+											</div><!-- End .collapse -->
+										</div><!-- End .widget -->
+
+										<div class="widget widget-collapsible">
+											<h3 class="widget-title">
+												<a data-toggle="collapse" href="#widget-1" role="button"
+													aria-expanded="true" aria-controls="widget-1">
 													Category
 												</a>
 											</h3><!-- End .widget-title -->
+
+											<!-- Your existing EJS code -->
+
 
 											<div class="collapse show" id="widget-1">
 												<div class="widget-body">
@@ -179,13 +209,23 @@
 																	<label for="">
 																		<%= i.categoryName %>
 																	</label>
+																	<% const categoryId=i._id.toString(); const
+																		categoryCount=categoryProductCount[categoryId]
+																		|| 0; %>
+																		<span class="item-count">
+																			<%= categoryCount %>
+																		</span>
 																</div><!-- End .custom-checkbox -->
-																<span class="item-count">3</span>
 																<% } %>
 														</div><!-- End .filter-item -->
 													</div><!-- End .filter-items -->
 												</div><!-- End .widget-body -->
 											</div><!-- End .collapse -->
+
+
+											<!-- Your existing EJS code -->
+
+
 										</div><!-- End .widget -->
 
 
@@ -454,7 +494,7 @@
 				var selectedCategory;
 				var selectedSort = 'popularity';
 
-				  $('#searchInput').on('keyup', function () {
+				$('#searchInput').on('keyup', function () {
 					// Trigger search on keyup after a short delay
 					setTimeout(sendRequests, 300);
 				});
@@ -487,13 +527,13 @@
 				}
 
 				function sendRequests() {
-					 var searchTerm = $('#searchInput').val();
+					var searchTerm = $('#searchInput').val();
 					var data = {
 						category: selectedCategory,
 						sort: selectedSort,
 						page: currentPage,
 						q: searchTerm
-					}; 
+					};
 					$.ajax({
 						url: '/shop',
 						method: 'GET',
@@ -552,7 +592,9 @@
 								);
 								rowContainer.append(productElement);
 							});
+
 							productsContainer.append(rowContainer);
+
 						},
 						error: function (error) {
 							console.error('Error fetching products:', error);

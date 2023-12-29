@@ -28,12 +28,12 @@ const shop = async (req, res) => {
             query.category = { $in: selectedCategories };
         }
 
-        // Add sorting logic based on the selected sort option
+
         let sortCriteria = {};
         if (sortOption === 'lowToHigh') {
-            sortCriteria = { price: 1 }; // Sort low to high by price
+            sortCriteria = { price: 1 };
         } else if (sortOption === 'highToLow') {
-            sortCriteria = { price: -1 }; // Sort high to low by price
+            sortCriteria = { price: -1 };
         }
 
         const totalProducts = await Products.countDocuments(query);
@@ -41,14 +41,25 @@ const shop = async (req, res) => {
 
         const products = await Products.find(query)
             .populate({ path: 'category', model: 'Categorys', select: 'categoryName' })
-            .sort(sortCriteria) // Apply sorting
+            .sort(sortCriteria)
             .skip((currentPage - 1) * 6)
             .limit(6);
+
+
+        const categoryProductCount = await Products.aggregate([
+            { $match: query },
+            { $group: { _id: '$category', count: { $sum: 1 } } },
+        ]);
+
+        const categoryProductCountMap = {};
+        categoryProductCount.forEach(({ _id, count }) => {
+            categoryProductCountMap[_id.toString()] = count;
+        });
 
         const category = await Category.find({});
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
 
-        // Create a response object
+        console.log(categoryProductCountMap);
         const response = {
             category: category,
             products: products,
@@ -57,9 +68,11 @@ const shop = async (req, res) => {
             currentPage,
             searchTerm: searchTerm,
             selectedCategories: selectedCategories,
+            categoryProductCount: categoryProductCountMap,
         };
 
-        // checking the client accept JSON responses
+        console.log(response);
+
         if (req.xhr || req.headers.accept.indexOf('json') > -1) {
             return res.json(response);
         }
