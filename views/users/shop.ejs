@@ -34,10 +34,9 @@
 												<label for="sortby">Sort by:</label>
 												<div class="select-custom">
 													<select name="sortby" id="sortby" class="form-control">
-														<option value="popularity" selected="selected">Most Popular
-														</option>
-														<option value="rating">Most Rated</option>
-														<option value="date">Date</option>
+														<option value="popularity" selected="selected">Popular</option>
+														<option value="lowToHigh">Low to High</option>
+														<option value="highToLow">High to Low</option>
 													</select>
 												</div>
 											</div><!-- End .toolbox-sort -->
@@ -107,7 +106,7 @@
 												<% } %>
 									
 													<% for (let i=1; i <=totalPages; i++) { %>
-														<li class="page-item <%= i === currentPage ? 'active' : '' %>">
+														<li class="page-item <%= i === currentPage ? 'activ' : '' %>">
 															<a class="page-link" href="#" data-page="<%= i %>">
 																<%= i %>
 															</a>
@@ -443,127 +442,118 @@
 		</script>
 
 
-		<!-- ------------catogory filtering------------- -->
+		<!-- ------------ filtering------------- -->
 		<script>
 			$(document).ready(function () {
-				var selectedCategory;
-				$('.category-filter').on('change', function () {
-					selectedCategory = updateProductList();
-					var data = {
-						// search: searchTerm,
-						category: selectedCategory,
-						// page: currentPage, // Update the page parameter
-						// priceFrom: $('#priceFrom').val(),
-						// priceTo: $('#priceTo').val()
-					};
-					sendRequests(data)
-				});
+				    var currentPage;
+					var selectedCategory;
+					var selectedSort = 'popularity'; // Default sorting order
 
-				function updateProductList() {
-					const selectedCategories = $('.category-filter:checked').map(function () {
-						return $(this).val();
-					}).get();
-
-
-					return selectedCategories;
-				}
-				// Event handler for pagination links
-				$(document).on('click', '.pagination a.page-link', function (e) {
-					e.preventDefault();
-					var currentPage = $(this).data('page');
-					 selectedCategory = updateProductList()
-					 var data = {
-						// search: searchTerm,
-						category: selectedCategory,
-						page: currentPage, // Update the page parameter
-						// priceFrom: $('#priceFrom').val(),
-						// priceTo: $('#priceTo').val()
-					};
-					console.log(data);
-					sendRequests(data)
-					// performSearch(currentPage);
-
-					// Scroll to the top of the page
-					$('html, body').animate({ scrollTop: 0 }, 'slow');
-				});
-
-
-
-				function sendRequests(data) {
-					console.log(data);
-					$.ajax({
-						url: '/shop',
-						method: 'GET',
-						data: data,
-						dataType: 'json',
-						success: function (data) {
-
-							const products = data.products;
-
-							const productsContainer = $('.products');
-							productsContainer.empty();
-							const rowContainer = $('<div class="row justify-content-center"></div>');
-							products.forEach(product => {
-
-								const productElement = $(
-
-									`<div class="col-6">
-                    <div class="product product-7 text-center" data-product-id="${product._id}">
-                    <figure class="product-media">
-                        <span class="product-label label-new">New</span>
-                        <a href="/shop/productDetails/${product._id}">
-                            <img src="/assets/productImages/uploadImages/${product.productImages[0]}"
-                                alt="Product image" class="product-image">
-                        </a>
-
-                        <div class="product-action-vertical">
-                            <a href="#" class="btn-product-icon btn-wishlist btn-expandable">
-                                <span>add to wishlist</span>
-                            </a>
-                            <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view">
-                                <span>Quick view</span>
-                            </a>
-                            <a href="#" class="btn-product-icon btn-compare" title="Compare">
-                                <span>Compare</span>
-                            </a>
-                        </div><!-- End .product-action-vertical -->
-
-                        <div class="product-action">
-                            <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
-                        </div><!-- End .product-action -->
-                    </figure><!-- End .product-media -->
-
-                    <div class="product-body">
-                        <div class="product-cat">
-                            <a href="#">
-                                ${product.category.categoryName}
-                            </a>
-                        </div><!-- End .product-cat -->
-                        <h3 class="product-title">
-                            <a href="product.html">${product.productName}</a>
-                        </h3><!-- End .product-title -->
-                        <div class="product-price">
-                            $ ${product.price}
-                        </div><!-- End .product-price -->
-                    </div><!-- End .product-body -->
-                   </div><!-- End .product -->
-                  </div><!-- End .col-6 -->`
-								);
-								rowContainer.append(productElement);
-							});
-							productsContainer.append(rowContainer);
-
-						},
-						error: function (error) {
-							console.error('Error fetching products:', error);
-						}
+					$('.category-filter').on('change', function () {
+						selectedCategory = updateProductList();
+						sendRequests();
 					});
-				}
 
+					// Event handler for sorting dropdown
+					$('#sortby').on('change', function () {
+						selectedSort = $(this).val();
+						sendRequests();
+					});
 
-			});
+					// Event handler for pagination links
+					$(document).on('click', '.pagination a.page-link', function (e) {
+						e.preventDefault();
+					    currentPage = $(this).data('page');
+						selectedCategory = updateProductList();
+						sendRequests();
+						// Scroll to the top of the page
+						$('html, body').animate({ scrollTop: 0 }, 'slow');
+					});
+
+					function updateProductList() {
+						const selectedCategories = $('.category-filter:checked').map(function () {
+							return $(this).val();
+						}).get();
+						return selectedCategories;
+					}
+
+					function sendRequests() {
+						var data = {
+							category: selectedCategory,
+							sort: selectedSort,
+							page:currentPage
+						};
+
+						console.log(data);
+
+						$.ajax({
+							url: '/shop',
+							method: 'GET',
+							data: data,
+							dataType: 'json',
+							success: function (data) {
+								const products = data.products;
+
+								const productsContainer = $('.products');
+								productsContainer.empty();
+								const rowContainer = $('<div class="row justify-content-center"></div>');
+								products.forEach(product => {
+									const productElement = $(
+
+										`<div class="col-6">
+			<div class="product product-7 text-center" data-product-id="${product._id}">
+				<figure class="product-media">
+					<span class="product-label label-new">New</span>
+					<a href="/shop/productDetails/${product._id}">
+						<img src="/assets/productImages/uploadImages/${product.productImages[0]}" alt="Product image"
+							class="product-image">
+					</a>
+		
+					<div class="product-action-vertical">
+						<a href="#" class="btn-product-icon btn-wishlist btn-expandable">
+							<span>add to wishlist</span>
+						</a>
+						<a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view">
+							<span>Quick view</span>
+						</a>
+						<a href="#" class="btn-product-icon btn-compare" title="Compare">
+							<span>Compare</span>
+						</a>
+					</div><!-- End .product-action-vertical -->
+		
+					<div class="product-action">
+						<a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+					</div><!-- End .product-action -->
+				</figure><!-- End .product-media -->
+		
+				<div class="product-body">
+					<div class="product-cat">
+						<a href="#">
+							${product.category.categoryName}
+						</a>
+					</div><!-- End .product-cat -->
+					<h3 class="product-title">
+						<a href="product.html">${product.productName}</a>
+					</h3><!-- End .product-title -->
+					<div class="product-price">
+						$ ${product.price}
+					</div><!-- End .product-price -->
+				</div><!-- End .product-body -->
+			</div><!-- End .product -->
+		</div><!-- End .col-6 -->`
+									);
+									rowContainer.append(productElement);
+								});
+								productsContainer.append(rowContainer);
+							},
+							error: function (error) {
+								console.error('Error fetching products:', error);
+							}
+						});
+					}
+				});
+
 		</script>
-
-
+		
 
 		<%-include('../layouts/user/footer')-%>
