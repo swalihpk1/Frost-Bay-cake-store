@@ -6,7 +6,6 @@ const session = require("express-session");
 
 const shop = async (req, res) => {
     try {
-        console.log(req.query);
         const userId = req.userId;
         const user = await User.findOne({ _id: userId });
         const currentPage = parseInt(req.query.page) || 1;

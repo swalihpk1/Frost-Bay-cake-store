@@ -23,25 +23,48 @@
 							<div class="row">
 								<div class="col-lg-9">
 									<div class="toolbox">
-										<div class="toolbox-left">
-											<div class="toolbox-info">
-												Showing <span>9 of 56</span> Products
-											</div><!-- End .toolbox-info -->
-										</div><!-- End .toolbox-left -->
-
-										<div class="toolbox-right">
-											<div class="toolbox-sort">
-												<label for="sortby">Sort by:</label>
-												<div class="select-custom">
-													<select name="sortby" id="sortby" class="form-control">
-														<option value="popularity" selected="selected">Popular</option>
-														<option value="lowToHigh">Low to High</option>
-														<option value="highToLow">High to Low</option>
-													</select>
+										<div class="container">
+											<div class="row">
+												<div class="col-md-6">
+													<div class="header-search header-search-visible d-lg-block">
+														<form action="#" method="get">
+															<div class="header-search-wrapper w-75">
+																<div class="input-group flex-row">
+																	<input type="text" id="searchInput"
+																		class="form-control" style="width: 80%;"
+																		placeholder="Search cake here..." />
+																	<div
+																		class="input-group-append justify-content-center">
+																		<button type="button"
+																			style="justify-content: flex-start; height: 3.3rem;"
+																			class="btn" onclick="sendRequests()">
+																			<i class="fa-solid fa-magnifying-glass"
+																				style="color: hsl(0, 0%, 50%);"></i>
+																		</button>
+																	</div>
+																</div>
+															</div>
+														</form>
+													</div>
 												</div>
-											</div><!-- End .toolbox-sort -->
-										</div><!-- End .toolbox-right -->
+
+												<div class="col-md-6">
+													<div class="toolbox-sort">
+														<label for="sortby">Sort by:</label>
+														<div class="select-custom">
+															<select name="sortby" id="sortby" class="form-control">
+																<option value="popularity" selected="selected">Popular
+																</option>
+																<option value="lowToHigh">Low to High</option>
+																<option value="highToLow">High to Low</option>
+															</select>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
 									</div><!-- End .toolbox -->
+
 
 									<div class="products mb-3">
 										<div class="row justify-content-center">
@@ -68,7 +91,8 @@
 															</div><!-- End .product-action-vertical -->
 
 															<div class="product-action">
-																<a href="#" class="btn-product btn-cart"><span>add to
+																<a href="#" class="btn-product btn-cart"><span>add
+																		to
 																		cart</span></a>
 															</div><!-- End .product-action -->
 														</figure><!-- End .product-media -->
@@ -99,12 +123,14 @@
 										<ul class="pagination justify-content-center" id="pagination">
 											<% if (currentPage> 1) { %>
 												<li class="page-item">
-													<a class="page-link page-link-prev" href="#" aria-label="Previous" data-page="<%= currentPage - 1 %>">
-														<span aria-hidden="true"><i class="icon-long-arrow-left"></i></span>Prev
+													<a class="page-link page-link-prev" href="#" aria-label="Previous"
+														data-page="<%= currentPage - 1 %>">
+														<span aria-hidden="true"><i
+																class="icon-long-arrow-left"></i></span>Prev
 													</a>
 												</li>
 												<% } %>
-									
+
 													<% for (let i=1; i <=totalPages; i++) { %>
 														<li class="page-item <%= i === currentPage ? 'activ' : '' %>">
 															<a class="page-link" href="#" data-page="<%= i %>">
@@ -112,12 +138,14 @@
 															</a>
 														</li>
 														<% } %>
-									
+
 															<% if (currentPage < totalPages) { %>
 																<li class="page-item">
-																	<a class="page-link page-link-next" href="#" aria-label="Next"
+																	<a class="page-link page-link-next" href="#"
+																		aria-label="Next"
 																		data-page="<%= currentPage + 1 %>">
-																		Next <span aria-hidden="true"><i class="icon-long-arrow-right"></i></span>
+																		Next <span aria-hidden="true"><i
+																				class="icon-long-arrow-right"></i></span>
 																	</a>
 																</li>
 																<% } %>
@@ -128,7 +156,7 @@
 									<div class="sidebar sidebar-shop">
 										<div class="widget widget-clean">
 											<label>Filters:</label>
-											<a href="#" class="sidebar-filter-clear">Clean All</a>
+											<a href="/shop">Clean All</a>
 										</div><!-- End .widget widget-clean -->
 
 										<div class="widget widget-collapsible">
@@ -419,88 +447,68 @@
 		<script src="/assets/js/main.js"></script>
 		<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-		<!-- ----------searching--------- -->
-		<script>
-			$(document).ready(function () {
-				// Keep track of the original search term
-				let originalSearchTerm = "<%= searchTerm || '' %>";
-
-				// Set the initial value of the input
-				$('#q').val(originalSearchTerm);
-
-				// Clear the search input and redirect to /shop when the "Close" button is clicked
-				$('#clearSearch').on('click', function () {
-					$('#q').val(originalSearchTerm);
-					window.location.href = '/shop'; // Redirect to /shop
-				});
-
-				// Update the original search term when the input value changes
-				$('#q').on('input', function () {
-					originalSearchTerm = $(this).val();
-				});
-			});
-		</script>
-
-
 		<!-- ------------ filtering------------- -->
 		<script>
 			$(document).ready(function () {
-				    var currentPage;
-					var selectedCategory;
-					var selectedSort = 'popularity'; // Default sorting order
+				var currentPage;
+				var selectedCategory;
+				var selectedSort = 'popularity';
 
-					$('.category-filter').on('change', function () {
-						selectedCategory = updateProductList();
-						sendRequests();
-					});
+				  $('#searchInput').on('keyup', function () {
+					// Trigger search on keyup after a short delay
+					setTimeout(sendRequests, 300);
+				});
 
-					// Event handler for sorting dropdown
-					$('#sortby').on('change', function () {
-						selectedSort = $(this).val();
-						sendRequests();
-					});
+				$('.category-filter').on('change', function () {
+					selectedCategory = updateProductList();
+					sendRequests();
+				});
 
-					// Event handler for pagination links
-					$(document).on('click', '.pagination a.page-link', function (e) {
-						e.preventDefault();
-					    currentPage = $(this).data('page');
-						selectedCategory = updateProductList();
-						sendRequests();
-						// Scroll to the top of the page
-						$('html, body').animate({ scrollTop: 0 }, 'slow');
-					});
 
-					function updateProductList() {
-						const selectedCategories = $('.category-filter:checked').map(function () {
-							return $(this).val();
-						}).get();
-						return selectedCategories;
-					}
+				$('#sortby').on('change', function () {
+					selectedSort = $(this).val();
+					sendRequests();
+				});
 
-					function sendRequests() {
-						var data = {
-							category: selectedCategory,
-							sort: selectedSort,
-							page:currentPage
-						};
+				$(document).on('click', '.pagination a.page-link', function (e) {
+					e.preventDefault();
+					currentPage = $(this).data('page');
+					selectedCategory = updateProductList();
+					sendRequests();
 
-						console.log(data);
+					$('html, body').animate({ scrollTop: 0 }, 'slow');
+				});
 
-						$.ajax({
-							url: '/shop',
-							method: 'GET',
-							data: data,
-							dataType: 'json',
-							success: function (data) {
-								const products = data.products;
+				function updateProductList() {
+					const selectedCategories = $('.category-filter:checked').map(function () {
+						return $(this).val();
+					}).get();
+					return selectedCategories;
+				}
 
-								const productsContainer = $('.products');
-								productsContainer.empty();
-								const rowContainer = $('<div class="row justify-content-center"></div>');
-								products.forEach(product => {
-									const productElement = $(
+				function sendRequests() {
+					 var searchTerm = $('#searchInput').val();
+					var data = {
+						category: selectedCategory,
+						sort: selectedSort,
+						page: currentPage,
+						q: searchTerm
+					}; 
+					$.ajax({
+						url: '/shop',
+						method: 'GET',
+						data: data,
+						dataType: 'json',
+						success: function (data) {
+							const products = data.products;
 
-										`<div class="col-6">
+							const productsContainer = $('.products');
+							productsContainer.empty();
+							const rowContainer = $('<div class="row justify-content-center"></div>');
+							products.forEach(product => {
+								const productElement = $(
+
+									`<div class="col-6">
 			<div class="product product-7 text-center" data-product-id="${product._id}">
 				<figure class="product-media">
 					<span class="product-label label-new">New</span>
@@ -541,19 +549,19 @@
 				</div><!-- End .product-body -->
 			</div><!-- End .product -->
 		</div><!-- End .col-6 -->`
-									);
-									rowContainer.append(productElement);
-								});
-								productsContainer.append(rowContainer);
-							},
-							error: function (error) {
-								console.error('Error fetching products:', error);
-							}
-						});
-					}
-				});
+								);
+								rowContainer.append(productElement);
+							});
+							productsContainer.append(rowContainer);
+						},
+						error: function (error) {
+							console.error('Error fetching products:', error);
+						}
+					});
+				}
+			});
 
 		</script>
-		
+
 
 		<%-include('../layouts/user/footer')-%>
