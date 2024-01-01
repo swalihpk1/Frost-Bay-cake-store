@@ -75,6 +75,7 @@ app.patch('/cart/updateQuantity',authUser.isLogin,cartControllers.updateQuantity
 // -----------------------CHECKOUT-----------------------------
 app.get('/cart/checkout', authUser.isLogin, userController.checkout);
 app.post('/cart/placeOrder', authUser.isLogin, orderController.addOrder);
+app.post('/cart/verifyPayment', authUser.isLogin, orderController.verifyPayment);
 
 
 // ---------------------USER-ACCOUNT--------------------------
@@ -86,6 +87,7 @@ app.patch('/account/editAddress', authUser.isLogin, userController.editAddress);
 
 // -----------------------------------Orders-----------------------------------------
 app.delete('/account/deleteOrderItem', authUser.isLogin, orderController.cancelOrder);
+
 
 
 module.exports = app;

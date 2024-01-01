@@ -2,7 +2,21 @@ const User = require("../models/usersModel");
 const Address = require("../models/addressModel")
 const Order = require("../models/ordersModel")
 const Products = require("../models/productModel")
+const Razorpay = require("razorpay");
+const crypto = require("crypto");
+const { products } = require("./adminController");
 
+
+// --------Creating unique ids------
+// const generateUniqueOrderId = () => {
+//     return uuidv4();
+// };
+
+// ----Razorpay--------
+const razorpayInstance = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_SECRET_ID,
+});
 
 const addOrder = async (req, res) => {
     try {
@@ -25,13 +39,13 @@ const addOrder = async (req, res) => {
                 email: req.body.email,
                 default: false
             });
-            // await shipAddress.save()
+
         } else {
             const addressId = req.body.selectedAddressId
             shipAddress = await Address.findOne({ _id: addressId })
         }
 
-        let products = cartUser.cart.map(item => ({
+        var products = cartUser.cart.map(item => ({
             productId: item.productId._id,
             quantity: item.quantity,
             productDetails: {
@@ -83,8 +97,8 @@ const addOrder = async (req, res) => {
         });
         const newOrders = await orders.save()
 
-        if (newOrders) {
-            //-------------for-deleting----------
+        if (req.body.paymentMethod == 'cashOnDelivery') {
+
             for (const product of products) {
                 const productId = product.productId;
                 const quantityToDecrease = product.quantity;
@@ -93,17 +107,68 @@ const addOrder = async (req, res) => {
                     { _id: productId },
                     { $inc: { totalQuantity: -quantityToDecrease } }
                 );
+
+                await User.updateOne({ _id: userId }, { $set: { cart: [] } });
             }
+            res.json({ success: true, message: 'Order success', });
 
-            await Products.updateMany()
-            await User.updateOne({ _id: userId }, { $set: { cart: [] } });
+        } else if (req.body.paymentMethod == 'wallet') {
+            for (const product of products) {
+                const productId = product.productId;
+                const quantityToDecrease = product.quantity;
+
+                await Products.updateOne(
+                    { _id: productId },
+                    { $inc: { totalQuantity: -quantityToDecrease } }
+                );
+
+
+                await User.updateOne({ _id: userId }, { $set: { cart: [] } });
+            }
+           
+            const newTransactionHistory = {
+                amount: newOrders.totalAmount,
+                direction: 'paid',
+                transactionDate: Date.now()
+            };
+
+            await User.findOneAndUpdate(
+                { _id:userId },
+                {
+                    $push: {
+                        'wallet.transactionHistory': newTransactionHistory
+                    },
+                    $inc: { 'wallet.balance': -newOrders.totalAmount }
+                },
+                { upsert: true }
+            );
+
             res.json({ success: true, message: 'Order success' });
-        } else {
-            res.json({ success: false, message: 'please select address and payment method!' });
-        }
 
+        } else if (req.body.paymentMethod == 'razorpay') {
+            const options = {
+                amount: newOrders.totalAmount * 100,
+                currency: 'INR',
+                receipt: newOrders._id.toString(),
+            };
+            razorpayInstance.orders.create(options, (err, razorpayOrder) => { 
+                if (err) {
+                    console.error('Razorpay order creation error:', err);
+                    res.json({ success: false, message: 'Error creating Razorpay order.' });
+                } else {
+                    res.json({
+                        success: true,
+                        paymentMethod: "razorpay",
+                        amount: razorpayOrder.amount,
+                        orderId: razorpayOrder.id,
+                    });
+                }
+            });
+
+        } else {
+            res.json({ success: false, message: 'Select address and payment method..!' });
+        }
     } catch (error) {
-        res.json({ success: false, message: 'Select address and payment method..!' });
         console.log(error.message);
     }
 }
@@ -130,7 +195,50 @@ const cancelOrder = async (req, res) => {
         console.log(error.message);
     }
 }
+
+const verifyPayment = async (req, res) => {
+    try {
+        console.log(req.body);
+        const userId = req.session.user_id;
+        const paymentData = req.body;
+        const user = await User.findOne({ _id: userId });
+        const cartUser = await User.populate(user, { path: 'cart.productId', model: 'products' });
+
+        var products = cartUser.cart.map(item => ({
+            productId: item.productId._id,
+            quantity: item.quantity,
+            productDetails: {
+                name: item.productId.productName,
+                price: item.productId.price,
+                productImage: item.productId.productImages[0]
+            }
+        }));
+
+        const hmac = crypto.createHmac("sha256",process.env.RAZORPAY_SECRET_ID);
+        hmac.update(paymentData.payment.razorpay_order_id + "|" + paymentData.payment.razorpay_payment_id);
+        const hmacValue = hmac.digest("hex");
+
+        if (hmacValue == paymentData.payment.razorpay_signature) {
+            for (const product of products) {
+                const productId = product.productId;
+                const quantityToDecrease = product.quantity;
+
+                await Products.updateOne(
+                    { _id: productId },
+                    { $inc: { totalQuantity: -quantityToDecrease } }
+                );
+
+                await User.updateOne({ _id: userId }, { $set: { cart: [] } });
+            }
+               res.json({ success: true, message: 'Order success' });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 module.exports = {
     addOrder,
-    cancelOrder
+    cancelOrder,
+    verifyPayment
 }

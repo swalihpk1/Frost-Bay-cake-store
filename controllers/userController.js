@@ -208,8 +208,7 @@ const home = async (req, res) => {
         const id = req.session.user_id
         const user = await User.findOne({ _id: id });
         const userCart = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('home', { user: userCart, message: message });
-        // res.render('home',{user:user,message:message});
+        res.render('home', { user: userCart, message: message, currentPath:"/home" });
     } catch (error) {
         console.log(error.message);
     }

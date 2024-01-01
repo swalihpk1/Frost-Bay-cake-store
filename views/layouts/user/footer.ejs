@@ -1,15 +1,17 @@
 <script src="https://kit.fontawesome.com/a6f4adbcd9.js" crossorigin="anonymous"></script>
+
 <script>
+  
+
     function confirmLogout() {
         const isConfirmed = confirm("Are you sure you want to logout?");
         if (isConfirmed) {
-            // Redirect to the logout URL
             window.location.href = "/logout";
         } else {
-            // Optionally, you can add code to handle the "Cancel" or "No" case
             console.log("Logout canceled");
         }
     }
 </script>
+
 </body>
 </html>

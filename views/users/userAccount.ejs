@@ -52,6 +52,11 @@
                                                     aria-selected="false">Adresses</a>
                                             </li>
                                             <li class="nav-item">
+                                                <a class="nav-link" id="tab-wallet-link" data-toggle="tab"
+                                                    href="#tab-wallet" role="tab" aria-controls="tab-wallet"
+                                                    aria-selected="false">Wallet</a>
+                                            </li>
+                                            <li class="nav-item">
 
                                                 <a class="nav-link" onclick="confirmLogout()" href="/logout">Sign
                                                     Out</a>
@@ -212,7 +217,7 @@
                                                                 </td>
                                                                 <td>
                                                                     <span class="text-info">
-                                                                    <%= order.purchaseDate %>
+                                                                        <%= order.purchaseDate %>
                                                                     </span>
                                                                 </td>
                                                                 <td><button
@@ -227,10 +232,11 @@
                                                                         data-payment-method="<%= order.paymentMethod %>"
                                                                         data-status="<%= order.status %>">View
                                                                         More</button>
-                                                                 </td>
-                                                                 <td>
-                                                                    <i class="fa-regular fa-x fa-xs xbtn" onclick="showConfirmation('<%= product.productId %>')"></i>
-                                                                 </td>
+                                                                </td>
+                                                                <td>
+                                                                    <i class="fa-regular fa-x fa-xs xbtn"
+                                                                        onclick="showConfirmation('<%= product.productId %>')"></i>
+                                                                </td>
                                                             </tr>
                                                             <% }); %>
 
@@ -256,18 +262,25 @@
                                                         </div>
                                                         <div class="modal-body m-3">
                                                             <!-- Order details content using data attributes -->
-                                     
-                                                            <p><strong>Product Image:</strong> 
-                                                             <div class="product-image">
-                                                                    <img id="modal-product-image" class="w-25 m-4" src="" alt="Product Image">
-                                                              </div>
+
+                                                            <p><strong>Product Image:</strong>
+                                                            <div class="product-image">
+                                                                <img id="modal-product-image" class="w-25 m-4" src=""
+                                                                    alt="Product Image">
+                                                            </div>
                                                             </p>
-                                                            <p><strong>Product Name:</strong> <span id="modal-product-name"></span></p>
-                                                            <p><strong>Product Quantity:</strong> <span id="modal-product-quantity"></span></p>
-                                                            <p><strong>Purchase Date:</strong> <span id="modal-purchase-date"></span></p>
-                                                            <p><strong>Total Amount:</strong> $<span id="modal-total-amount"></span></p>
-                                                            <p><strong>Payment Method:</strong> <span id="modal-payment-method"></span></p>
-                                                            <p><strong>Status:</strong> <span id="modal-status"></span></p>
+                                                            <p><strong>Product Name:</strong> <span
+                                                                    id="modal-product-name"></span></p>
+                                                            <p><strong>Product Quantity:</strong> <span
+                                                                    id="modal-product-quantity"></span></p>
+                                                            <p><strong>Purchase Date:</strong> <span
+                                                                    id="modal-purchase-date"></span></p>
+                                                            <p><strong>Total Amount:</strong> $<span
+                                                                    id="modal-total-amount"></span></p>
+                                                            <p><strong>Payment Method:</strong> <span
+                                                                    id="modal-payment-method"></span></p>
+                                                            <p><strong>Status:</strong> <span id="modal-status"></span>
+                                                            </p>
                                                             <!-- Add more order details as needed -->
                                                         </div>
                                                     </div>
@@ -275,68 +288,75 @@
                                             </div>
 
 
-                                            <div class="tab-pane fade" id="tab-address" role="tabpanel"
-                                                aria-labelledby="tab-address-link">
-                                                <div id="addressTab">
-                                                    <div class="d-flex justify-content-end">
-                                                        <p>
-                                                            <button class="text-dark border-0 shadow"
-                                                                data-toggle="modal" data-target="#addAddressModal">
-                                                                <i class="fa-sharp fa-solid fa-circle-plus"
-                                                                    style="color: #2bc752;"></i> Add address
-                                                            </button>
-                                                        </p>
-                                                    </div>
-                                                    <div class="row">
-                                                        <% for( let i=0 ; i < address.length ; i++) { %>
-                                                            <div class="col-lg-6">
-                                                                <div class="card card-dashboard">
-                                                                    <div class="card-body pr-0 py-0">
-                                                                        <h3 class="card-title d-inline">Address <%= i+1
-                                                                                %>
-                                                                                <%if(address[i].default==true){%>
-                                                                                    <span class="text-info"
-                                                                                        style="font-size: x-small;">default</span>
-                                                                                    <%}%>
-                                                                        </h3>
-                                                                        <button class="float-right delete p-0"><i
-                                                                                class="fas fa-trash"
-                                                                                onclick="showConfirmationModal('<%= address[i]._id %>')"></i></button>
-                                                                        <p class="m-0">
-                                                                            <%= address[i].name %><br>
-                                                                                <%= address[i].company %>
-                                                                                    <%= address[i].houseName %> <br>
-                                                                                        <%= address[i].appartmentNumber
-                                                                                            %>,
-                                                                                            <%=address[i].city %><br>
-                                                                                                <%= address[i].state%>,
-                                                                                                    <%=address[i].country
-                                                                                                        %>
+                                        <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
+                                            <div id="addressTab">
+                                                <div class="d-flex justify-content-end">
+                                                    <p>
+                                                        <button class="text-dark border-0 shadow" data-toggle="modal" data-target="#addAddressModal">
+                                                            <i class="fa-sharp fa-solid fa-circle-plus" style="color: #2bc752;"></i> Add address
+                                                        </button>
+                                                    </p>
+                                                </div>
+                                                <div class="row">
+                                                    <% for( let i=0 ; i < address.length ; i++) { %>
+                                                        <div class="col-lg-6">
+                                                            <div class="card card-dashboard shadow">
+                                                                <!-- Add the shadow class to the card -->
+                                                                <div class="card-body pr-0 py-0">
+                                                                    <h3 class="card-title d-inline">Address <%= i+1 %>
+                                                                            <%if(address[i].default==true){%>
+                                                                                <span class="text-info" style="font-size: x-small;">default</span>
+                                                                                <%}%>
+                                                                    </h3>
+                                                                    <button class="float-right delete p-0"><i class="fas fa-trash"
+                                                                            onclick="showConfirmationModal('<%= address[i]._id %>')"></i></button>
+                                                                    <p class="m-0">
+                                                                        <%= address[i].name %><br>
+                                                                            <%= address[i].company %>
+                                                                                <%= address[i].houseName %> <br>
+                                                                                    <%= address[i].appartmentNumber %>,
+                                                                                        <%=address[i].city %><br>
+                                                                                            <%= address[i].state%>,
+                                                                                                <%=address[i].country %>
+                                                                                                    <br>
+                                                                                                    <%= address[i].zipcode%>
                                                                                                         <br>
-                                                                                                        <%=
-                                                                                                            address[i].zipcode%>
+                                                                                                        <%= address[i].email%>
                                                                                                             <br>
-                                                                                                            <%=
-                                                                                                                address[i].email%>
+                                                                                                            <%=address[i].phone%>
                                                                                                                 <br>
-                                                                                                                <%=address[i].phone%>
-                                                                                                                    <br>
-                                                                                                                    <a href="#"
-                                                                                                                        onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
-                                                                                                                        <i class="fa-sharp fa-solid fa-pen"
-                                                                                                                            style="color: #cc9966;"></i></a>
-
-                                                                    </div><!-- End .card-body -->
-                                                                </div><!-- End .card-dashboard -->
-                                                            </div><!-- End .col-lg-6 -->
-                                                            <%}%>
-                                                    </div>
-                                                    <% if(address.length < 1){ %>
-                                                        <h6 style="color: gray;" class="text-center"></h6>No
-                                                        addressess..!</h6>
+                                                                                                                <a href="#"
+                                                                                                                    onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
+                                                                                                                    <i class="fa-sharp fa-solid fa-pen"
+                                                                                                                        style="color: #cc9966;"></i></a>
+                                                                    </p>
+                                                                </div><!-- End .card-body -->
+                                                            </div><!-- End .card-dashboard -->
+                                                        </div><!-- End .col-lg-6 -->
                                                         <%}%>
                                                 </div>
+                                                <% if(address.length < 1){ %>
+                                                    <h6 style="color: gray;" class="text-center">No addresses..!</h6>
+                                                    <%}%>
                                             </div>
+                                        </div>
+
+
+                                        <div class="tab-pane fade" id="tab-wallet" role="tabpanel" aria-labelledby="tab-wallet-link">
+                                            <div class="card card-dashboard m-0 shadow-lg"
+                                                style="background-image: url(/assets/images/banners/Wallet\ Banner.png.webp);">
+                                                <h3 class="text-light ls-3" style="margin: 6rem;">Wallet</h3>
+                                            </div>
+                                            <div class="card card-dashboard p-4 shadow">
+                                                <h5 style="color: grey;">Wallet amount : <span class="text-dark">₹ 00.0</span></h5>
+                                                <a href="" class="" style="color: gray;"><i class="fa-regular fa-square-plus  fa-la pr-2"
+                                                        style="color: #cc9966;"></i>Add money to wallet</a>
+                                                <a href="" class="" style="color: gray;"><i class="fa-solid fa-clock-rotate-left fa-la"
+                                                        style="color: #cc9966;"></i> Transaction history</a>
+                                            </div>
+                                        </div>
+
+
                                         </div><!-- .End .tab-pane -->
                                     </div> <!-- col -->
                                 </div><!-- End .row -->
@@ -944,63 +964,63 @@
 
         <script>
             function showConfirmation(productId) {
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: 'Do you wan\'t  cancel this order!',
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#7ac093',
-                        confirmButtonText: 'Yes, cancel Orde!'
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Do you wan\'t  cancel this order!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#7ac093',
+                    confirmButtonText: 'Yes, cancel Orde!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
 
-                             fetch(`/account/deleteOrderItem`,{
-                                method:'DELETE',
-                                headers:{
-                                    "Content-Type":"application/json"
-                                },
-                                body: JSON.stringify({productId})
-                            })
-                               .then(response => response.json())
-                               .then(data =>{
-                                   
-                                if(data.success){
+                        fetch(`/account/deleteOrderItem`, {
+                            method: 'DELETE',
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ productId })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+
+                                if (data.success) {
                                     $('#tab-orders').load('/account #tab-orders');
                                 }
-                               })
-                                Swal.fire('Cancelled!','Your order has been cancelled.','success');
-                        }
-                    });
-                }
+                            })
+                        Swal.fire('Cancelled!', 'Your order has been cancelled.', 'success');
+                    }
+                });
+            }
 
-            
+
         </script>
 
 
         <!--  set the modal with orders content dynamically -->
-   <script>
-    $(document).on('click', '.view-more-btn', function () {
-        var productImage = $(this).data('product-image');
-        var productName = $(this).data('product-name');
-        var productQuantity = $(this).data('product-quantity');
-        var purchaseDate = $(this).data('purchase-date');
-        var totalAmount = $(this).data('total-amount');
-        var paymentMethod = $(this).data('payment-method');
-        var status = $(this).data('status');
+        <script>
+            $(document).on('click', '.view-more-btn', function () {
+                var productImage = $(this).data('product-image');
+                var productName = $(this).data('product-name');
+                var productQuantity = $(this).data('product-quantity');
+                var purchaseDate = $(this).data('purchase-date');
+                var totalAmount = $(this).data('total-amount');
+                var paymentMethod = $(this).data('payment-method');
+                var status = $(this).data('status');
 
-        console.log(productImage);
+                console.log(productImage);
 
-        // Set the modal content dynamically
-       $('#modal-product-image').attr('src', "/assets/productImages/uploadImages/" + productImage);
-        $('#modal-product-quantity').text(productQuantity);
-        $('#modal-product-name').text(productName);
-        $('#modal-purchase-date').text(purchaseDate);
-        $('#modal-total-amount').text(totalAmount);
-        $('#modal-payment-method').text(paymentMethod);
-        $('#modal-status').text(status);
-    });
-</script>
+                // Set the modal content dynamically
+                $('#modal-product-image').attr('src', "/assets/productImages/uploadImages/" + productImage);
+                $('#modal-product-quantity').text(productQuantity);
+                $('#modal-product-name').text(productName);
+                $('#modal-purchase-date').text(purchaseDate);
+                $('#modal-total-amount').text(totalAmount);
+                $('#modal-payment-method').text(paymentMethod);
+                $('#modal-status').text(status);
+            });
+        </script>
 
         <!-- ----------------Edit Addres-------------------- -->
         <script>
@@ -1052,7 +1072,7 @@
                     body: JSON.stringify({ addressId })
                 })
                     .then(response => response.json())
-                    .then(result => { 
+                    .then(result => {
                         console.log(result);
 
                         $('#addressTab').load('/account #addressTab', function () {

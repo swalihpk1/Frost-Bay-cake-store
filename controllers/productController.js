@@ -65,7 +65,6 @@ const shop = async (req, res) => {
         const category = await Category.find({});
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
 
-        console.log(categoryProductCountMap);
         const response = {
             category: category,
             products: products,
@@ -76,9 +75,8 @@ const shop = async (req, res) => {
             selectedCategories: selectedCategories,
             categoryProductCount: categoryProductCountMap,
             selectedKilograms: selectedKilograms,
+            currentPath:'/shop'
         };
-
-        console.log(response);
 
         if (req.xhr || req.headers.accept.indexOf('json') > -1) {
             return res.json(response);

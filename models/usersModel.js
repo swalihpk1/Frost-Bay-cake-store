@@ -38,6 +38,26 @@ const userSchema = new mongoose.Schema({
             }
         }
     ],
+    wallet: {
+        balance: {
+            type: Number,
+            default: 0,
+        },
+        transactionHistory: [{
+            amount: {
+                type: Number,
+                require: true
+            },
+            direction: {
+                type: String,
+                require: true
+            },
+            transactionDate: {
+                type: Date,
+                require: true
+            },
+        }]
+    },
     isBlocked: {
         type: Number,
         default: 0

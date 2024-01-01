@@ -4,6 +4,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 
 
 
@@ -212,11 +214,13 @@
                                                                 <a class="sf-with-ul p-0 text-dark">Online Payments</a>
                                                                 <ul>
                                                                     <li>
-                                                                        <input type="radio" class="mx-4"
-                                                                            name="paymentMethod" id="paypal">
-                                                                        <i class="fa-brands fa-paypal fa-xl mr-2"
-                                                                            style="color: #0561ff;"></i>
-                                                                        <label for="paypal">PayPal</label>
+                                                                        <input type="radio" class="ml-4 mr-1"
+                                                                            name="paymentMethod" id="razorpay">
+                                                                        <div
+                                                                            style="display: inline-block; width: 8rem;">
+                                                                            <img src="/assets/images/icons/razorpay-icon.webp"
+                                                                                alt="">
+                                                                        </div>
                                                                     </li>
                                                                 </ul>
                                                             </li>
@@ -224,12 +228,13 @@
                                                                 <a class="sf-with-ul p-0 text-dark">Wallet</a>
                                                                 <ul>
                                                                     <li>
+                                                                        <p class="text-danger" id="walletError" ></p>
                                                                         <input type="radio" class="mx-4"
                                                                             name="paymentMethod" id="wallet">
                                                                         <i class="fa-solid fa-wallet fa-lg mr-2"
                                                                             style="color: #121b2b;"></i>
                                                                         <label for="wallet">Wallet </label>
-                                                                        <p class="mx-5">Wallet amount: $453 </p>
+                                                                        <p class="mx-5">Wallet amount:<span id="walletAmount"> 453</span></p>
                                                                     </li>
                                                                 </ul>
                                                             </li>
@@ -742,53 +747,19 @@
         <div id="notification-container"></div>
 
         <!-- ----------Select address and send datas when click placeOder---------- -->
-    
-    <script>
-        document.getElementById('placeOrderBtn').addEventListener('click', function () {
-            event.preventDefault();
-            const selectedRadioButton = document.querySelector('input[name="addressRadioButton"]:checked');
-            const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
-            const orderNotes = document.getElementById('orderNotes').value;
-            const totalValue = parseFloat(document.getElementById('total').textContent.replace('$', ''));
 
-            if (selectedRadioButton) {
-                // Radio button is selected, send data to /cart/placeOrder route
-                const formData = new FormData();
-                formData.append('selectedAddressId', selectedRadioButton.id);
+        <script>
+            document.getElementById('placeOrderBtn').addEventListener('click', function () {
+                event.preventDefault();
+                const selectedRadioButton = document.querySelector('input[name="addressRadioButton"]:checked');
+                const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
+                const orderNotes = document.getElementById('orderNotes').value;
+                const totalValue = parseFloat(document.getElementById('total').textContent.replace('$', ''));
 
-                if (paymentMethod) {
-                    formData.append('paymentMethod', paymentMethod.id);
-                }
-
-                formData.append('orderNotes', orderNotes);
-                formData.append('total', totalValue);
-
-                $.ajax({
-                     url: '/cart/placeOrder',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify(Object.fromEntries(formData.entries())),
-                    success: function (data) {
-
-                        showSuccessAlert(data.result)
-                            .then((clickedButton) => {
-                                console.log('Clicked Button:', clickedButton);
-
-                                if (clickedButton == 'OK') {
-                                    window.location.href = '/home';
-                                } else {
-                                    window.location.href = '/account';
-                                }
-                            });
-                    },
-                    error: function (error) {
-                        console.error('Error:', error);
-                    }
-                });
-
-            } else {
-                if (validateForm('addAddressForm')) {
-                    const formData = new FormData(document.getElementById('addAddressForm'));
+                if (selectedRadioButton) {
+                    // Radio button is selected, send data to /cart/placeOrder route
+                    const formData = new FormData();
+                    formData.append('selectedAddressId', selectedRadioButton.id);
 
                     if (paymentMethod) {
                         formData.append('paymentMethod', paymentMethod.id);
@@ -803,8 +774,108 @@
                         contentType: 'application/json',
                         data: JSON.stringify(Object.fromEntries(formData.entries())),
                         success: function (data) {
+
+                            if (data.success && data.paymentMethod !== 'razorpay') {
+                                showSuccessAlert(data.success, data.message)
+                                    .then((clickedButton) => {
+                                        console.log('Clicked Button:', clickedButton);
+
+                                        if (clickedButton == 'OK') {
+                                            window.location.href = '/home';
+                                        } else {
+                                            window.location.href = '/account';
+                                        }
+                                    });
+
+                            }else if(data.success && data.paymentMethod === 'razorpay'){
+                                const options = {
+                                    key: 'rzp_test_9WWhpgu9IlsKe3',
+                                    amount: data.amount,
+                                    currency: 'INR',
+                                    order_id: data.orderId,
+                                    name: 'Frost-Bay',
+                                    description: 'Payment for your order',
+                                    theme: {
+                                        color: '#cc9966', 
+                                        
+                                    },
+                                     prefill: {
+                                        "email": "frostBay@gmail.com",
+                                        "contact": "7306477519"
+                                    },
+                                    notes: {
+                                        "address": "Frost-Bay"
+                                    },
+                                    handler: function (response) {
+                                        verifyPayment(response, data);
+                                    },
+                                };
+
+                                const rzr = new Razorpay(options);
+                                rzr.on('payment.failed', function (response) {
+                                    console.log(response);
+                                    console.error('Payment failed:', response.error.code, response.error.description);
+                                });
+                                rzr.open();
+                            }else {
+                                showNotification(data.message, false);
+                            }
+                        },
+                        error: function (error) {
+                            console.error('Error:', error);
+                        }
+                    });
+
+                } else {
+                    if (validateForm('addAddressForm')) {
+                        const formData = new FormData(document.getElementById('addAddressForm'));
+
+                        if (paymentMethod) {
+                            formData.append('paymentMethod', paymentMethod.id);
+                        }
+
+                        formData.append('orderNotes', orderNotes);
+                        formData.append('total', totalValue);
+
+                        $.ajax({
+                            url: '/cart/placeOrder',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            data: JSON.stringify(Object.fromEntries(formData.entries())),
+                            success: function (data) {
+                                showSuccessAlert(data.result)
+                                    .then((clickedButton) => {
+                                        console.log('Clicked Button:', clickedButton);
+
+                                        if (clickedButton == 'OK') {
+                                            window.location.href = '/home';
+                                        } else {
+                                            window.location.href = '/account';
+                                        }
+                                    });
+                            },
+                            error: function (error) {
+                                console.error('Error:', error);
+                            }
+                        });
+                    }
+                }
+            });
+
+            function verifyPayment(payment,order) {
+                    $.ajax({
+                        url: "/cart/verifyPayment",
+                        method: "post",
+                        data: {
+                            payment: payment,
+                            amount: order.amount,
+                            order: order,
+                        },
+                        success: (response) => {
                             
-                            showSuccessAlert(data.result)
+       console.log("response",response);
+                            if (response) {
+                                 showSuccessAlert(response.success, response.message)
                                 .then((clickedButton) => {
                                     console.log('Clicked Button:', clickedButton);
 
@@ -814,21 +885,26 @@
                                         window.location.href = '/account';
                                     }
                                 });
+
+                            } else {
+                                swal.fire({
+                                    positon: "center",
+                                    icon: "error",
+                                    title: "Payment failed",
+                                    showConfirmButton: false,
+                                    timer: 1500,
+                                });
+                            }
                         },
-                        error: function (error) {
-                            console.error('Error:', error);
-                        }
                     });
                 }
-            }
-        });
-    </script>
+        </script>
 
 
 
         <!-- -------------sweet Alerts------------------- -->
         <script>
-            function showSuccessAlert(result) {
+            function showSuccessAlert(result, message) {
                 return new Promise((resolve) => {
                     Swal.fire({
                         title: 'Order Success!',
@@ -876,7 +952,6 @@
 
                 const result = await response.json();
 
-                console.log(result);
 
                 if (result.success) {
                     showNotification(result.message, true);
@@ -950,19 +1025,11 @@
             // -------Edit form validation-------
             function validateForm(formId) {
                 var form = document.getElementById(formId);
-                console.log(form)
-
-                console.log("1")
                 var name = form.querySelector('#name');
-                console.log("2")
                 var email = form.querySelector('#email');
-                console.log("3")
                 var phone = form.querySelector('#phone');
-                console.log("4")
                 var country = form.querySelector('#country');
-                console.log("5")
                 var postcode = form.querySelector('#postcode');
-                console.log("6")
                 var nameError = form.querySelector('#nameError');
                 var emailError = form.querySelector('#emailError');
                 var phoneError = form.querySelector('#phoneError');
@@ -1087,8 +1154,28 @@
         </script>
 
 
+       <script >
+        document.addEventListener("DOMContentLoaded", function () {
+            console.log("working");
+            var totalElement = document.getElementById("total");
+            var walletAmountElement = document.getElementById("walletAmount");
+            var walletError =  document.getElementById("walletError");
 
+            var totalAmount = parseFloat(totalElement.innerHTML.replace("$", ""));
+            var walletAmount = parseFloat(walletAmountElement.innerHTML.replace("Wallet amount: $", ""));
 
+            if (totalAmount > walletAmount) {
+
+                walletError.innerHTML = "Insufficient funds in the wallet.";
+
+                // Disable the wallet radio button
+                var walletRadioButton = document.getElementById("wallet");
+                if (walletRadioButton) {
+                    walletRadioButton.disabled = true;
+                }
+            }
+        });
+    </script>
 
 
 
@@ -1098,6 +1185,7 @@
         <script src="/assets/js/jquery.waypoints.min.js"></script>
         <script src="/assets/js/superfish.min.js"></script>
         <script src="/assets/js/owl.carousel.min.js"></script>
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         <!-- Main JS File -->
         <script src="/assets/js/main.js"></script>
         <%-include('../layouts/user/footer')-%>
