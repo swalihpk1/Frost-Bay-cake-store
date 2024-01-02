@@ -179,6 +179,7 @@
                                             <div class="tab-pane fade show active" id="tab-orders" role="tabpanel"
                                                 aria-labelledby="tab-orders-link">
                                                 <h5 class="text-center">Orders</h5>
+                                               <% if(orders.length>0){ %>
                                                 <table class="table table-wishlist table-no-padding">
                                                     <thead>
                                                         <tr>
@@ -213,11 +214,20 @@
                                                                     </h6>
                                                                 </td>
                                                                 <td>
-                                                                    <%= order.paymentMethod %>
+                                                                    <%if(product.status == "Placed"){%>
+                                                                    <p class="rounded-pill" id="placed"><%= product.status %></p>
+                                                                    <%}else if(product.status == "On the way"){%>
+                                                                        <p class="rounded-pill" id="onTheWay"><%= product.status %></p>
+                                                                   <% }else if(product.status == "Delivered"){%>
+                                                                        <p class="rounded-pill" id="delivered"><%= product.status %></p>
+                                                                   <% }else{ %>
+                                                                        <p class="rounded-pill" id="cancelled"><%= product.status %></p>
+                                                                  <% } %>
+
                                                                 </td>
                                                                 <td>
                                                                     <span class="text-info">
-                                                                        <%= order.purchaseDate %>
+                                                                       On <%= product.stausUpdatedDate %>
                                                                     </span>
                                                                 </td>
                                                                 <td><button
@@ -230,13 +240,21 @@
                                                                         data-purchase-date="<%= order.purchaseDate  %>"
                                                                         data-total-amount="<%= order.totalAmount %>"
                                                                         data-payment-method="<%= order.paymentMethod %>"
-                                                                        data-status="<%= order.status %>">View
-                                                                        More</button>
+                                                                        data-status="<%= order.status %>">
+                                                                        View More</button>
                                                                 </td>
                                                                 <td>
-                                                                    <i class="fa-regular fa-x fa-xs xbtn"
-                                                                        onclick="showConfirmation('<%= product.productId %>')"></i>
-                                                                </td>
+                                                                  <% const now = new Date();
+                                                                     const purchaseDateTime = new Date(`${order.purchaseDate} ${order.purchaseTime}`);
+                                                                     const timeDifference = (now - purchaseDateTime) / (1000 * 60); 
+                                                                     const minutesDifference = Math.floor(timeDifference);
+
+                                                                     if (product.status === "Placed") { %>
+                                                                         <a class="text-danger" onclick="cancelOrder('<%= product.productId %>')">Cancel</a>
+                                                                     <% } else if (product.status === "Delivered" && minutesDifference <= 1440) { %>
+                                                                         <!-- 1440 minutes = 24 hours -->
+                                                                         <a class="text-primary" onclick="refundRequest('<%= product.productId %>')">Refund request <i class="fa-sharp fa-solid fa-rotate-left" style="color: #cc9966;"></i></a>
+                                                                     <% } %>
                                                             </tr>
                                                             <% }); %>
 
@@ -244,6 +262,19 @@
                                                                     <!-- Add more rows as needed -->
                                                     </tbody>
                                                 </table>
+                                                    <% }else{%>
+
+                                                        <div class="d-flex flex-column  align-items-center">
+                                                            <div>
+                                                                <h5 style="color: gray;">OOPS!..Nothing is here</h5>
+                                                            </div>
+                                                            <div>
+                                                                <a href="/shop" class=" btn btn-secondary position-relative">Shop</a>
+                                                            </div>
+                                                        
+                                                        
+                                                        </div>
+                                                        <% } %>
                                                 <!-- End .table table-wishlist -->
                                             </div>
 
@@ -961,7 +992,7 @@
         <!-- Main JS File -->
         <script src="/assets/js/main.js"></script>
 
-
+         
         <script>
             function showConfirmation(productId) {
                 Swal.fire({
@@ -971,8 +1002,9 @@
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
                     cancelButtonColor: '#7ac093',
-                    confirmButtonText: 'Yes, cancel Orde!'
+                    confirmButtonText: 'Yes, cancel Order!'
                 }).then((result) => {
+                    console.log(result);
                     if (result.isConfirmed) {
 
                         fetch(`/account/deleteOrderItem`, {
@@ -993,7 +1025,6 @@
                     }
                 });
             }
-
 
         </script>
 
@@ -1198,7 +1229,7 @@
 
                 setTimeout(() => {
                     notificationContainer.style.display = 'none';
-                }, 3000); // Adjust the time as needed
+                }, 3000); 
             }
 
 

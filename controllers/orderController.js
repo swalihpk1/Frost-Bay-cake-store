@@ -7,11 +7,6 @@ const crypto = require("crypto");
 const { products } = require("./adminController");
 
 
-// --------Creating unique ids------
-// const generateUniqueOrderId = () => {
-//     return uuidv4();
-// };
-
 // ----Razorpay--------
 const razorpayInstance = new Razorpay({
     key_id: process.env.RAZORPAY_KEY_ID,
@@ -45,16 +40,6 @@ const addOrder = async (req, res) => {
             shipAddress = await Address.findOne({ _id: addressId })
         }
 
-        var products = cartUser.cart.map(item => ({
-            productId: item.productId._id,
-            quantity: item.quantity,
-            productDetails: {
-                name: item.productId.productName,
-                price: item.productId.price,
-                productImage: item.productId.productImages[0]
-            }
-        }));
-
         // --------to Date formating-------------
         const currentDate = new Date();
         const formattedDate = currentDate.toLocaleDateString('en-US', {
@@ -69,6 +54,18 @@ const addOrder = async (req, res) => {
             minute: 'numeric',
             hour12: true
         });
+
+        var products = cartUser.cart.map(item => ({
+            productId: item.productId._id,
+            quantity: item.quantity,
+            status: 'Placed',
+            stausUpdatedDate:formattedDate,
+            productDetails: {
+                name: item.productId.productName,
+                price: item.productId.price,
+                productImage: item.productId.productImages[0],
+            }
+        }));
 
         const orders = new Order({
             userId: userId,
@@ -92,7 +89,6 @@ const addOrder = async (req, res) => {
             purchaseDate: formattedDate,
             purchaseTime: formattedTime,
             totalAmount: req.body.total,
-            status: 'pending',
             paymentMethod: req.body.paymentMethod,
         });
         const newOrders = await orders.save()
@@ -173,29 +169,6 @@ const addOrder = async (req, res) => {
     }
 }
 
-const cancelOrder = async (req, res) => {
-    try {
-        const productId = req.body.productId
-        const deleteOrder = await Order.findOneAndUpdate(
-            { 'orderedProducts.productId': productId },
-            {
-                $pull: {
-                    orderedProducts: {
-                        productId: productId
-                    }
-                }
-            },
-            { new: true }
-        );
-        if (deleteOrder) {
-            res.json({ success: true, message: 'Order deleted successfully.' });
-        }
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
 const verifyPayment = async (req, res) => {
     try {
         console.log(req.body);
@@ -231,6 +204,29 @@ const verifyPayment = async (req, res) => {
                 await User.updateOne({ _id: userId }, { $set: { cart: [] } });
             }
                res.json({ success: true, message: 'Order success' });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const cancelOrder = async (req, res) => {
+    try {
+        const productId = req.body.productId
+        console.log(req.body);
+        const cancelledOrder = await Order.findOneAndUpdate(
+            { 'orderedProducts.productId': productId },
+            {
+                $set: {
+                    'orderedProducts.$.status': 'Cancelled',
+                    status: 'Cancelled'
+                }
+            },
+            { new: true }
+        );
+        if (cancelledOrder) {
+            res.json({ success: true, message: 'Order cancelled successfully.' });
         }
 
     } catch (error) {

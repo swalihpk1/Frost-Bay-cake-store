@@ -219,8 +219,7 @@ const home = async (req, res) => {
 const userAccount = async (req, res) => {
     try {
        
-        const orders = await Orders.find({})
-        console.log(orders);
+        const orders = await Orders.find({}).sort({ createdAt: -1 });
         const userId = req.session.user_id;
         const user = await User.findOne({ _id: userId })
         const address = await Address.find({ user: userId })

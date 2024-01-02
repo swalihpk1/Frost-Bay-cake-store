@@ -160,17 +160,26 @@ border-style:double;
 .mmenu-btn:focus {
     color: #c96;
 }
-
 .open>a>.mmenu-btn::after {
     content: '⌃';
 }
-.xbtn{
-    color: gainsboro;
-    transition: color 0.35s;
+#placed{
+    background-color: #ff7d006e;
+        color: #ff5700e0;
 }
-.xbtn:hover{
-    color: black;
+#onTheWay{
+   background-color: #00c9ff6e;
+        color: #0092ff;
 }
+#delivered{
+    background-color: #25ff007a;
+        color: #49b328;
+}
+#cancelled{
+    background-color: #ff000047;
+        color: #ff0000;
+}
+
 
 
 

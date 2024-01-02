@@ -64,6 +64,13 @@ const ordersSchema = new mongoose.Schema({
                 type: Number,
                 required: true
             },
+            status: {
+                type: String,
+                required: true
+            },
+            stausUpdatedDate: {
+                type: String,
+            },
             productDetails: {
                 name: {
                     type: String,
@@ -76,7 +83,7 @@ const ordersSchema = new mongoose.Schema({
                 productImage: {
                     type: String,
                     required: true
-                }
+                },
             }
         }
     ],
@@ -104,10 +111,6 @@ const ordersSchema = new mongoose.Schema({
     usedCouponCode: {
         type: String,
     },
-    status: {
-        type: String,
-        required: true
-    },
     paymentMethod: {
         type: String,
         required: true
@@ -115,6 +118,10 @@ const ordersSchema = new mongoose.Schema({
     paymentStatus: {
         type: String,
         require: true
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now
     },
 });
 
