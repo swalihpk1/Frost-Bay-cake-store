@@ -52,32 +52,33 @@ app.get('/dashboard', authAdmin.isLogin, adminController.dashboard);
 // --------------------------Product-----------------------------
 app.get('/products', authAdmin.isLogin, adminController.products);
 app.get('/products/addProduct', authAdmin.isLogin, adminController.addProduct);
-app.post('/products/addProduct', upload.array("productImages", 4), adminController.insertProduct);
+app.post('/products/addProduct', authAdmin.isLogin, upload.array("productImages", 4), adminController.insertProduct);
 app.get('/products/editProduct/:productId', adminController.editProduct);
-app.post('/products/editProduct', upload.fields([
+app.post('/products/editProduct', authAdmin.isLogin, upload.fields([
     { name: "image1", maxCount: 1 },
     { name: "image2", maxCount: 1 },
     { name: "image3", maxCount: 1 },
     { name: "image4", maxCount: 1 }
 
 ]), adminController.inserEditedProduct);
-app.put('/products/hideProduct', adminController.hideProduct);
-app.put('/products/showProduct', adminController.showProduct);
+app.put('/products/hideProduct', authAdmin.isLogin, adminController.hideProduct);
+app.put('/products/showProduct', authAdmin.isLogin, adminController.showProduct);
 
 // ---------------------------User-------------------------
 app.get('/users', authAdmin.isLogin, adminController.users);
-app.put('/blockUser', adminController.blockUser);
-app.put('/UnBlockUser', adminController.UnBlockUser);
+app.put('/blockUser', authAdmin.isLogin, adminController.blockUser);
+app.put('/UnBlockUser', authAdmin.isLogin, adminController.UnBlockUser);
 
 // ---------------------------Category---------------------------
 app.get('/category', authAdmin.isLogin, adminController.category);
-app.post('/category', adminController.insertCategory);
-app.put('/category/editCategory', adminController.editCategory);
-app.put('/category/listCategory', adminController.listCatogory);
-app.put('/category/UnListCategory', adminController.UnListCatogory);
+app.post('/category', authAdmin.isLogin, adminController.insertCategory);
+app.put('/category/editCategory', authAdmin.isLogin, adminController.editCategory);
+app.put('/category/listCategory', authAdmin.isLogin, adminController.listCatogory);
+app.put('/category/UnListCategory', authAdmin.isLogin, adminController.UnListCatogory);
 
 // --------------------------Users Orders--------------------
-app.get('/orders',authAdmin.isLogin,adminController.userOrders)
+app.get('/orders', authAdmin.isLogin, adminController.userOrders)
+app.patch('/orders/changeStatus', authAdmin.isLogin, adminController.changeStatus)
 
 // ---------------------------Logout-admin-------------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);

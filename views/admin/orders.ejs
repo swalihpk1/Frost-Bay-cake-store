@@ -1,109 +1,5 @@
 <%-include('../layouts/admin/header')-%>
-    <style data-hs-appearance-onload-styles>
-        * {
-            transition: unset !important;
-        }
-
-        body {
-            opacity: 0;
-        }
-    </style>
-
-    <!-- ONLY DEV -->
-
-    <style>
-        body {
-            opacity: 0;
-        }
-    </style>
-
-    <!-- END ONLY DEV -->
-
-    <script>
-        window.hs_config = { "autopath": "@@autopath", "deleteLine": "hs-builder:delete", "deleteLine:build": "hs-builder:build-delete", "deleteLine:dist": "hs-builder:dist-delete", "previewMode": false, "startPath": "/index.html", "vars": { "themeFont": "https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap", "version": "?v=1.0" }, "layoutBuilder": { "extend": { "switcherSupport": true }, "header": { "layoutMode": "default", "containerMode": "container-fluid" }, "sidebarLayout": "default" }, "themeAppearance": { "layoutSkin": "default", "sidebarSkin": "default", "styles": { "colors": { "primary": "#377dff", "transparent": "transparent", "white": "#fff", "dark": "132144", "gray": { "100": "#f9fafc", "900": "#1e2022" } }, "font": "Inter" } }, "languageDirection": { "lang": "en" }, "skipFilesFromBundle": { "dist": ["/assets/admin/js/hs.theme-appearance.js", "/assets/admin/js/hs.theme-appearance-charts.js", "/assets/admin/js/demo.js"], "build": ["/assets/admin/css/theme.css", "/assets/admin/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside-mini-cache.js", "/assets/admin/js/demo.js", "/assets/admin/css/theme-dark.html", "/assets/admin/css/docs.css", "/assets/admin/vendor/icon-set/style.html", "/assets/admin/js/hs.theme-appearance.js", "/assets/admin/js/hs.theme-appearance-charts.js", "node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.min.html", "/assets/admin/js/demo.js"] }, "minifyCSSFiles": ["/assets/admin/css/theme.css", "/assets/admin/css/theme-dark.css"], "copyDependencies": { "dist": { "*/assets/admin/js/theme-custom.js": "" }, "build": { "*/assets/admin/js/theme-custom.js": "", "node_modules/bootstrap-icons/font/*fonts/**": "/assets/admin/css" } }, "buildFolder": "", "replacePathsToCDN": {}, "directoryNames": { "src": "./src", "dist": "./dist", "build": "./build" }, "fileNames": { "dist": { "js": "theme.min.js", "css": "theme.min.css" }, "build": { "css": "theme.min.css", "js": "theme.min.js", "vendorCSS": "vendor.min.css", "vendorJS": "vendor.min.js" } }, "fileTypes": "jpg|png|svg|mp4|webm|ogv|json" }
-        window.hs_config.gulpRGBA = (p1) => {
-            const options = p1.split(',')
-            const hex = options[0].toString()
-            const transparent = options[1].toString()
-
-            var c;
-            if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-                c = hex.substring(1).split('');
-                if (c.length == 3) {
-                    c = [c[0], c[0], c[1], c[1], c[2], c[2]];
-                }
-                c = '0x' + c.join('');
-                return 'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',' + transparent + ')';
-            }
-            throw new Error('Bad Hex');
-        }
-        window.hs_config.gulpDarken = (p1) => {
-            const options = p1.split(',')
-
-            let col = options[0].toString()
-            let amt = -parseInt(options[1])
-            var usePound = false
-
-            if (col[0] == "#") {
-                col = col.slice(1)
-                usePound = true
-            }
-            var num = parseInt(col, 16)
-            var r = (num >> 16) + amt
-            if (r > 255) {
-                r = 255
-            } else if (r < 0) {
-                r = 0
-            }
-            var b = ((num >> 8) & 0x00FF) + amt
-            if (b > 255) {
-                b = 255
-            } else if (b < 0) {
-                b = 0
-            }
-            var g = (num & 0x0000FF) + amt
-            if (g > 255) {
-                g = 255
-            } else if (g < 0) {
-                g = 0
-            }
-            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
-        }
-        window.hs_config.gulpLighten = (p1) => {
-            const options = p1.split(',')
-
-            let col = options[0].toString()
-            let amt = parseInt(options[1])
-            var usePound = false
-
-            if (col[0] == "#") {
-                col = col.slice(1)
-                usePound = true
-            }
-            var num = parseInt(col, 16)
-            var r = (num >> 16) + amt
-            if (r > 255) {
-                r = 255
-            } else if (r < 0) {
-                r = 0
-            }
-            var b = ((num >> 8) & 0x00FF) + amt
-            if (b > 255) {
-                b = 255
-            } else if (b < 0) {
-                b = 0
-            }
-            var g = (num & 0x0000FF) + amt
-            if (g > 255) {
-                g = 255
-            } else if (g < 0) {
-                g = 0
-            }
-            return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16)
-        }
-    </script>
-
-
+   
     </head>
 
     <body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl   footer-offset">
@@ -397,50 +293,7 @@
                                     </a>
                                 </div>
                             </div>
-
                         </div>
-                        <!-- End Content -->
-
-                        <!-- Footer -->
-                        <div class="navbar-vertical-footer">
-                            <ul class="navbar-vertical-footer-list">
-                                <li class="navbar-vertical-footer-list-item">
-                                    <!-- Style Switcher -->
-                                    <div class="dropdown dropup">
-                                        <button type="button" class="btn btn-ghost-secondary btn-icon rounded-circle"
-                                            id="selectThemeDropdown" data-bs-toggle="dropdown" aria-expanded="false"
-                                            data-bs-dropdown-animation>
-
-                                        </button>
-
-                                        <div class="dropdown-menu navbar-dropdown-menu navbar-dropdown-menu-borderless"
-                                            aria-labelledby="selectThemeDropdown">
-                                            <a class="dropdown-item" href="#" data-icon="bi-moon-stars"
-                                                data-value="auto">
-                                                <i class="bi-moon-stars me-2"></i>
-                                                <span class="text-truncate" title="Auto (system default)">Auto (system
-                                                    default)</span>
-                                            </a>
-                                            <a class="dropdown-item" href="#" data-icon="bi-brightness-high"
-                                                data-value="default">
-                                                <i class="bi-brightness-high me-2"></i>
-                                                <span class="text-truncate" title="Default (light mode)">Default (light
-                                                    mode)</span>
-                                            </a>
-                                            <a class="dropdown-item active" href="#" data-icon="bi-moon"
-                                                data-value="dark">
-                                                <i class="bi-moon me-2"></i>
-                                                <span class="text-truncate" title="Dark">Dark</span>
-                                            </a>
-                                        </div>
-                                    </div>
-
-                                    <!-- End Style Switcher -->
-                                </li>
-                                </li>
-                            </ul>
-                        </div>
-                        <!-- End Footer -->
                     </div>
                 </div>
         </aside>
@@ -473,11 +326,12 @@
                              }'>
                             <thead class="thead-light">
                                 <tr>
-                                    <th class="table-column-ps-0">Cake name </th>
+                                    <th class="">Cake name </th>
                                     <th>Customer name</th>
                                     <th>Location</th>
-                                    <th>ORDER STATUs</th>
                                     <th>ordered time</th>
+                                    <th>ORDER STATUS</th>
+                                    <th></th>
                                     <th>refund requests</th>
                                 </tr>
                             </thead>
@@ -486,38 +340,52 @@
                                 <tr>
                                     <% orders.forEach(function(order) { order.orderedProducts.forEach(function(product)
                                         { %>
-                                        <td class="table-column-ps-0">
+                                        <td class="p-0">
                                             <a class="d-flex align-items-center" href="user-profile.html">
-                                                <div class="avatar avatar-circle m-3 " style="height: 60px; width: 60px;">
-                                                <img class="w-100 rounded" src="/assets/productImages/uploadImages/<%= product.productDetails.productImage%>"
+                                                <div class="avatar avatar-circle m-3 "
+                                                    style="height: 60px; width: 60px;">
+                                                    <img class="w-100 rounded"
+                                                        src="/assets/productImages/uploadImages/<%= product.productDetails.productImage%>"
                                                         alt="Image Description">
                                                 </div>
                                                 <div class="ms-3">
                                                     <span class="d-block h5 text-inherit mb-0">
-                                                    <%= product.productDetails.name %>
+                                                        <%= product.productDetails.name %>
                                                     </span>
                                                 </div>
                                             </a>
                                         </td>
 
-                                        <td>
-                                        <%= order.userName %>
+                                        <td class="p-0">
+                                            <%= order.userName %>
                                         </td>
-                                        <td>
+                                        <td class="p-0">
                                             <%= order.shipAddress[0].city %>
                                         </td>
-                                        <td>
-                                        <%= order.status %>
+                                        <td class="p-0">
+                                            <%= order.purchaseTime %>
+                                                <%= order.purchaseDate %>
+                                        </td>
+                                        <td class="text-center">
+                                            <div class="tom-select-custom">
+                                                <div class="d-flex">
+                                                    <select name="status" class="js-select form-select flex-grow-1 p-2 statusLabel" autocomplete="off"
+                                                        data-product-id="<%= product.productId %>">
+                                                        <option value="Placed" <%=product.status=="Placed" ? 'selected' : '' %>>Placed</option>
+                                                        <option value="On the way" <%=product.status=="On the way" ? 'selected' : '' %>>On the way</option>
+                                                        <option value="Delivered" <%=product.status=="Delivered" ? 'selected' : '' %>>Delivered</option>
+                                                        <option value="Cancelled" <%=product.status=="Cancelled" ? 'selected' : '' %>>Cancelled</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                         </td>
                                         <td>
-                                            <%= order.purchaseTime %>
-                                            <%= order.purchaseDate %>
                                         </td>
                                         <!-- <td><button class="btn-btn primary">decline</button><button
                                                 class="btn-btn primary">accept</button></td> -->
                                 </tr>
 
-                                 <% }); %>
+                                <% }); %>
                                     <% }); %>
                             </tbody>
                         </table>
@@ -1163,7 +1031,6 @@
                                             <!-- End Projects -->
 
                                             <!-- Project -->
-                                            ject -->
 
                                             <!-- Authentication -->
                                             <div class="hs-has-sub-menu nav-item">
@@ -2740,11 +2607,62 @@
             </div>
         </div>
 
+        <div id="notification-container"></div>
 
-        <!-- Import Products Modal -->
+     
 
+        <!-- -----------changing the order status--------- -->
+        <script>
+            document.querySelectorAll('.statusLabel').forEach(function (select) {
+                    select.addEventListener('change', function () {
+                var selectedStatus = this.value;
+                var productId = this.dataset.productId;
+                console.log(selectedStatus);
+                console.log(productId);
 
+                fetch('/admin/orders/changeStatus', {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ productId: productId, status: selectedStatus }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if(data.success){
+                            showNotification(data.message, true);
+                        }else{
+                            showNotification(data.message, false);
+                        }
+                        
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                    });
+            });
 
-        // <!-- End Style Switcher JS -->
+            // <!------------showing notification------------->
+                function showNotification(message, success = true) {
+                    console.log("vann");
+                    const notificationContainer = document.getElementById('notification-container');
+                    notificationContainer.innerHTML = message;
+
+                    if (success) {
+                        notificationContainer.style.color = 'green';
+                    } else {
+                        notificationContainer.style.color = 'red';
+                    }
+
+                    notificationContainer.style.display = 'block';
+
+                    setTimeout(() => {
+                        notificationContainer.style.display = 'none';
+                    }, 3000);
+                }
+        </script>
+
+        
 
         <%-include('../layouts/admin/footer')-%>

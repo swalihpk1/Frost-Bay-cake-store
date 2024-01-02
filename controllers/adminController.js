@@ -360,6 +360,31 @@ const userOrders = async (req, res) => {
     }
     
 }
+const changeStatus = async (req, res) => {
+    try {
+        console.log(req.body);
+         const productId = req.body.productId;
+         const status = req.body.status;
+         const statusChanged = await Orders.findOneAndUpdate(
+             { 'orderedProducts.productId': productId },
+             {
+                 $set: {
+                     'orderedProducts.$.status': status,
+                     status: status
+                 }
+             },
+             { new: true }
+         );
+         if (statusChanged) {
+             res.json({ success: true, message: 'Order status changed.' });
+         } else {
+             res.json({ success: false, message: 'Something went wrong.' });
+         }
+         
+     } catch (error) {
+        console.log(error.message);
+     }
+ }
 
 
 
@@ -383,6 +408,7 @@ module.exports = {
     inserEditedProduct,
     hideProduct,
     showProduct,
+    changeStatus,
     userOrders,
     logout
 
