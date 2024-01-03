@@ -42,36 +42,36 @@ const viewCart = async (req, res) => {
     }
 };
 
-const removeProduct = async(req,res)=>{
-     try {
-        const userId = req.userId; 
+const removeProduct = async (req, res) => {
+    try {
+        const userId = req.userId;
         const productId = req.body.productId;
-    
+
         const updatedUser = await User.findByIdAndUpdate(
-          userId,
-          { $pull: { cart: { productId: productId } } },
-          { new: true }
+            userId,
+            { $pull: { cart: { productId: productId } } },
+            { new: true }
         );
-    
+
         if (!updatedUser) {
-          return res.status(404).json({ message: "User not found" });
+            return res.status(404).json({ message: "User not found" });
         }
-         res.json({status:"success"});
-    
-     } catch (error) {
+        res.json({ status: "success" });
+
+    } catch (error) {
         console.log(error.message);
-     }
+    }
 }
 
-const updateQuantity = async(req,res)=>{
+const updateQuantity = async (req, res) => {
     try {
 
         const userId = req.userId;
         const productId = req.body.productId;
         const quantity = req.body.quantity;
 
-         // Update the quantity in the user's cart
-         const updatedUser = await User.findOneAndUpdate(
+        // Update the quantity in the user's cart
+        const updatedUser = await User.findOneAndUpdate(
             { _id: userId, 'cart.productId': productId },
             { $set: { 'cart.$.quantity': quantity } },
             { new: true }
@@ -80,8 +80,8 @@ const updateQuantity = async(req,res)=>{
         if (!updatedUser) {
             return res.status(404).json({ message: "User or product not found in the cart." });
         }
-        res.json({ status:"success"});
-        
+        res.json({ status: "success" });
+
     } catch (error) {
         console.log(error.message);
     }

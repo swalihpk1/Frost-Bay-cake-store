@@ -152,8 +152,8 @@ border-style:double;
 /* Add the icon for the mobile-menu span */
 .mobile-menu span:not(.mmenu-btn):not(.tip)::before {
     font-family: 'Font Awesome';
-    content: '⏏'; /* Replace with the code for your desired icon */
-    margin-right: 5px; /* Adjust spacing if needed */
+    content: ''; 
+    margin-right: 5px; 
 }
 
 .mmenu-btn:hover,
@@ -166,18 +166,33 @@ border-style:double;
 #placed{
     background-color: #ff7d006e;
         color: #ff5700e0;
+        display: inline;
+    padding: 1rem;
+
 }
 #onTheWay{
    background-color: #00c9ff6e;
         color: #0092ff;
+        display: inline;
+    padding: 1rem;
 }
 #delivered{
     background-color: #25ff007a;
         color: #49b328;
+        display: inline;
+    padding: 1rem;
 }
 #cancelled{
     background-color: #ff000047;
         color: #ff0000;
+        display: inline;
+    padding: 1rem;
+}
+#refund{
+    background-color: #c9996675;
+        color: #b56d26;
+        display: inline;
+    padding: 1rem;
 }
 
 

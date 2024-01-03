@@ -369,13 +369,19 @@
                                         <td class="text-center">
                                             <div class="tom-select-custom">
                                                 <div class="d-flex">
-                                                    <select name="status" class="js-select form-select flex-grow-1 p-2 statusLabel" autocomplete="off"
-                                                        data-product-id="<%= product.productId %>">
-                                                        <option value="Placed" <%=product.status=="Placed" ? 'selected' : '' %>>Placed</option>
-                                                        <option value="On the way" <%=product.status=="On the way" ? 'selected' : '' %>>On the way</option>
-                                                        <option value="Delivered" <%=product.status=="Delivered" ? 'selected' : '' %>>Delivered</option>
-                                                        <option value="Cancelled" <%=product.status=="Cancelled" ? 'selected' : '' %>>Cancelled</option>
+                                                    <select name="status" class="js-select form-select flex-grow-1 p-2 statusLabel" autocomplete="off" data-product-id="<%= product.productId %>">
+                                                        <% if (['Placed', 'On the way', 'Refunded', 'Delivered', 'Cancelled'].includes(product.status)) { %>
+                                                            <option value="<%= product.status %>" selected><%= product.status %></option>
+                                                        <% } else { %>
+                                                            <option value="" disabled selected hidden><%= product.status %></option>
+                                                        <% } %>
+                                                        <option value="Placed">Placed</option>
+                                                        <option value="On the way">On the way</option>
+                                                        <option value="Refunded">Refunded</option>
+                                                        <option value="Delivered">Delivered</option>
+                                                        <option value="Cancelled">Cancelled</option>
                                                     </select>
+                                                    
                                                 </div>
                                             </div>
                                         </td>

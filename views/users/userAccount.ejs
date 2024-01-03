@@ -179,89 +179,97 @@
                                             <div class="tab-pane fade show active" id="tab-orders" role="tabpanel"
                                                 aria-labelledby="tab-orders-link">
                                                 <h5 class="text-center">Orders</h5>
-                                               <% if(orders.length>0){ %>
-                                                <table class="table table-wishlist table-no-padding">
-                                                    <thead>
-                                                        <tr>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                            <th></th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <% orders.forEach(function(order) {
-                                                            order.orderedProducts.forEach(function(product) { %>
-                                                            <tr class="text-center">
-                                                                <td class="p-0">
-                                                                    <div class="">
-                                                                        <figure class="d-inline-block">
-                                                                            <a href="#">
-                                                                                <div class="p-2"
-                                                                                    style="height:60px ; width: 60px;">
-                                                                                    <img src="/assets/productImages/uploadImages/<%= product.productDetails.productImage%>"
-                                                                                        alt="<%= product.productDetails.name %>">
-                                                                                </div>
-                                                                            </a>
-                                                                        </figure>
-                                                                    </div>
-                                                                </td>
-                                                                <td>
-                                                                    <h6>
-                                                                        <%= product.productDetails.name %>
-                                                                    </h6>
-                                                                </td>
-                                                                <td>
-                                                                    <%if(product.status == "Placed"){%>
-                                                                    <p class="rounded-pill" id="placed"><%= product.status %></p>
-                                                                    <%}else if(product.status == "On the way"){%>
-                                                                        <p class="rounded-pill" id="onTheWay"><%= product.status %></p>
-                                                                   <% }else if(product.status == "Delivered"){%>
-                                                                        <p class="rounded-pill" id="delivered"><%= product.status %></p>
-                                                                   <% }else{ %>
-                                                                        <p class="rounded-pill" id="cancelled"><%= product.status %></p>
-                                                                  <% } %>
-
-                                                                </td>
-                                                                <td>
-                                                                    <span class="text-info">
-                                                                       On <%= product.stausUpdatedDate %>
-                                                                    </span>
-                                                                </td>
-                                                                <td><button
-                                                                        class="small border-0 shadow btn view-more-btn"
+                                                <% if(orders.length>0){ %>
+                                                    <table class="table table-wishlist table-no-padding">
+                                                        <thead>
+                                                            <tr>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                                <th></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% orders.forEach(function(order) {
+                                                                order.orderedProducts.forEach(function(product) { %>
+                                                                <tr class="text-center">
+                                                                    <td class="p-0">
+                                                                        <div class="">
+                                                                            <figure class="d-inline-block">
+                                                                                <a href="#">
+                                                                                    <div class="p-2"
+                                                                                        style="height:60px ; width: 60px;">
+                                                                                        <img src="/assets/productImages/uploadImages/<%= product.productDetails.productImage%>"
+                                                                                            alt="<%= product.productDetails.name %>">
+                                                                                    </div>
+                                                                                </a>
+                                                                            </figure>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td class="product-name" style="cursor: pointer;"
                                                                         data-toggle="modal"
                                                                         data-target="#orderDetailsModal"
                                                                         data-product-image="<%= product.productDetails.productImage%>"
                                                                         data-product-quantity="<%= product.quantity %>"
                                                                         data-product-name="<%= product.productDetails.name %>"
-                                                                        data-purchase-date="<%= order.purchaseDate  %>"
+                                                                        data-purchase-date="<%= order.purchaseDate %>"
                                                                         data-total-amount="<%= order.totalAmount %>"
                                                                         data-payment-method="<%= order.paymentMethod %>"
                                                                         data-status="<%= order.status %>">
-                                                                        View More</button>
-                                                                </td>
-                                                                <td>
-                                                                  <% const now = new Date();
-                                                                     const purchaseDateTime = new Date(`${order.purchaseDate} ${order.purchaseTime}`);
-                                                                     const timeDifference = (now - purchaseDateTime) / (1000 * 60); 
-                                                                     const minutesDifference = Math.floor(timeDifference);
-
-                                                                     if (product.status === "Placed") { %>
-                                                                         <a class="text-danger" onclick="cancelOrder('<%= product.productId %>')">Cancel</a>
-                                                                     <% } else if (product.status === "Delivered" && minutesDifference <= 1440) { %>
-                                                                         <!-- 1440 minutes = 24 hours -->
-                                                                         <a class="text-primary" onclick="refundRequest('<%= product.productId %>')">Refund request <i class="fa-sharp fa-solid fa-rotate-left" style="color: #cc9966;"></i></a>
-                                                                     <% } %>
-                                                            </tr>
-                                                            <% }); %>
-
+                                                                        <h6>
+                                                                            <%= product.productDetails.name %>
+                                                                        </h6>
+                                                                    </td>
+                                                                    <td id="status">
+                                                                        <% if(product.status=="Placed" ){ %>
+                                                                            <p class="rounded-pill" id="placed"><%= product.status %></p>
+                                                                        <% }else if(product.status=="On the way" ){ %>
+                                                                                <p class="rounded-pill" id="onTheWay"> <%= product.status %></p>
+                                                                        <% }else if(product.status=="Refunded"){ %>
+                                                                                 <p class="rounded-pill" id="refund"><%= product.status %></p>
+                                                                        <% }else if(product.status=="Cancelled"){ %>
+                                                                                <p class="rounded-pill"id="cancelled"><%= product.status %></p>
+                                                                        <% }else if(product.status=="Delivered"){%>
+                                                                                <p class="rounded-pill" id="delivered"><%= product.status %></p>
+                                                                        <% }else{ %>
+                                                                                <p class="text-primary"><%= product.status %></p>
+                                                                         <% } %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span class="text-info">
+                                                                            On <%= product.stausUpdatedDate %>
+                                                                        </span>
+                                                                    </td>
+                                                                    <td class="">
+                                                                        <% const now=new Date(); const
+                                                                            purchaseDateTime=new
+                                                                            Date(`${order.purchaseDate}
+                                                                            ${order.purchaseTime}`); const
+                                                                            timeDifference=(now - purchaseDateTime) /
+                                                                            (1000 * 60); const
+                                                                            minutesDifference=Math.floor(timeDifference);
+                                                                            if (product.status==="Placed" ) { %>
+                                                                            <a class="text-danger"
+                                                                                style="cursor: pointer;"
+                                                                                onclick="cancelOrder('<%= product.productId %>')">Cancel</a>
+                                                                            <% } else if (product.status==="Delivered"
+                                                                                && minutesDifference <=1440) { %>
+                                                                                <!-- 1440 minutes = 24 hours -->
+                                                                                <a class="text-primary" id="requestStatus"
+                                                                                    style="cursor: pointer;"
+                                                                                    onclick="refundRequest('<%= order._id %>','<%= product.productId %>')">Refund
+                                                                                    request <i
+                                                                                        class="fa-sharp fa-solid fa-rotate-left"
+                                                                                        style="color: #cc9966;"></i></a>
+                                                                                <% } %>
+                                                                </tr>
                                                                 <% }); %>
-                                                                    <!-- Add more rows as needed -->
-                                                    </tbody>
-                                                </table>
+
+                                                                    <% }); %>
+                                                                        <!-- Add more rows as needed -->
+                                                        </tbody>
+                                                    </table>
                                                     <% }else{%>
 
                                                         <div class="d-flex flex-column  align-items-center">
@@ -269,13 +277,14 @@
                                                                 <h5 style="color: gray;">OOPS!..Nothing is here</h5>
                                                             </div>
                                                             <div>
-                                                                <a href="/shop" class=" btn btn-secondary position-relative">Shop</a>
+                                                                <a href="/shop"
+                                                                    class=" btn btn-secondary position-relative">Shop</a>
                                                             </div>
-                                                        
-                                                        
+
+
                                                         </div>
                                                         <% } %>
-                                                <!-- End .table table-wishlist -->
+                                                            <!-- End .table table-wishlist -->
                                             </div>
 
                                             <!-- -------------Modal for Order Details-------------- -->
@@ -312,80 +321,145 @@
                                                                     id="modal-payment-method"></span></p>
                                                             <p><strong>Status:</strong> <span id="modal-status"></span>
                                                             </p>
-                                                            <!-- Add more order details as needed -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- -------------------------------Modal for refund request------------------------------ -->
+                                            <div class="modal fade" id="refundRequestModal" tabindex="-1" role="dialog"
+                                                aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="orderDetailsModalLabel">Refund
+                                                                request</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body m-3">
+                                                            <p style="color: #0a9538;font-style: italic;">Honesty
+                                                                Appreciated: We believe you! Get your full refund
+                                                                with no fuss. Just share a pic & reason, and your next
+                                                                slice
+                                                                comes with a sweet discount. Cheers!</p>
+                                                            <form action="" class="m-3">
+                                                                <label for="">Cake image(damage) <span
+                                                                        class="text-danger">*</span></label>
+                                                                <div class="row justify-content-center">
+                                                                    <div class="col-md-6"
+                                                                        style="text-align:-webkit-center; border: 1px solid #ccc;">
+                                                                        <input type="file"
+                                                                            class="h-100 position-absolute "
+                                                                            style="left: 0;opacity: 0;"
+                                                                            name="damageCakeImage" required>
+                                                                        <img src="/assets/images/icons/imageUploader.png"
+                                                                            alt="" class="img-fluid">
+                                                                        <p>Upload your cake image</p>
+
+                                                                    </div>
+                                                                    <div class="col-md-6 ">
+                                                                        <textarea class="pl-2 w-100 h-100"
+                                                                            name="reasonNote" id=""
+                                                                            placeholder="Drop your reason here..."
+                                                                            required></textarea>
+                                                                    </div>
+                                                                    <button type="submit"
+                                                                        class="btn btn-primary mt-2">Send
+                                                                        request</button>
+                                                                </div>
+
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
 
-                                        <div class="tab-pane fade" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
-                                            <div id="addressTab">
-                                                <div class="d-flex justify-content-end">
-                                                    <p>
-                                                        <button class="text-dark border-0 shadow" data-toggle="modal" data-target="#addAddressModal">
-                                                            <i class="fa-sharp fa-solid fa-circle-plus" style="color: #2bc752;"></i> Add address
-                                                        </button>
-                                                    </p>
-                                                </div>
-                                                <div class="row">
-                                                    <% for( let i=0 ; i < address.length ; i++) { %>
-                                                        <div class="col-lg-6">
-                                                            <div class="card card-dashboard shadow">
-                                                                <!-- Add the shadow class to the card -->
-                                                                <div class="card-body pr-0 py-0">
-                                                                    <h3 class="card-title d-inline">Address <%= i+1 %>
-                                                                            <%if(address[i].default==true){%>
-                                                                                <span class="text-info" style="font-size: x-small;">default</span>
-                                                                                <%}%>
-                                                                    </h3>
-                                                                    <button class="float-right delete p-0"><i class="fas fa-trash"
-                                                                            onclick="showConfirmationModal('<%= address[i]._id %>')"></i></button>
-                                                                    <p class="m-0">
-                                                                        <%= address[i].name %><br>
-                                                                            <%= address[i].company %>
-                                                                                <%= address[i].houseName %> <br>
-                                                                                    <%= address[i].appartmentNumber %>,
-                                                                                        <%=address[i].city %><br>
-                                                                                            <%= address[i].state%>,
-                                                                                                <%=address[i].country %>
-                                                                                                    <br>
-                                                                                                    <%= address[i].zipcode%>
+                                            <div class="tab-pane fade" id="tab-address" role="tabpanel"
+                                                aria-labelledby="tab-address-link">
+                                                <div id="addressTab">
+                                                    <div class="d-flex justify-content-end">
+                                                        <p>
+                                                            <button class="text-dark border-0 shadow"
+                                                                data-toggle="modal" data-target="#addAddressModal">
+                                                                <i class="fa-sharp fa-solid fa-circle-plus"
+                                                                    style="color: #2bc752;"></i> Add address
+                                                            </button>
+                                                        </p>
+                                                    </div>
+                                                    <div class="row justify-content-center">
+                                                        <% for( let i=0 ; i < address.length ; i++) { %>
+                                                            <div class="col-lg-6">
+                                                                <div class="card card-dashboard shadow">
+                                                                    <!-- Add the shadow class to the card -->
+                                                                    <div class="card-body pr-0 py-0">
+                                                                        <h3 class="card-title d-inline">Address <%= i+1
+                                                                                %>
+                                                                                <%if(address[i].default==true){%>
+                                                                                    <span class="text-info"
+                                                                                        style="font-size: x-small;">default</span>
+                                                                                    <%}%>
+                                                                        </h3>
+                                                                        <button class="float-right delete p-0"><i
+                                                                                class="fas fa-trash"
+                                                                                onclick="showConfirmationModal('<%= address[i]._id %>')"></i></button>
+                                                                        <p class="m-0">
+                                                                            <%= address[i].name %><br>
+                                                                                <%= address[i].company %>
+                                                                                    <%= address[i].houseName %> <br>
+                                                                                        <%= address[i].appartmentNumber
+                                                                                            %>,
+                                                                                            <%=address[i].city %><br>
+                                                                                                <%= address[i].state%>,
+                                                                                                    <%=address[i].country
+                                                                                                        %>
                                                                                                         <br>
-                                                                                                        <%= address[i].email%>
+                                                                                                        <%=
+                                                                                                            address[i].zipcode%>
                                                                                                             <br>
-                                                                                                            <%=address[i].phone%>
+                                                                                                            <%=
+                                                                                                                address[i].email%>
                                                                                                                 <br>
-                                                                                                                <a href="#"
-                                                                                                                    onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
-                                                                                                                    <i class="fa-sharp fa-solid fa-pen"
-                                                                                                                        style="color: #cc9966;"></i></a>
-                                                                    </p>
-                                                                </div><!-- End .card-body -->
-                                                            </div><!-- End .card-dashboard -->
-                                                        </div><!-- End .col-lg-6 -->
+                                                                                                                <%=address[i].phone%>
+                                                                                                                    <br>
+                                                                                                                    <a href="#"
+                                                                                                                        onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
+                                                                                                                        <i class="fa-sharp fa-solid fa-pen"
+                                                                                                                            style="color: #cc9966;"></i></a>
+                                                                        </p>
+                                                                    </div><!-- End .card-body -->
+                                                                </div><!-- End .card-dashboard -->
+                                                            </div><!-- End .col-lg-6 -->
+                                                            <%}%>
+                                                    </div>
+                                                    <% if(address.length < 1){ %>
+                                                        <h6 style="color: gray;" class="text-center">No addresses..!
+                                                        </h6>
                                                         <%}%>
                                                 </div>
-                                                <% if(address.length < 1){ %>
-                                                    <h6 style="color: gray;" class="text-center">No addresses..!</h6>
-                                                    <%}%>
                                             </div>
-                                        </div>
 
 
-                                        <div class="tab-pane fade" id="tab-wallet" role="tabpanel" aria-labelledby="tab-wallet-link">
-                                            <div class="card card-dashboard m-0 shadow-lg"
-                                                style="background-image: url(/assets/images/banners/Wallet\ Banner.png.webp);">
-                                                <h3 class="text-light ls-3" style="margin: 6rem;">Wallet</h3>
+                                            <div class="tab-pane fade" id="tab-wallet" role="tabpanel"
+                                                aria-labelledby="tab-wallet-link">
+                                                <div class="card card-dashboard m-0 shadow-lg"
+                                                    style="background-image: url(/assets/images/banners/Wallet\ Banner.png.webp);">
+                                                    <h3 class="text-light ls-3" style="margin: 6rem;">Wallet</h3>
+                                                </div>
+                                                <div class="card card-dashboard p-4 shadow">
+                                                    <h5 style="color: grey;">Wallet amount : <span class="text-dark">₹
+                                                            00.0</span></h5>
+                                                    <a href="" class="" style="color: gray;"><i
+                                                            class="fa-regular fa-square-plus  fa-la pr-2"
+                                                            style="color: #cc9966;"></i>Add money to wallet</a>
+                                                    <a href="" class="" style="color: gray;"><i
+                                                            class="fa-solid fa-clock-rotate-left fa-la"
+                                                            style="color: #cc9966;"></i> Transaction history</a>
+                                                </div>
                                             </div>
-                                            <div class="card card-dashboard p-4 shadow">
-                                                <h5 style="color: grey;">Wallet amount : <span class="text-dark">₹ 00.0</span></h5>
-                                                <a href="" class="" style="color: gray;"><i class="fa-regular fa-square-plus  fa-la pr-2"
-                                                        style="color: #cc9966;"></i>Add money to wallet</a>
-                                                <a href="" class="" style="color: gray;"><i class="fa-solid fa-clock-rotate-left fa-la"
-                                                        style="color: #cc9966;"></i> Transaction history</a>
-                                            </div>
-                                        </div>
 
 
                                         </div><!-- .End .tab-pane -->
@@ -658,131 +732,7 @@
             </div><!-- End .mobile-menu-wrapper -->
         </div><!-- End .mobile-menu-container -->
 
-        <!-- Sign in / Register Modal -->
-        <div class="modal fade" id="signin-modal" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true"><i class="icon-close"></i></span>
-                        </button>
 
-                        <div class="form-box">
-                            <div class="form-tab">
-                                <ul class="nav nav-pills nav-fill" role="tablist">
-                                    <li class="nav-item">
-                                        <a class="nav-link active" id="signin-tab" data-toggle="tab" href="#signin"
-                                            role="tab" aria-controls="signin" aria-selected="true">Sign In</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" id="register-tab" data-toggle="tab" href="#register"
-                                            role="tab" aria-controls="register" aria-selected="false">Register</a>
-                                    </li>
-                                </ul>
-                                <div class="tab-content" id="tab-content-5">
-                                    <div class="tab-pane fade show active" id="signin" role="tabpanel"
-                                        aria-labelledby="signin-tab">
-                                        <form action="#">
-                                            <div class="form-group">
-                                                <label for="singin-email">Username or email address *</label>
-                                                <input type="text" class="form-control" id="singin-email"
-                                                    name="singin-email" required>
-                                            </div><!-- End .form-group -->
-
-                                            <div class="form-group">
-                                                <label for="singin-password">Password *</label>
-                                                <input type="password" class="form-control" id="singin-password"
-                                                    name="singin-password" required>
-                                            </div><!-- End .form-group -->
-
-                                            <div class="form-footer">
-                                                <button type="submit" class="btn btn-outline-primary-2">
-                                                    <span>LOG IN</span>
-                                                    <i class="icon-long-arrow-right"></i>
-                                                </button>
-
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                        id="signin-remember">
-                                                    <label class="custom-control-label" for="signin-remember">Remember
-                                                        Me</label>
-                                                </div><!-- End .custom-checkbox -->
-
-                                                <a href="#" class="forgot-link">Forgot Your Password?</a>
-                                            </div><!-- End .form-footer -->
-                                        </form>
-                                        <div class="form-choice">
-                                            <p class="text-center">or sign in with</p>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <a href="#" class="btn btn-login btn-g">
-                                                        <i class="icon-google"></i>
-                                                        Login With Google
-                                                    </a>
-                                                </div><!-- End .col-6 -->
-                                                <div class="col-sm-6">
-                                                    <a href="#" class="btn btn-login btn-f">
-                                                        <i class="icon-facebook-f"></i>
-                                                        Login With Facebook
-                                                    </a>
-                                                </div><!-- End .col-6 -->
-                                            </div><!-- End .row -->
-                                        </div><!-- End .form-choice -->
-                                    </div><!-- .End .tab-pane -->
-                                    <div class="tab-pane fade" id="register" role="tabpanel"
-                                        aria-labelledby="register-tab">
-                                        <form action="#">
-                                            <div class="form-group">
-                                                <label for="register-email">Your email address *</label>
-                                                <input type="email" class="form-control" id="register-email"
-                                                    name="register-email" required>
-                                            </div><!-- End .form-group -->
-
-                                            <div class="form-group">
-                                                <label for="register-password">Password *</label>
-                                                <input type="password" class="form-control" id="register-password"
-                                                    name="register-password" required>
-                                            </div><!-- End .form-group -->
-
-                                            <div class="form-footer">
-                                                <button type="submit" class="btn btn-outline-primary-2">
-                                                    <span>SIGN UP</span>
-                                                    <i class="icon-long-arrow-right"></i>
-                                                </button>
-
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input"
-                                                        id="register-policy" required>
-                                                    <label class="custom-control-label" for="register-policy">I agree to
-                                                        the <a href="#">privacy policy</a> *</label>
-                                                </div><!-- End .custom-checkbox -->
-                                            </div><!-- End .form-footer -->
-                                        </form>
-                                        <div class="form-choice">
-                                            <p class="text-center">or sign in with</p>
-                                            <div class="row">
-                                                <div class="col-sm-6">
-                                                    <a href="#" class="btn btn-login btn-g">
-                                                        <i class="icon-google"></i>
-                                                        Login With Google
-                                                    </a>
-                                                </div><!-- End .col-6 -->
-                                                <div class="col-sm-6">
-                                                    <a href="#" class="btn btn-login  btn-f">
-                                                        <i class="icon-facebook-f"></i>
-                                                        Login With Facebook
-                                                    </a>
-                                                </div><!-- End .col-6 -->
-                                            </div><!-- End .row -->
-                                        </div><!-- End .form-choice -->
-                                    </div><!-- .End .tab-pane -->
-                                </div><!-- End .tab-content -->
-                            </div><!-- End .form-tab -->
-                        </div><!-- End .form-box -->
-                    </div><!-- End .modal-body -->
-                </div><!-- End .modal-content -->
-            </div><!-- End .modal-dialog -->
-        </div><!-- End .modal -->
 
         <!-- -----------------Address deletion Modal------------ -->
         <!-- Modal -->
@@ -992,9 +942,107 @@
         <!-- Main JS File -->
         <script src="/assets/js/main.js"></script>
 
-         
+
+
+
+        <!-- --------------Refund request------------- -->
         <script>
-            function showConfirmation(productId) {
+            function refundRequest(orderId,productId) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Do you want to send a refund request for this order?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#7ac093',
+                    confirmButtonText: 'Yes, send refund request!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $('#refundRequestModal').modal({
+                            backdrop: 'static',
+                            keyboard: false
+                        }).modal('show');
+
+                        $('#refundRequestModal').on('hidden.bs.modal', function () {
+                            location.reload();
+                        });
+
+                        $('#refundRequestModal form').submit(function (event) {
+                            event.preventDefault();
+
+                            const formData = new FormData(this);
+                            formData.append('orderId', orderId);
+                            formData.append('productId', productId);
+                            
+                            $.ajax({
+                                url: '/account/refundRequest',
+                                type: 'POST',
+                                data: formData,
+                                contentType: false,
+                                processData: false,
+                                success: function (response) {
+                                    console.log(response);
+                                    if (response.success) { 
+                                        Swal.fire({
+                                            title: 'Refund request sent!',
+                                            text:"We'll review your request and get back to you shortly.",
+                                            icon: 'success'
+                                        }).then(() => {
+                                            $('#refundRequestModal').modal('hide');
+                                            $('#status').load('/account #status')
+
+                                        });
+
+                                    } else {
+                                        Swal.fire({
+                                            title: 'Oops!',
+                                            text: response.message || 'There was an error processing your request. Please try again.',
+                                            icon: 'error'
+                                        });
+                                    }
+                                },
+                                error: function (error) {
+                                    Swal.fire({
+                                        title: 'Oops!',
+                                        text: 'There was an error sending your request. Please check your internet connection and try again.',
+                                        icon: 'error'
+                                    });
+                                }
+                            });
+
+                        });
+                    }
+                });
+            }
+            //    -----------showing image on div--------[]
+            const input = document.querySelector('.col-md-6 input[type="file"]');
+            const image = document.querySelector('.col-md-6 img');
+
+            input.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        image.src = event.target.result;
+                        image.style.width = '100%';
+                        image.style.height = '100%';
+                        image.style.objectFit = 'cover';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+
+                    image.src = '/assets/images/icons/imageUploader.png';
+                    image.style.width = 'auto';
+                    image.style.height = 'auto';
+                }
+            });
+
+
+        </script>
+        <!-- -------order cancelation-------- -->
+        <script>
+            function cancelOrder(productId) {
                 Swal.fire({
                     title: 'Are you sure?',
                     text: 'Do you wan\'t  cancel this order!',
@@ -1004,10 +1052,9 @@
                     cancelButtonColor: '#7ac093',
                     confirmButtonText: 'Yes, cancel Order!'
                 }).then((result) => {
-                    console.log(result);
                     if (result.isConfirmed) {
 
-                        fetch(`/account/deleteOrderItem`, {
+                        fetch(`/account/cancelOrderItem`, {
                             method: 'DELETE',
                             headers: {
                                 "Content-Type": "application/json"
@@ -1031,7 +1078,7 @@
 
         <!--  set the modal with orders content dynamically -->
         <script>
-            $(document).on('click', '.view-more-btn', function () {
+            $(document).on('click', '.product-name', function () {
                 var productImage = $(this).data('product-image');
                 var productName = $(this).data('product-name');
                 var productQuantity = $(this).data('product-quantity');
@@ -1040,7 +1087,6 @@
                 var paymentMethod = $(this).data('payment-method');
                 var status = $(this).data('status');
 
-                console.log(productImage);
 
                 // Set the modal content dynamically
                 $('#modal-product-image').attr('src', "/assets/productImages/uploadImages/" + productImage);
@@ -1229,7 +1275,7 @@
 
                 setTimeout(() => {
                     notificationContainer.style.display = 'none';
-                }, 3000); 
+                }, 3000);
             }
 
 
@@ -1349,8 +1395,5 @@
                 return new Date(dateString).toLocaleDateString('en-US', options);
             }
         </script>
-
-
-
 
         <%-include('../layouts/user/footer')-%>

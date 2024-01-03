@@ -5,6 +5,7 @@ const Products = require("../models/productModel")
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const { products } = require("./adminController");
+const Refundrequests = require("../models/refundReqModel")
 
 
 // ----Razorpay--------
@@ -59,7 +60,7 @@ const addOrder = async (req, res) => {
             productId: item.productId._id,
             quantity: item.quantity,
             status: 'Placed',
-            stausUpdatedDate:formattedDate,
+            stausUpdatedDate: formattedDate,
             productDetails: {
                 name: item.productId.productName,
                 price: item.productId.price,
@@ -121,7 +122,7 @@ const addOrder = async (req, res) => {
 
                 await User.updateOne({ _id: userId }, { $set: { cart: [] } });
             }
-           
+
             const newTransactionHistory = {
                 amount: newOrders.totalAmount,
                 direction: 'paid',
@@ -129,7 +130,7 @@ const addOrder = async (req, res) => {
             };
 
             await User.findOneAndUpdate(
-                { _id:userId },
+                { _id: userId },
                 {
                     $push: {
                         'wallet.transactionHistory': newTransactionHistory
@@ -147,7 +148,7 @@ const addOrder = async (req, res) => {
                 currency: 'INR',
                 receipt: newOrders._id.toString(),
             };
-            razorpayInstance.orders.create(options, (err, razorpayOrder) => { 
+            razorpayInstance.orders.create(options, (err, razorpayOrder) => {
                 if (err) {
                     console.error('Razorpay order creation error:', err);
                     res.json({ success: false, message: 'Error creating Razorpay order.' });
@@ -187,7 +188,7 @@ const verifyPayment = async (req, res) => {
             }
         }));
 
-        const hmac = crypto.createHmac("sha256",process.env.RAZORPAY_SECRET_ID);
+        const hmac = crypto.createHmac("sha256", process.env.RAZORPAY_SECRET_ID);
         hmac.update(paymentData.payment.razorpay_order_id + "|" + paymentData.payment.razorpay_payment_id);
         const hmacValue = hmac.digest("hex");
 
@@ -203,7 +204,7 @@ const verifyPayment = async (req, res) => {
 
                 await User.updateOne({ _id: userId }, { $set: { cart: [] } });
             }
-               res.json({ success: true, message: 'Order success' });
+            res.json({ success: true, message: 'Order success' });
         }
 
     } catch (error) {
@@ -214,7 +215,6 @@ const verifyPayment = async (req, res) => {
 const cancelOrder = async (req, res) => {
     try {
         const productId = req.body.productId
-        console.log(req.body);
         const cancelledOrder = await Order.findOneAndUpdate(
             { 'orderedProducts.productId': productId },
             {
@@ -233,8 +233,43 @@ const cancelOrder = async (req, res) => {
         console.log(error.message);
     }
 }
+
+const refundRequest = async (req, res) => {
+    try {
+        console.log(req.body);
+        const returnRequest = new Refundrequests({
+            orderId: req.body.orderId,
+            productImage: req.file.filename,
+            reasonNote: req.body.reasonNote
+        })
+        // await returnRequest.save()
+
+        if (returnRequest) {
+            const productId = req.body.productId;
+            const cancelledOrder = await Order.findOneAndUpdate(
+                { 'orderedProducts.productId': productId },
+                {
+                    $set: {
+                        'orderedProducts.$.status': 'Refund requested',
+                        status: 'Refund requested'
+                    }
+                },
+                { new: true }
+            );
+            res.json({ success: true })
+        } else {
+            res.json({ success: false })
+        }
+
+
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
 module.exports = {
     addOrder,
     cancelOrder,
-    verifyPayment
+    verifyPayment,
+    refundRequest
 }

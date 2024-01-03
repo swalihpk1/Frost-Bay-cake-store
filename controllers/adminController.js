@@ -353,7 +353,7 @@ const hideProduct = async (req, res) => {
 
 const userOrders = async (req, res) => {
     try {
-        const orders = await Orders.find({});
+        const orders = await Orders.find({}).sort({ createdAt: -1 });
         res.render('orders',{orders:orders});
     } catch (error) {
         console.log(error.message);

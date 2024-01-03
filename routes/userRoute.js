@@ -17,7 +17,7 @@ app.use(
     express.static(path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages'))
 )
 
-// Multer Configuration
+// Multer Configuration for user image 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         return cb(null, path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages'));
@@ -27,6 +27,19 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage, });
+
+
+// Multer Configuration for Redund Request Images
+const refundImageStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, path.join(__dirname, '..', 'public', 'assets', 'returnReasonImages')); 
+    },
+    filename: function (req, file, cb) {
+      cb(null, `${Date.now()}-${file.originalname}`)
+    }
+  });
+  
+const refundImageUpload = multer({ storage: refundImageStorage });
 
 
 
@@ -86,8 +99,7 @@ app.delete('/account/deleteAddress',authUser.isLogin,userController.deleteAddres
 app.patch('/account/editAddress', authUser.isLogin, userController.editAddress);
 
 // -----------------------------------Orders-----------------------------------------
-app.delete('/account/deleteOrderItem', authUser.isLogin, orderController.cancelOrder);
-
-
+app.delete('/account/cancelOrderItem', authUser.isLogin, orderController.cancelOrder);
+app.post('/account/refundRequest',refundImageUpload.single('damageCakeImage'),authUser.isLogin, orderController.refundRequest);
 
 module.exports = app;

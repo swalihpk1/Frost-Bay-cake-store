@@ -171,7 +171,7 @@
 													<div class="filter-item">
 														<div class="custom-control">
 															<input type="checkbox" class="Kilogram-filter"
-																name="kilograms" id="kg-0.5"" value="0.5" />
+																name="kilograms" id="kg-0.5"" value=" 0.5" />
 															<label for="">
 																0.5 kg
 															</label>
@@ -192,7 +192,7 @@
 														</div><!-- End .custom-checkbox -->
 														<div class="custom-control">
 															<input type="checkbox" class="Kilogram-filter"
-																name="kilograms" id="kg-2.0"value="2" />
+																name="kilograms" id="kg-2.0" value="2" />
 															<label for="">
 																2.0 kg
 															</label>
@@ -521,19 +521,19 @@
 					sendRequests();
 				});
 
-                // ---------sorting-----
+				// ---------sorting-----
 				$('#sortby').on('change', function () {
 					selectedSort = $(this).val();
 					sendRequests();
 				});
 
 				// -------kilogram-filtering-----
-				 $('.Kilogram-filter').on('change', function () {
+				$('.Kilogram-filter').on('change', function () {
 					selectedKilogram = $(this).val()
-					sendRequests(); 
+					sendRequests();
 				});
 
-                //   ---pagination----
+				//   ---pagination----
 				$(document).on('click', '.pagination a.page-link', function (e) {
 					e.preventDefault();
 					currentPage = $(this).data('page');
@@ -542,7 +542,7 @@
 
 					$('html, body').animate({ scrollTop: 0 }, 'slow');
 				});
-                
+
 				function updateProductList() {
 					const selectedCategories = $('.category-filter:checked').map(function () {
 						return $(this).val();
@@ -557,7 +557,7 @@
 						category: selectedCategory,
 						sort: selectedSort,
 						page: currentPage,
-						kilogram:selectedKilogram,
+						kilogram: selectedKilogram,
 						q: searchTerm
 					};
 					$.ajax({

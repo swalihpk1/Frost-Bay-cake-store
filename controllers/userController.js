@@ -13,6 +13,7 @@ const Sharp = require("sharp");
 const Address = require("../models/addressModel")
 const Orders = require("../models/ordersModel")
 const { findByIdAndUpdate } = require("../models/productModel");
+const  Refundreqests = require("../models/refundReqModel")
 
 
 // nodemailer stuffs
@@ -35,7 +36,6 @@ const authentication = async (req, res) => {
         res.render('404');
     }
 }
-
 
 // ----------Secure-password(bcrypt)------------
 const securePassword = async (password) => {
@@ -236,7 +236,6 @@ const editUserData = async (req, res) => {
         let imageName;
 
         const file = req.file;
-        console.log(file);
 
         if (file) {
             const imagePath = path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages', file.filename);
