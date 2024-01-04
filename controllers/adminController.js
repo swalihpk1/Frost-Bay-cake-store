@@ -3,9 +3,10 @@ const { use } = require("../routes/userRoute");
 const Products = require("../models/productModel");
 const Category = require("../models/categoryModel");
 const Sharp = require("sharp");
-const path = require("path")
-const Orders = require('../models/ordersModel')
- 
+const path = require("path");
+const Orders = require('../models/ordersModel');
+const Refundreqests = require("../models/refundReqModel")
+
 
 // --------Admin-login-------
 const login = async (req, res) => {
@@ -57,7 +58,7 @@ const dashboard = async (req, res) => {
     }
 }
 
-// --------Products-------
+// --------Products------
 const products = async (req, res) => {
     try {
         const products = await Products.find({}).populate('category');
@@ -190,7 +191,7 @@ const insertCategory = async (req, res) => {
         const categoryCheck = await Category.findOne({ categoryName: categoryName });
         if (categoryCheck) {
             const categoryName = await Category.find({})
-            return res.render('category', { message: 'Category exist',category:categoryName});
+            return res.render('category', { message: 'Category exist', category: categoryName });
         }
 
         const category = new Category({
@@ -198,7 +199,7 @@ const insertCategory = async (req, res) => {
         })
         await category.save();
         const categorys = await Category.find({})
-        return res.render('category', { message: 'Category added',category:categorys });
+        return res.render('category', { message: 'Category added', category: categorys });
 
     } catch (error) {
         console.log(error.message);
@@ -354,37 +355,94 @@ const hideProduct = async (req, res) => {
 const userOrders = async (req, res) => {
     try {
         const orders = await Orders.find({}).sort({ createdAt: -1 });
-        res.render('orders',{orders:orders});
+        const refundRequests = await Refundreqests.find({})
+        res.render('orders', { orders: orders, refundRequests: refundRequests });
     } catch (error) {
         console.log(error.message);
     }
-    
+
 }
 const changeStatus = async (req, res) => {
     try {
-        console.log(req.body);
-         const productId = req.body.productId;
-         const status = req.body.status;
-         const statusChanged = await Orders.findOneAndUpdate(
-             { 'orderedProducts.productId': productId },
-             {
-                 $set: {
-                     'orderedProducts.$.status': status,
-                     status: status
-                 }
-             },
-             { new: true }
-         );
-         if (statusChanged) {
-             res.json({ success: true, message: 'Order status changed.' });
-         } else {
-             res.json({ success: false, message: 'Something went wrong.' });
-         }
-         
-     } catch (error) {
+        const orderId = req.body.orderId
+        const productId = req.body.productId;
+        const status = req.body.status;
+        const statusChanged = await Orders.findOneAndUpdate(
+            {
+                _id: orderId,
+                'orderedProducts.productId': productId,
+            },
+            {
+                $set: {
+                    'orderedProducts.$.status': status,
+                    status: status,
+                },
+            },
+            { new: true }
+        );
+
+        if (statusChanged) {
+            res.json({ success: true, message: 'Order status changed.' });
+        } else {
+            res.json({ success: false, message: 'Something went wrong.' });
+        }
+
+    } catch (error) {
         console.log(error.message);
-     }
- }
+    }
+}
+
+const requestAction = async (req, res) => {
+    try {
+        const productId = req.body.productId;
+        const orderId = req.body.orderId;
+        console.log(req.body);
+
+        const deleteRequest = await Refundreqests.findOneAndDelete({
+            orderId: orderId,
+            productId: productId
+        });
+
+        if (req.action === "decline") {
+            await Orders.findOneAndUpdate(
+                {
+                    _id: orderId,
+                    'orderedProducts.productId': productId,
+                },
+                {
+                    $set: {
+                        'orderedProducts.$.status': "Delivered",
+                        status: "Delivered",
+                    },
+                },
+                { new: true }
+            );
+        }
+
+        await Orders.findOneAndUpdate(
+            {
+                _id: orderId,
+                'orderedProducts.productId': productId,
+            },
+            {
+                $set: {
+                    'orderedProducts.$.status': "Refunded",
+                    status: "Redunded",
+                },
+            },
+            { new: true }
+        );
+
+        if (deleteRequest) {
+         res.json({ success: true })
+        }
+         res.json({ success: false })
+
+    } catch (error) {
+
+        console.log(error.message);
+    }
+}
 
 
 
@@ -409,6 +467,7 @@ module.exports = {
     hideProduct,
     showProduct,
     changeStatus,
+    requestAction,
     userOrders,
     logout
 

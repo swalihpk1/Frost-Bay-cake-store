@@ -79,6 +79,7 @@ app.put('/category/UnListCategory', authAdmin.isLogin, adminController.UnListCat
 // --------------------------Users Orders--------------------
 app.get('/orders', authAdmin.isLogin, adminController.userOrders)
 app.patch('/orders/changeStatus', authAdmin.isLogin, adminController.changeStatus)
+app.put('/orders/requestAction', authAdmin.isLogin, adminController.requestAction)
 
 // ---------------------------Logout-admin-------------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);

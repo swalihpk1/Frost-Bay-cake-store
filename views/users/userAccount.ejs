@@ -252,7 +252,7 @@
                                                                             if (product.status==="Placed" ) { %>
                                                                             <a class="text-danger"
                                                                                 style="cursor: pointer;"
-                                                                                onclick="cancelOrder('<%= product.productId %>')">Cancel</a>
+                                                                                onclick="cancelOrder('<%= product.productId %>','<%= order._id %>')">Cancel</a>
                                                                             <% } else if (product.status==="Delivered"
                                                                                 && minutesDifference <=1440) { %>
                                                                                 <!-- 1440 minutes = 24 hours -->
@@ -989,8 +989,7 @@
                                             icon: 'success'
                                         }).then(() => {
                                             $('#refundRequestModal').modal('hide');
-                                            $('#status').load('/account #status')
-
+                                            location.reload();
                                         });
 
                                     } else {
@@ -1042,7 +1041,7 @@
         </script>
         <!-- -------order cancelation-------- -->
         <script>
-            function cancelOrder(productId) {
+            function cancelOrder(productId,orderId) {
                 Swal.fire({
                     title: 'Are you sure?',
                     text: 'Do you wan\'t  cancel this order!',
@@ -1059,7 +1058,7 @@
                             headers: {
                                 "Content-Type": "application/json"
                             },
-                            body: JSON.stringify({ productId })
+                            body: JSON.stringify({ productId,orderId })
                         })
                             .then(response => response.json())
                             .then(data => {

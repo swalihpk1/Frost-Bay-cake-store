@@ -172,7 +172,6 @@ const addOrder = async (req, res) => {
 
 const verifyPayment = async (req, res) => {
     try {
-        console.log(req.body);
         const userId = req.session.user_id;
         const paymentData = req.body;
         const user = await User.findOne({ _id: userId });
@@ -214,14 +213,18 @@ const verifyPayment = async (req, res) => {
 
 const cancelOrder = async (req, res) => {
     try {
+        const orderId = req.body.orderId;
         const productId = req.body.productId
         const cancelledOrder = await Order.findOneAndUpdate(
-            { 'orderedProducts.productId': productId },
+            {
+                _id: orderId, 
+                'orderedProducts.productId': productId,
+            },
             {
                 $set: {
-                    'orderedProducts.$.status': 'Cancelled',
-                    status: 'Cancelled'
-                }
+                    'orderedProducts.$.status':"Cancelled",
+                    status: "Cancelled",
+                },
             },
             { new: true }
         );
@@ -236,23 +239,27 @@ const cancelOrder = async (req, res) => {
 
 const refundRequest = async (req, res) => {
     try {
-        console.log(req.body);
         const returnRequest = new Refundrequests({
             orderId: req.body.orderId,
+            productId:req.body.productId,
             productImage: req.file.filename,
-            reasonNote: req.body.reasonNote
+            reasonNote: req.body.reasonNote.trim()
         })
-        // await returnRequest.save()
+        await returnRequest.save()
 
         if (returnRequest) {
+            const orderId = req.body.orderId;
             const productId = req.body.productId;
-            const cancelledOrder = await Order.findOneAndUpdate(
-                { 'orderedProducts.productId': productId },
+             await Order.findOneAndUpdate(
+                {
+                    _id: orderId, 
+                    'orderedProducts.productId': productId,
+                },
                 {
                     $set: {
-                        'orderedProducts.$.status': 'Refund requested',
-                        status: 'Refund requested'
-                    }
+                        'orderedProducts.$.status':"Refund requested",
+                        status: "Refund requested",
+                    },
                 },
                 { new: true }
             );

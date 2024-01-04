@@ -62,3 +62,35 @@ svg{-ms-touch-action:none;touch-action:none}.jvm-zoomin,.jvm-zoomout,image,text{
         transform: translateX(-100%);
     }
 }
+#dot{
+    left: 20%;
+    top: -16%;
+    color: #d60000;
+    display: list-item;
+    position: absolute;
+}
+#viewDetailsbtn{
+    border: 0;
+    background-color: transparent;
+    color: gray;
+    transition: color 0.35s;
+}
+#viewDetailsbtn:hover{
+    border: 0;
+    background-color: transparent;
+    color: white;
+}
+.declineBtn{
+    color: rgb(196, 47, 47);
+    transition: color 0.35s;
+}
+.declineBtn:hover{
+    color:red ;
+}
+.acceptBtn{
+    color: rgb(4, 158, 9);
+    transition: color 0.35s;
+}
+.acceptBtn:hover{
+    color:rgb(3, 218, 46) ;
+}

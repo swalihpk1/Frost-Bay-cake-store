@@ -6,13 +6,18 @@ const refundReqSchema = new mongoose.Schema({
         ref: 'Orders',
         required: true
     },
+    productId: {
+        type: mongoose.Types.ObjectId,
+        required: true,
+        ref: "Product"
+    },
     productImage: {
         type: String,
-        required:true
+        required: true
     },
     reasonNote: {
         type: String,
-        required:true
+        required: true
     }
 });
 

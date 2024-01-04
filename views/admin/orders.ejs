@@ -1,5 +1,10 @@
 <%-include('../layouts/admin/header')-%>
-   
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <!-- Bootstrap JS (make sure it's the correct version) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
     </head>
 
     <body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl   footer-offset">
@@ -336,13 +341,20 @@
                                 </tr>
                             </thead>
 
+
+
                             <tbody>
-                                <tr>
-                                    <% orders.forEach(function(order) { order.orderedProducts.forEach(function(product)
-                                        { %>
+                                <% orders.forEach(function(order) { order.orderedProducts.forEach(function(product) {
+                                    const refundRequest=refundRequests.find(request=>
+                                    request.productId && order._id &&
+                                    request.productId.toString() === product.productId.toString() &&
+                                    request.orderId.toString() === order._id.toString()
+                                    );
+                                    %>
+                                    <tr>
                                         <td class="p-0">
-                                            <a class="d-flex align-items-center" href="user-profile.html">
-                                                <div class="avatar avatar-circle m-3 "
+                                            <a class="d-flex align-items-center" href="">
+                                                <div class="avatar avatar-circle m-3"
                                                     style="height: 60px; width: 60px;">
                                                     <img class="w-100 rounded"
                                                         src="/assets/productImages/uploadImages/<%= product.productDetails.productImage%>"
@@ -366,80 +378,108 @@
                                             <%= order.purchaseTime %>
                                                 <%= order.purchaseDate %>
                                         </td>
-                                        <td class="text-center">
+                                        <td class="text-center p-2">
                                             <div class="tom-select-custom">
                                                 <div class="d-flex">
-                                                    <select name="status" class="js-select form-select flex-grow-1 p-2 statusLabel" autocomplete="off" data-product-id="<%= product.productId %>">
-                                                        <% if (['Placed', 'On the way', 'Refunded', 'Delivered', 'Cancelled'].includes(product.status)) { %>
-                                                            <option value="<%= product.status %>" selected><%= product.status %></option>
-                                                        <% } else { %>
-                                                            <option value="" disabled selected hidden><%= product.status %></option>
-                                                        <% } %>
-                                                        <option value="Placed">Placed</option>
-                                                        <option value="On the way">On the way</option>
-                                                        <option value="Refunded">Refunded</option>
-                                                        <option value="Delivered">Delivered</option>
-                                                        <option value="Cancelled">Cancelled</option>
+                                                    <select name="status"
+                                                        class="js-select form-select flex-grow-1 p-2 statusLabel"
+                                                        autocomplete="off" data-product-id="<%= product.productId %>"
+                                                        data-order-id="<%= order._id %>">
+                                                        <% if (['Placed', 'On the way' , 'Refunded' , 'Delivered'
+                                                            , 'Cancelled' ].includes(product.status)) { %>
+                                                            <option value="<%= product.status %>" selected>
+                                                                <%= product.status %>
+                                                            </option>
+                                                            <% } else { %>
+                                                                <option value="" disabled selected hidden>
+                                                                    <%= product.status %>
+                                                                </option>
+                                                                <% } %>
+                                                                    <option value="Placed">Placed</option>
+                                                                    <option value="On the way">On the way</option>
+                                                                    <option value="Refunded">Refunded</option>
+                                                                    <option value="Delivered">Delivered</option>
+                                                                    <option value="Cancelled">Cancelled</option>
                                                     </select>
-                                                    
                                                 </div>
                                             </div>
                                         </td>
-                                        <td>
+                                        <td class="p-0">
+                                            On <%= product.stausUpdatedDate %>
                                         </td>
-                                        <!-- <td><button class="btn-btn primary">decline</button><button
-                                                class="btn-btn primary">accept</button></td> -->
-                                </tr>
-
-                                <% }); %>
+                                        <td class="p-0">
+                                            <% if (refundRequest) { %>
+                                                <button id="viewDetailsbtn" class="text-center p-1 viewDetailsbtn"
+                                                    data-toggle="modal" data-target="#refundRequestDetails"
+                                                    data-cake-image="<%= refundRequest.productImage %>"
+                                                    data-reason-note="<%= refundRequest.reasonNote %>">
+                                                    View details
+                                                </button>
+                                                <br>
+                                                <a style="cursor: pointer;" class=" mx-1  declineBtn"
+                                                    onclick="requestAction('<%= order._id %>','<%= product.productId %>','decline')">decline</a>
+                                                <a style="cursor: pointer;" class=" mx-1 acceptBtn"
+                                                    onclick="requestAction('<%= order._id %>','<%= product.productId %>','accept')">accept</a>
+                                                <% } else { %>
+                                                    <!-- Add some default content or hide buttons -->
+                                                    <!-- <button class="btn-btn primary" style="display: none;"></button> -->
+                                                    <% } %>
+                                        </td>
+                                    </tr>
                                     <% }); %>
+                                        <% }); %>
                             </tbody>
+
+
                         </table>
                     </div>
                     <!-- End Table -->
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="confirmationModal" tabindex="-1"
-                        aria-labelledby="confirmationModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
+
+                    <!-- --------------------Refund request modal----------------- -->
+                    <div class="modal fade" id="refundRequestDetails" tabindex="-1" role="dialog"
+                        aria-labelledby="refundRequestDetailsLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                                    <h5 class="modal-title" id="orderDetailsModalLabel">Refund request Details</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
-                                <div class="modal-body">
-                                    Are you sure you want to block this user?
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary"
-                                        data-bs-dismiss="modal">Cancel</button>
-                                    <button type="button" class="btn btn-danger"
-                                        onclick="confirmBlockUser()">Block</button>
-                                </div>
-                            </div>
-                        </div>x
-                    </div>
-
-                    <!-- Footer -->
-                    <div class="card-footer">
-                        <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
-
-                            <!-- End Col -->
-
-                            <div class="col-sm-auto">
-                                <div class="d-flex justify-content-center justify-content-sm-end">
-                                    <!-- Pagination -->
-                                    <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+                                <div class="modal-body m-3">
+                                    <p><strong>Cake Image:(Damaged)</strong>
+                                    <div class="product-image">
+                                        <img id="modal-product-image" class="w-25 m-4" alt="Product Image">
+                                    </div>
+                                    </p>
+                                    <p><strong>Reason Note</strong> <span id="modal-reason-note"></span></p>
                                 </div>
                             </div>
-                            <!-- End Col -->
                         </div>
-                        <!-- End Row -->
                     </div>
-                    <!-- End Footer -->
                 </div>
-                <!-- End Card -->
+            </div>
+
+            <!-- Footer -->
+            <div class="card-footer">
+                <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
+
+                    <!-- End Col -->
+
+                    <div class="col-sm-auto">
+                        <div class="d-flex justify-content-center justify-content-sm-end">
+                            <!-- Pagination -->
+                            <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+                        </div>
+                    </div>
+                    <!-- End Col -->
+                </div>
+                <!-- End Row -->
+            </div>
+            <!-- End Footer -->
+            </div>
+            <!-- End Card -->
             </div>
             <!-- End Content -->
 
@@ -2615,60 +2655,106 @@
 
         <div id="notification-container"></div>
 
-     
+
 
         <!-- -----------changing the order status--------- -->
         <script>
             document.querySelectorAll('.statusLabel').forEach(function (select) {
-                    select.addEventListener('change', function () {
-                var selectedStatus = this.value;
-                var productId = this.dataset.productId;
-                console.log(selectedStatus);
-                console.log(productId);
+                select.addEventListener('change', function () {
+                    var selectedStatus = this.value;
+                    var productId = this.dataset.productId;
+                    var orderId = $(this).data('order-id');
 
-                fetch('/admin/orders/changeStatus', {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ productId: productId, status: selectedStatus }),
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                        if(data.success){
-                            showNotification(data.message, true);
-                        }else{
-                            showNotification(data.message, false);
-                        }
-                        
+
+                    fetch('/admin/orders/changeStatus', {
+                        method: 'PATCH',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ productId: productId, status: selectedStatus, orderId: orderId }),
                     })
-                    .catch(error => {
-                        console.error('Error:', error);
-                    });
-                    });
+                        .then(response => response.json())
+                        .then(data => {
+                           
+                            if (data.success) {
+                                showNotification(data.message, true);
+                            } else {
+                                showNotification(data.message, false);
+                            }
+
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                        });
+                });
             });
 
             // <!------------showing notification------------->
-                function showNotification(message, success = true) {
-                    console.log("vann");
-                    const notificationContainer = document.getElementById('notification-container');
-                    notificationContainer.innerHTML = message;
+            function showNotification(message, success = true) {
+                const notificationContainer = document.getElementById('notification-container');
+                notificationContainer.innerHTML = message;
 
-                    if (success) {
-                        notificationContainer.style.color = 'green';
-                    } else {
-                        notificationContainer.style.color = 'red';
-                    }
-
-                    notificationContainer.style.display = 'block';
-
-                    setTimeout(() => {
-                        notificationContainer.style.display = 'none';
-                    }, 3000);
+                if (success) {
+                    notificationContainer.style.color = 'green';
+                } else {
+                    notificationContainer.style.color = 'red';
                 }
+
+                notificationContainer.style.display = 'block';
+
+                setTimeout(() => {
+                    notificationContainer.style.display = 'none';
+                }, 3000);
+            }
         </script>
 
-        
+        <!-- for refundRequests showing details in modal -->
+        <script>
+            $(document).ready(function () {
+                $('.viewDetailsbtn').on('click', function () {
+                    const cakeImage = $(this).data('cake-image');
+                    const reasonNote = $(this).data('reason-note');
+                    console.log("cake", cakeImage);
+                    console.log("note", reasonNote);
+
+                    $('#modal-product-image').attr('src', `/assets/returnReasonImages/${cakeImage}`);
+                    $('#modal-reason-note').text(reasonNote);
+
+                });
+            });
+
+        </script>
+
+        <!-- Refund request Actions -->
+        <script>
+            function requestAction(orderId, productId, action) {
+                fetch('/admin/orders/requestAction', {
+                    method: 'PUT',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ productId, orderId, action })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        if (data.success) {
+                                showNotification("Request accepted", true);
+                                setTimeout(() => {
+                                    location.reload();
+                                }, 1000);
+                             
+
+                            } else {
+                                showNotification("Request declined", false);
+                            }
+                    })
+            }
+
+        </script>
+
+
+
+
 
         <%-include('../layouts/admin/footer')-%>
