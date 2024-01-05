@@ -223,18 +223,39 @@
                                                                     </td>
                                                                     <td id="status">
                                                                         <% if(product.status=="Placed" ){ %>
-                                                                            <p class="rounded-pill" id="placed"><%= product.status %></p>
-                                                                        <% }else if(product.status=="On the way" ){ %>
-                                                                                <p class="rounded-pill" id="onTheWay"> <%= product.status %></p>
-                                                                        <% }else if(product.status=="Refunded"){ %>
-                                                                                 <p class="rounded-pill" id="refund"><%= product.status %></p>
-                                                                        <% }else if(product.status=="Cancelled"){ %>
-                                                                                <p class="rounded-pill"id="cancelled"><%= product.status %></p>
-                                                                        <% }else if(product.status=="Delivered"){%>
-                                                                                <p class="rounded-pill" id="delivered"><%= product.status %></p>
-                                                                        <% }else{ %>
-                                                                                <p class="text-primary"><%= product.status %></p>
-                                                                         <% } %>
+                                                                            <p class="rounded-pill" id="placed">
+                                                                                <%= product.status %>
+                                                                            </p>
+                                                                            <% }else if(product.status=="On the way" ){
+                                                                                %>
+                                                                                <p class="rounded-pill" id="onTheWay">
+                                                                                    <%= product.status %>
+                                                                                </p>
+                                                                                <% }else if(product.status=="Refunded"
+                                                                                    ){ %>
+                                                                                    <p class="rounded-pill" id="refund">
+                                                                                        <%= product.status %>
+                                                                                    </p>
+                                                                                    <% }else
+                                                                                        if(product.status=="Cancelled"
+                                                                                        ){ %>
+                                                                                        <p class="rounded-pill"
+                                                                                            id="cancelled">
+                                                                                            <%= product.status %>
+                                                                                        </p>
+                                                                                        <% }else
+                                                                                            if(product.status=="Delivered"
+                                                                                            ){%>
+                                                                                            <p class="rounded-pill"
+                                                                                                id="delivered">
+                                                                                                <%= product.status %>
+                                                                                            </p>
+                                                                                            <% }else{ %>
+                                                                                                <p class="text-primary">
+                                                                                                    <%= product.status
+                                                                                                        %>
+                                                                                                </p>
+                                                                                                <% } %>
                                                                     </td>
                                                                     <td>
                                                                         <span class="text-info">
@@ -256,7 +277,8 @@
                                                                             <% } else if (product.status==="Delivered"
                                                                                 && minutesDifference <=1440) { %>
                                                                                 <!-- 1440 minutes = 24 hours -->
-                                                                                <a class="text-primary" id="requestStatus"
+                                                                                <a class="text-primary"
+                                                                                    id="requestStatus"
                                                                                     style="cursor: pointer;"
                                                                                     onclick="refundRequest('<%= order._id %>','<%= product.productId %>')">Refund
                                                                                     request <i
@@ -286,6 +308,8 @@
                                                         <% } %>
                                                             <!-- End .table table-wishlist -->
                                             </div>
+
+
 
                                             <!-- -------------Modal for Order Details-------------- -->
                                             <div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog"
@@ -451,13 +475,60 @@
                                                 </div>
                                                 <div class="card card-dashboard p-4 shadow">
                                                     <h5 style="color: grey;">Wallet amount : <span class="text-dark">₹
-                                                            00.0</span></h5>
+                                                            <%= user.wallet.balance %>.00</span></h5>
+
+                                                    <!-- <h5><%= user.wallet %></h5> -->
                                                     <a href="" class="" style="color: gray;"><i
                                                             class="fa-regular fa-square-plus  fa-la pr-2"
                                                             style="color: #cc9966;"></i>Add money to wallet</a>
-                                                    <a href="" class="" style="color: gray;"><i
-                                                            class="fa-solid fa-clock-rotate-left fa-la"
-                                                            style="color: #cc9966;"></i> Transaction history</a>
+                                                    <a href="#" class="" style="color: gray;" data-toggle="modal"
+                                                        data-target="#transationDetailsModal" <i
+                                                        class="fa-solid fa-clock-rotate-left fa-la"
+                                                        style="color: #cc9966;"></i> Transaction history
+                                                    </a>
+                                                </div>
+                                            </div>
+
+
+                                            <!-- -------------Modal for Transation  historys-------------- -->
+                                            <div class="modal fade" id="transationDetailsModal" tabindex="-1"
+                                                role="dialog" aria-labelledby="orderDetailsModalLabel"
+                                                aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                    <div class="modal-content" style="background-color: antiquewhite;">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="orderDetailsModalLabel">
+                                                                Transaction history</h5>
+                                                            <button type="button" class="close" data-dismiss="modal"
+                                                                aria-label="Close">
+                                                                <span aria-hidden="true">&times;</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="modal-body m-3" >
+                                                            <div class="container w-100">
+                                                                <% user.wallet.transactionHistory.forEach(transaction => { %>
+                                                                <div class="row">
+                                                                    <div class="col-md-6">
+                                                                        <p class="text-dark"><%= transaction.direction %> to <%= transaction.type %></p>
+                                                                        <p><%= transaction.transactionDate %></p>
+                                                                        <p>Transaction id : <%= transaction._id %></p>
+                                                                    </div>
+                                                                    <div class="col-md-6 d-flex justify-content-end align-items-center" style="text-align: end;">
+                                                                        <h6 class="<%= transaction.direction === 'paid' ? 'text-danger' : 'text-success' %>
+                                                                            <%= transaction.direction === 'Paid' ? 'text-danger' : 'text-success' %>">
+                                                                            <%= transaction.direction === 'Paid' ? '-' : '+' %><%= transaction.amount %>
+                                                                        </h6>
+                                                                    </div>
+                                                                </div>
+                                                                <hr class=" my-2" style="border-top: 1px solid #8e8e8e;">
+                                                                <% }); %>
+                                                            </div>
+
+
+
+
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
 
@@ -947,7 +1018,7 @@
 
         <!-- --------------Refund request------------- -->
         <script>
-            function refundRequest(orderId,productId) {
+            function refundRequest(orderId, productId) {
                 Swal.fire({
                     title: 'Are you sure?',
                     text: 'Do you want to send a refund request for this order?',
@@ -973,7 +1044,7 @@
                             const formData = new FormData(this);
                             formData.append('orderId', orderId);
                             formData.append('productId', productId);
-                            
+
                             $.ajax({
                                 url: '/account/refundRequest',
                                 type: 'POST',
@@ -982,10 +1053,10 @@
                                 processData: false,
                                 success: function (response) {
                                     console.log(response);
-                                    if (response.success) { 
+                                    if (response.success) {
                                         Swal.fire({
                                             title: 'Refund request sent!',
-                                            text:"We'll review your request and get back to you shortly.",
+                                            text: "We'll review your request and get back to you shortly.",
                                             icon: 'success'
                                         }).then(() => {
                                             $('#refundRequestModal').modal('hide');
@@ -1041,7 +1112,7 @@
         </script>
         <!-- -------order cancelation-------- -->
         <script>
-            function cancelOrder(productId,orderId) {
+            function cancelOrder(productId, orderId) {
                 Swal.fire({
                     title: 'Are you sure?',
                     text: 'Do you wan\'t  cancel this order!',
@@ -1058,7 +1129,7 @@
                             headers: {
                                 "Content-Type": "application/json"
                             },
-                            body: JSON.stringify({ productId,orderId })
+                            body: JSON.stringify({ productId, orderId })
                         })
                             .then(response => response.json())
                             .then(data => {

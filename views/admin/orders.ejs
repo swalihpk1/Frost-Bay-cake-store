@@ -417,9 +417,9 @@
                                                 </button>
                                                 <br>
                                                 <a style="cursor: pointer;" class=" mx-1  declineBtn"
-                                                    onclick="requestAction('<%= order._id %>','<%= product.productId %>','decline')">decline</a>
+                                                    onclick="requestAction('<%= order._id %>','<%= product.productId %>','<%= order.totalAmount %>','<%= order.userId %>','decline')">decline</a>
                                                 <a style="cursor: pointer;" class=" mx-1 acceptBtn"
-                                                    onclick="requestAction('<%= order._id %>','<%= product.productId %>','accept')">accept</a>
+                                                    onclick="requestAction('<%= order._id %>','<%= product.productId %>','<%= order.totalAmount %>','<%= order.userId %>','accept')">accept</a>
                                                 <% } else { %>
                                                     <!-- Add some default content or hide buttons -->
                                                     <!-- <button class="btn-btn primary" style="display: none;"></button> -->
@@ -2727,13 +2727,13 @@
 
         <!-- Refund request Actions -->
         <script>
-            function requestAction(orderId, productId, action) {
+            function requestAction(orderId, productId,amount,userId,action) {
                 fetch('/admin/orders/requestAction', {
                     method: 'PUT',
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ productId, orderId, action })
+                    body: JSON.stringify({ productId, orderId, amount, userId ,action })
                 })
                     .then(response => response.json())
                     .then(data => {

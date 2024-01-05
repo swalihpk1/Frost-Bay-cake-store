@@ -211,8 +211,6 @@ const editCategory = async (req, res) => {
     try {
         const editCatName = req.body.editedCategoryName;
         const categoryId = req.body.categoryId;
-        console.log(editCatName);
-        console.log(categoryId);
         await Category.findByIdAndUpdate(categoryId, { categoryName: editCatName }, { new: true });
 
         res.json({ status: "success" })
@@ -394,6 +392,7 @@ const changeStatus = async (req, res) => {
 
 const requestAction = async (req, res) => {
     try {
+
         const productId = req.body.productId;
         const orderId = req.body.orderId;
         console.log(req.body);
@@ -431,6 +430,24 @@ const requestAction = async (req, res) => {
                 },
             },
             { new: true }
+        );
+
+        const newTransactionHistory = {
+            type:"Order refund",
+            amount: req.body.amount,
+            direction: 'Recieved',
+            transactionDate: Date.now()
+        };
+
+        await User.findOneAndUpdate(
+            { _id: req.body.userId },
+            {
+                $push: {
+                    'wallet.transactionHistory': newTransactionHistory
+                },
+                $inc: { 'wallet.balance': req.body.amount }
+            },
+            { upsert: true }
         );
 
         if (deleteRequest) {

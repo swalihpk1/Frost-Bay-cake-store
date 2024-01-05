@@ -124,6 +124,7 @@ const addOrder = async (req, res) => {
             }
 
             const newTransactionHistory = {
+                type:"FROST-BAY",
                 amount: newOrders.totalAmount,
                 direction: 'paid',
                 transactionDate: Date.now()

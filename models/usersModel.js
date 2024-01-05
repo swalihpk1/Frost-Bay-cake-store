@@ -41,9 +41,12 @@ const userSchema = new mongoose.Schema({
     wallet: {
         balance: {
             type: Number,
-            default: 0,
+            default: 0.0,
         },
         transactionHistory: [{
+            type: {
+                type: String,
+            },
             amount: {
                 type: Number,
                 require: true
