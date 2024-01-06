@@ -1,0 +1,322 @@
+<%-include('../layouts/admin/header')-%>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+
+    </head>
+
+    <body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl   footer-offset">
+
+        <script src="/assets/admin/js/hs.theme-appearance.js"></script>
+
+        <script
+            src="/assets/admin/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside-mini-cache.js"></script>
+
+        <!-- ========== HEADER ========== -->
+
+        <header id="header"
+            class="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white">
+            <div class="navbar-nav-wrap">
+
+            </div>
+        </header>
+
+        <aside
+            class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered bg-white  ">
+            <div class="navbar-vertical-container">
+                <div class="navbar-vertical-footer-offset">
+                    <!-- Logo -->
+
+                    <div class="navbar-vertical-content">
+                        <div id="navbarVerticalMenu" class="nav nav-pills nav-vertical card-navbar-nav">
+                            <!-- Collapse -->
+                            <div class="nav-item">
+                                <a class="nav-link" href="/admin/dashboard">
+                                    <i class="bi-house-door nav-icon"></i>
+                                    <span class="nav-link-title">Dashboards</span>
+                                </a>
+                            </div>
+                            <!-- End Collapse -->
+
+                            <span class="dropdown-header mt-4">Actions</span>
+                            <small class="bi-three-dots nav-subtitle-replacer"></small>
+
+                            <!-- Collapse -->
+                            <div class="navbar-nav nav-compact">
+
+                            </div>
+                            <div id="navbarVerticalMenuPagesMenu">
+                                <!-- Collapse -->
+                                <div class="nav-item">
+                                    <a class="nav-link" href="/admin/products">
+                                        <i class="bi-people nav-icon"></i>
+                                        <span class="nav-link-title">Cakes</span>
+                                    </a>
+                                </div>
+
+                                <div class="nav-item">
+                                    <a class="nav-link " href="/admin/users">
+                                        <i class="bi-people nav-icon"></i>
+                                        <span class="nav-link-title">Users</span>
+                                    </a>
+                                </div>
+
+                                <div class="nav-item">
+                                    <a class="nav-link " href="/admin/orders">
+                                        <i class="bi-people nav-icon"></i>
+                                        <span class="nav-link-title">Orders</span>
+                                    </a>
+                                </div>
+
+                                <div class="nav-item">
+                                    <a class="nav-link " href="/admin/category">
+                                        <i class="bi-people nav-icon"></i>
+                                        <span class="nav-link-title">Category</span>
+                                    </a>
+                                </div>
+
+                                <div class="nav-item">
+                                    <a class="nav-link active" href="/admin/coupons">
+                                        <i class="bi-people nav-icon"></i>
+                                        <span class="nav-link-title">Coupons</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </aside>
+
+        <main id="content" role="main" class="main">
+            <!-- Content -->
+            <div class="content container-fluid">
+                <div class="card text-center">
+                    <h2 class="card-header">Coupons</h2>
+
+                    <div class="d-flex justify-content-end">
+
+                        <div class="col-sm-auto m-3">
+                            <a href="#" class="btn btn-success" data-toggle="modal" data-target="#addCouponModal">Add
+                                Coupon</a>
+                        </div>
+                        <!-- End Dropdown -->
+                    </div>
+
+                    <!-- Table -->
+                    <div class="table-responsive datatable-custom position-relative">
+                        <table class="table table-bordered text-center" id="tableReload">
+                            <thead class="thead-light"">
+                                <tr>
+
+                                        <th>Coupon ID</th>
+                                        <th>Discount</th>
+                                        <th>Background image</th>
+                                        <th>Description</th>
+                                        <th>Activation</th>
+                                        <th>Expiry Date</th>
+                                        <th>Min purchase amount</th>
+                                        <th></th>
+
+                                </tr>
+                            </thead>
+        
+                            <tbody>
+                                 <% coupons.forEach(coupon =>{  %>
+                                <tr class=" text-center ">
+                                    <td class=" border-0"><%= coupon.couponId %></td>
+                                <td class="border-0"><%= coupon.diccountPercentage %>%</td>
+                                <td class="border-0 table-column-ps-0 d-flex justify-content-center">
+                                    <a class="d-flex align-items-center" href="ecommerce-product-details.html">
+                                        <div class="flex-shrink-0">
+                                            <img class="avatar avatar-lg"
+                                                src="/assets/couponBgImages/<%= coupon.bgImage %>"
+                                                alt="Image Description">
+                                        </div>
+                                    </a>
+                                </td>
+                                <td class="border-0"><%= coupon.description %></td>
+                                <td class="border-0 d-flex align-items-center">
+                                    <div class="form-check form-switch">
+                                        <input class="form-check-input" type="checkbox" id="stocksCheckbox">
+                                    </div>
+                                </td>
+                                <td class="border-0"><%= coupon.expiryDate %></td>
+                                <td class="border-0">RS: <%= coupon.minPurcahaseAmount %></td>
+                                <td class="border-0">
+                                    <div class="btn-group" role="group">
+                                        <a href="#" class="">
+                                            <i class="bi-pencil-fill me-1"></i> Edit
+                                        </a>
+                                    </div>
+                                </td>
+                                </tr>
+
+                                <% });%>
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- ----------------Add coupon modal----------------- -->
+        <div class="modal fade" id="addCouponModal" tabindex="-1" role="dialog" aria-labelledby="addCouponModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Add
+                            Coupon</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body m-3 p-0">
+
+                        <form method="POST" id="couponForm" class="m-3" enctype="multipart/form-data">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6 p-6 d-flex justify-content-center flex-column"
+                                    style="text-align:-webkit-center; border: 1px solid #ccc;">
+                                    <label for="couponImage" style="cursor: pointer;">
+                                        <img src="/assets/images/icons/imageUploader.png" alt="" class="img-fluid"
+                                            id="imagePreview">
+                                        <p>Upload coupon background image</p>
+                                    </label>
+                                    <input type="file" id="couponImage" name="couponImage" style="display: none;"
+                                        onchange="previewImage()">
+
+                                </div>
+                                <div class="row mt-4 p-0">
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="couponId">
+                                                <h6>Coupon ID</h6>
+                                            </label>
+                                            <input type="text" class="form-control" id="couponId" name="couponId"
+                                                placeholder="Enter Coupon ID">
+                                            <p class="text-danger" id="couponIdError"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="discount">
+                                                <h6>Discount %</h6>
+                                            </label>
+                                            <input type="text" class="form-control" id="discount" name="discount"
+                                                placeholder="Enter Discount %">
+                                            <p class="text-danger" id="discountError"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row p-0">
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="expiryDate">
+                                                <h6>Expiry Date</h6>
+                                            </label>
+                                            <input type="text" class="form-control" id="expiryDate" name="expiryDate"
+                                                placeholder="Enter Expiry Date">
+                                            <p class="text-danger" id="expiryDateError"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="minPurchaseAmount">
+                                                <h6>Min Purchase Amount</h6>
+                                            </label>
+                                            <input type="text" class="form-control" id="minPurchaseAmount"
+                                                name="minPurchaseAmount" placeholder="Enter Min Purchase Amount">
+                                            <p class="text-danger" id="minPurchaseAmountError"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 ">
+                                        <label for="">Description</label>
+                                        <input name="description" class="form-control" type="text">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" onclick="" class="btn btn-primary mt-2">Add couponc </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="notification-container"></div>
+
+        <script>
+
+            $('#addCouponModal form').submit(function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+
+
+                $.ajax({
+                    url: '/admin/addCoupon',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.success) {
+                            $('#tableReload').load('/admin/coupons #tableReload', function () {
+                                $('#couponForm').load('/admin/coupons #couponForm', function () {
+                                    $('#addCouponModal').modal('hide');
+                                });
+                            });
+                            showNotification("Coupon added successfully", true);
+                        } else {
+                            showNotification("Coupon added failed", false);
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error.message);
+                    }
+                });
+
+            });
+
+
+            function previewImage() {
+                var imagePreview = document.getElementById('imagePreview');
+                var couponImageInput = document.getElementById('couponImage');
+
+                if (couponImageInput.files.length > 0) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(couponImageInput.files[0]);
+                }
+            }
+
+            // <!------------showing notification------------->
+            function showNotification(message, success = true) {
+                const notificationContainer = document.getElementById('notification-container');
+                notificationContainer.innerHTML = message;
+
+                if (success) {
+                    notificationContainer.style.color = 'green';
+                } else {
+                    notificationContainer.style.color = 'red';
+                }
+
+                notificationContainer.style.display = 'block';
+
+                setTimeout(() => {
+                    notificationContainer.style.display = 'none';
+                }, 3000);
+            }
+
+        </script>
+
+
+
+
+        <%-include('../layouts/admin/footer')-%>

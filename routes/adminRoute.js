@@ -11,15 +11,10 @@ const authAdmin = require("../middlewares/authAdmin");
 
 // Require admin Controllers
 const adminController = require("../controllers/adminController");
+const couponController = require("../controllers/couponController");
 
 
-// Static path set
-app.use(
-    express.static(path.join(__dirname, '..', 'public', 'assets', 'productImages', 'uploadImages'))
-)
-
-
-// Multer Configuration
+// Multer Configuration for  add productImgaes
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         return cb(null, path.join(__dirname, '..', 'public', 'assets', 'productImages', 'uploadImages'));
@@ -29,6 +24,18 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage, });
+
+/// Multer Configuration for Coupon background
+const couponStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, path.join(__dirname, '..', 'public', 'assets', 'couponBgImages'));
+    },
+    filename: function (req, file, cb) {
+        cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
+const couponBgImageUpload = multer({ storage: couponStorage });
 
 
 // set middlewares
@@ -77,11 +84,15 @@ app.put('/category/listCategory', authAdmin.isLogin, adminController.listCatogor
 app.put('/category/UnListCategory', authAdmin.isLogin, adminController.UnListCatogory);
 
 // --------------------------Users Orders--------------------
-app.get('/orders', authAdmin.isLogin, adminController.userOrders)
-app.patch('/orders/changeStatus', authAdmin.isLogin, adminController.changeStatus)
-app.put('/orders/requestAction', authAdmin.isLogin, adminController.requestAction)
+app.get('/orders', authAdmin.isLogin, adminController.userOrders);
+app.patch('/orders/changeStatus', authAdmin.isLogin, adminController.changeStatus);
+app.put('/orders/requestAction', authAdmin.isLogin, adminController.requestAction);
 
-// ---------------------------Logout-admin-------------------------
+//------------------------------Coupons-----------------------------
+app.get('/coupons', authAdmin.isLogin, couponController.renderCoupon);
+app.post('/addCoupon', authAdmin.isLogin, couponBgImageUpload.single('couponImage'), couponController.couponDetails);
+
+// ---------------------------Logout-admin--------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);
 
 module.exports = app;
