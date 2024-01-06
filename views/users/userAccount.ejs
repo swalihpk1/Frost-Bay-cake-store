@@ -57,6 +57,11 @@
                                                     aria-selected="false">Wallet</a>
                                             </li>
                                             <li class="nav-item">
+                                                <a class="nav-link" id="tab-coupons-link" data-toggle="tab"
+                                                    href="#tab-coupons" role="tab" aria-controls="tab-coupons"
+                                                    aria-selected="false">My coupons</a>
+                                            </li>
+                                            <li class="nav-item">
 
                                                 <a class="nav-link" onclick="confirmLogout()" href="/logout">Sign
                                                     Out</a>
@@ -223,40 +228,32 @@
                                                                     </td>
                                                                     <td id="status">
                                                                         <% if(product.status=="Placed" ){ %>
-                                                                            <p class="rounded-pill" id="placed">
-                                                                                <%= product.status %>
-                                                                            </p>
-                                                                            <% }else if(product.status=="On the way" ){
-                                                                                %>
-                                                                                <p class="rounded-pill" id="onTheWay">
-                                                                                    <%= product.status %>
-                                                                                </p>
-                                                                                <% }else if(product.status=="Refunded"
-                                                                                    ){ %>
-                                                                                    <p class="rounded-pill" id="refund">
-                                                                                        <%= product.status %>
-                                                                                    </p>
-                                                                                    <% }else
-                                                                                        if(product.status=="Cancelled"
-                                                                                        ){ %>
-                                                                                        <p class="rounded-pill"
-                                                                                            id="cancelled">
-                                                                                            <%= product.status %>
-                                                                                        </p>
-                                                                                        <% }else
-                                                                                            if(product.status=="Delivered"
-                                                                                            ){%>
-                                                                                            <p class="rounded-pill"
-                                                                                                id="delivered">
-                                                                                                <%= product.status %>
-                                                                                            </p>
-                                                                                            <% }else{ %>
-                                                                                                <p class="text-primary">
-                                                                                                    <%= product.status
-                                                                                                        %>
-                                                                                                </p>
-                                                                                                <% } %>
-                                                                    </td>
+                                                                          <p class="rounded" id="placed">
+                                                                            <%= product.status %>
+                                                                          </p>
+                                                                        <% } else if(product.status=="On the way" ){ %>
+                                                                          <p class="rounded" id="onTheWay" >
+                                                                            <%= product.status %>
+                                                                          </p>
+                                                                        <% } else if(product.status=="Refunded"){ %>
+                                                                          <p class="rounded" id="refund">
+                                                                            <%= product.status %>
+                                                                          </p>
+                                                                        <% } else if(product.status=="Cancelled"){ %>
+                                                                          <p class="rounded" id="cancelled" >
+                                                                            <%= product.status %>
+                                                                          </p>
+                                                                        <% } else if(product.status=="Delivered"){ %>
+                                                                          <p class="rounded" id="delivered" >
+                                                                            <%= product.status %>
+                                                                          </p>
+                                                                        <% } else { %>
+                                                                          <p class="text-primary">
+                                                                            <%= product.status %>
+                                                                          </p>
+                                                                        <% } %>
+                                                                      </td>
+                                                                      
                                                                     <td>
                                                                         <span class="text-info">
                                                                             On <%= product.stausUpdatedDate %>
@@ -475,7 +472,8 @@
                                                 </div>
                                                 <div class="card card-dashboard p-4 shadow">
                                                     <h5 style="color: grey;">Wallet amount : <span class="text-dark">₹
-                                                            <%= user.wallet.balance %>.00</span></h5>
+                                                            <%= user.wallet.balance %>.00
+                                                        </span></h5>
 
                                                     <!-- <h5><%= user.wallet %></h5> -->
                                                     <a href="" class="" style="color: gray;"><i
@@ -504,126 +502,158 @@
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
-                                                        <div class="modal-body m-3" >
+                                                        <div class="modal-body m-3">
                                                             <div class="container w-100">
-                                                                <% user.wallet.transactionHistory.forEach(transaction => { %>
-                                                                <div class="row">
-                                                                    <div class="col-md-6">
-                                                                        <p class="text-dark"><%= transaction.direction %> to <%= transaction.type %></p>
-                                                                        <p><%= transaction.transactionDate %></p>
-                                                                        <p>Transaction id : <%= transaction._id %></p>
-                                                                    </div>
-                                                                    <div class="col-md-6 d-flex justify-content-end align-items-center" style="text-align: end;">
-                                                                        <h6 class="<%= transaction.direction === 'paid' ? 'text-danger' : 'text-success' %>
+                                                                <% user.wallet.transactionHistory.forEach(transaction=>
+                                                                    { %>
+                                                                    <div class="row">
+                                                                        <div class="col-md-6">
+                                                                            <p class="text-dark">
+                                                                                <%= transaction.direction %> to <%=
+                                                                                        transaction.type %>
+                                                                            </p>
+                                                                            <p>
+                                                                                <%= transaction.transactionDate %>
+                                                                            </p>
+                                                                            <p>Transaction id : <%= transaction._id %>
+                                                                            </p>
+                                                                        </div>
+                                                                        <div class="col-md-6 d-flex justify-content-end align-items-center"
+                                                                            style="text-align: end;">
+                                                                            <h6
+                                                                                class="<%= transaction.direction === 'paid' ? 'text-danger' : 'text-success' %>
                                                                             <%= transaction.direction === 'Paid' ? 'text-danger' : 'text-success' %>">
-                                                                            <%= transaction.direction === 'Paid' ? '-' : '+' %><%= transaction.amount %>
-                                                                        </h6>
+                                                                                <%= transaction.direction==='Paid' ? '-'
+                                                                                    : '+' %>
+                                                                                    <%= transaction.amount %>
+                                                                            </h6>
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                                <hr class=" my-2" style="border-top: 1px solid #8e8e8e;">
-                                                                <% }); %>
+                                                                    <hr class=" my-2"
+                                                                        style="border-top: 1px solid #8e8e8e;">
+                                                                    <% }); %>
                                                             </div>
-
-
-
-
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
 
 
-                                        </div><!-- .End .tab-pane -->
-                                    </div> <!-- col -->
-                                </div><!-- End .row -->
-                            </div><!-- End .container -->
-                        </div><!-- End .dashboard -->
-                    </div><!-- .End .page-content -->
-                </main><!-- End .main -->
+                                            <div class="tab-pane fade" id="tab-coupons" role="tabpanel"
+                                                aria-labelledby="tab-coupons-link">
+                                                <p><u>How to use?</u> : <span class="text-primary">copy the <strong><i>Coupon id</i></strong> and paste in your cart apply coupon field.</span></p>
+                                                <div class="row pl-4">
+                                                    <% coupons.forEach(coupon=>{ %>
+                                                    <div class="col-md-4 mt-3">
+                                                        <div class="card couponCard shadow text-center" style="background-image:url(/assets/couponBgImages/<%=coupon.bgImage%>);">
+                                                            <div class="card-body background p-0">
+                                                                <div class="white-body bg-light p-4"
+                                                                    style="opacity: 0.8; border: 5px double #c96; box-sizing: border-box; padding: 10px; max-height: 28rem;">
+                                                                    <h6>Discount upto</h6>
+                                                                    <h1><%=coupon.diccountPercentage%>%</h1>
+                                                                    <h6>-off-</h6>
+                                                                    <p><%=coupon.description%></p>
+                                                                    <h5><%=coupon.couponId%></h5>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <%  }); %>
 
-                <footer class="footer">
-                    <div class="footer-middle">
-                        <div class="container">m
-                            <div class="row">
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget widget-about">
-                                        <img src="/assets/images/logo.png" class="footer-logo" alt="Footer Logo"
-                                            width="105" height="25">
-                                        <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu
-                                            vulputate
-                                            magna eros eu erat. </p>
-
-                                        <div class="social-icons">
-                                            <a href="#" class="social-icon" target="_blank" title="Facebook"><i
-                                                    class="icon-facebook-f"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Twitter"><i
-                                                    class="icon-twitter"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Instagram"><i
-                                                    class="icon-instagram"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Youtube"><i
-                                                    class="icon-youtube"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
-                                                    class="icon-pinterest"></i></a>
-                                        </div><!-- End .soial-icons -->
-                                    </div><!-- End .widget about-widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget">
-                                        <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
-
-                                        <ul class="widget-list">
-                                            <li><a href="about.html">About Molla</a></li>
-                                            <li><a href="#">How to shop on Molla</a></li>
-                                            <li><a href="#">FAQ</a></li>
-                                            <li><a href="contact.html">Contact us</a></li>
-                                            <li><a href="login.html">Log in</a></li>
-                                        </ul><!-- End .widget-list -->
-                                    </div><!-- End .widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget">
-                                        <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
-
-                                        <ul class="widget-list">
-                                            <li><a href="#">Payment Methods</a></li>
-                                            <li><a href="#">Money-back guarantee!</a></li>
-                                            <li><a href="#">Returns</a></li>
-                                            <li><a href="#">Shipping</a></li>
-                                            <li><a href="#">Terms and conditions</a></li>
-                                            <li><a href="#">Privacy Policy</a></li>
-                                        </ul><!-- End .widget-list -->
-                                    </div><!-- End .widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget">
-                                        <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
-
-                                        <ul class="widget-list">
-                                            <li><a href="#">Sign In</a></li>
-                                            <li><a href="cart.html">View Cart</a></li>
-                                            <li><a href="#">My Wishlist</a></li>
-                                            <li><a href="#">Track My Order</a></li>
-                                            <li><a href="#">Help</a></li>
-                                        </ul><!-- End .widget-list -->
-                                    </div><!-- End .widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><!-- .End .tab-pane -->
+                                </div> <!-- col -->
                             </div><!-- End .row -->
                         </div><!-- End .container -->
-                    </div><!-- End .footer-middle -->
+                    </div><!-- End .dashboard -->
+        </div><!-- .End .page-content -->
+        </main><!-- End .main -->
 
-                    <div class="footer-bottom">
-                        <div class="container">
-                            <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
-                            <!-- End .footer-copyright -->
-                            <figure class="footer-payments">
-                                <img src="/assets/images/payments.png" alt="Payment methods" width="272" height="20">
-                            </figure><!-- End .footer-payments -->
-                        </div><!-- End .container -->
-                    </div><!-- End .footer-bottom -->
-                </footer><!-- End .footer -->
+        <footer class="footer">
+            <div class="footer-middle">
+                <div class="container">m
+                    <div class="row">
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget widget-about">
+                                <img src="/assets/images/logo.png" class="footer-logo" alt="Footer Logo" width="105"
+                                    height="25">
+                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu
+                                    vulputate
+                                    magna eros eu erat. </p>
+
+                                <div class="social-icons">
+                                    <a href="#" class="social-icon" target="_blank" title="Facebook"><i
+                                            class="icon-facebook-f"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Twitter"><i
+                                            class="icon-twitter"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Instagram"><i
+                                            class="icon-instagram"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Youtube"><i
+                                            class="icon-youtube"></i></a>
+                                    <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
+                                            class="icon-pinterest"></i></a>
+                                </div><!-- End .soial-icons -->
+                            </div><!-- End .widget about-widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
+
+                                <ul class="widget-list">
+                                    <li><a href="about.html">About Molla</a></li>
+                                    <li><a href="#">How to shop on Molla</a></li>
+                                    <li><a href="#">FAQ</a></li>
+                                    <li><a href="contact.html">Contact us</a></li>
+                                    <li><a href="login.html">Log in</a></li>
+                                </ul><!-- End .widget-list -->
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
+
+                                <ul class="widget-list">
+                                    <li><a href="#">Payment Methods</a></li>
+                                    <li><a href="#">Money-back guarantee!</a></li>
+                                    <li><a href="#">Returns</a></li>
+                                    <li><a href="#">Shipping</a></li>
+                                    <li><a href="#">Terms and conditions</a></li>
+                                    <li><a href="#">Privacy Policy</a></li>
+                                </ul><!-- End .widget-list -->
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
+
+                        <div class="col-sm-6 col-lg-3">
+                            <div class="widget">
+                                <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
+
+                                <ul class="widget-list">
+                                    <li><a href="#">Sign In</a></li>
+                                    <li><a href="cart.html">View Cart</a></li>
+                                    <li><a href="#">My Wishlist</a></li>
+                                    <li><a href="#">Track My Order</a></li>
+                                    <li><a href="#">Help</a></li>
+                                </ul><!-- End .widget-list -->
+                            </div><!-- End .widget -->
+                        </div><!-- End .col-sm-6 col-lg-3 -->
+                    </div><!-- End .row -->
+                </div><!-- End .container -->
+            </div><!-- End .footer-middle -->
+
+            <div class="footer-bottom">
+                <div class="container">
+                    <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
+                    <!-- End .footer-copyright -->
+                    <figure class="footer-payments">
+                        <img src="/assets/images/payments.png" alt="Payment methods" width="272" height="20">
+                    </figure><!-- End .footer-payments -->
+                </div><!-- End .container -->
+            </div><!-- End .footer-bottom -->
+        </footer><!-- End .footer -->
         </div><!-- End .page-wrapper -->
         <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 

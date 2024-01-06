@@ -1,4 +1,5 @@
 {
     "editor.minimap.maxColumn": 120,
-    "editor.formatOnPaste": false
+    "editor.formatOnPaste": false,
+    "files.autoSave": "onWindowChange"
 }

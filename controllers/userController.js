@@ -12,7 +12,9 @@ const path = require("path");
 const Sharp = require("sharp");
 const Address = require("../models/addressModel")
 const Orders = require("../models/ordersModel")
+const Coupons = require("../models/couponModel")
 const { findByIdAndUpdate } = require("../models/productModel");
+
 
 
 
@@ -218,13 +220,13 @@ const home = async (req, res) => {
 //  ----------Render-User-Account-----
 const userAccount = async (req, res) => {
     try {
-       
+        const coupons =  await Coupons.find({})
         const orders = await Orders.find({}).sort({ createdAt: -1 });
         const userId = req.session.user_id;
         const user = await User.findOne({ _id: userId })
         const address = await Address.find({ user: userId })
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('userAccount', { user: userDetails, address: address,orders:orders });
+        res.render('userAccount', { user: userDetails,address,orders,coupons});
     } catch (error) {
         console.log(error.message);
     }

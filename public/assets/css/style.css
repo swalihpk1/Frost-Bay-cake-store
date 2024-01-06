@@ -164,36 +164,46 @@ border-style:double;
     content: '⌃';
 }
 #placed{
-    background-color: #ff7d006e;
         color: #ff5700e0;
         display: inline;
-    padding: 1rem;
+    padding: 5px;
+    border: 1px solid #ffb271;
 
 }
 #onTheWay{
-   background-color: #00c9ff6e;
+
         color: #0092ff;
         display: inline;
-    padding: 1rem;
+    padding: 5px;
+    border: 1px solid #b1ccff;
 }
 #delivered{
-    background-color: #25ff007a;
         color: #49b328;
         display: inline;
-    padding: 1rem;
+    padding: 5px;
+    border: 1px solid #60ff21;
 }
 #cancelled{
-    background-color: #ff000047;
+
         color: #ff0000;
         display: inline;
-    padding: 1rem;
+    padding: 5px;
+    border: 1px solid #ff9595;
 }
 #refund{
-    background-color: #c9996675;
         color: #b56d26;
         display: inline;
-    padding: 1rem;
+    padding: 5px;
+     border: 1px solid #cc99669e;
 }
+.couponCard{
+    width:  22rem; 
+    /* filter: brightness(0.8); */
+    border-radius: 1.25rem;
+    padding: 2rem;
+  }
+    
+
 
 
 
