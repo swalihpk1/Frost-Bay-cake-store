@@ -92,6 +92,7 @@ app.put('/orders/requestAction', authAdmin.isLogin, adminController.requestActio
 app.get('/coupons', authAdmin.isLogin, couponController.renderCoupon);
 app.post('/addCoupon', authAdmin.isLogin, couponBgImageUpload.single('couponImage'), couponController.addCoupon);
 app.patch('/editCoupon', authAdmin.isLogin, couponBgImageUpload.single('couponImage'), couponController.editCoupon);
+app.patch('/couponActivation', authAdmin.isLogin, couponController.activation );
 
 // ---------------------------Logout-admin--------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);

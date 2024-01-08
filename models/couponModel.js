@@ -24,6 +24,10 @@ const  couponSchema = new mongoose.Schema({
     minPurcahaseAmount: {
         type: Number,
         required:true
+    },
+    isActive: {
+        type: Boolean,
+        default:true
     }
 }); 
 

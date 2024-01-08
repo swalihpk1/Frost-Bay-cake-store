@@ -144,7 +144,10 @@
                                     </td>
                                     <td class="border-0 d-flex align-items-center">
                                         <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox" id="stocksCheckbox">
+                                            <input class="form-check-input" type="checkbox"
+                                                onclick="showConfirmationModal('<%= coupon._id %>')"
+                                                id="CouponCheckbox<%= coupon._id %>" <% if(coupon.isActive==true) {
+                                                %>checked<% } %>>
                                         </div>
                                     </td>
                                     <td class="border-0">
@@ -342,8 +345,69 @@
                 </div>
             </div>
         </div>
+        <!--Confirmation Modal -->
+        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure you want to hide ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" onclick="confirmHideCoupon()">Hide</button>
+                    </div>
+                </div>
+            </div>x
+        </div>
 
         <div id="notification-container"></div>
+
+        <!-- Hide and show coupons -->
+        <script>
+            function showConfirmationModal(couponId) {
+                $('#confirmationModal').data('couponId', couponId);
+                $('#confirmationModal').modal('show');
+            }
+
+            function confirmHideCoupon() {
+                const couponId = $('#confirmationModal').data('couponId');
+
+                if (document.getElementById(`CouponCheckbox${couponId}`).checked) {
+                    console.log("show");
+                    toggleCoupon(couponId, 'show');
+                } else {
+                    console.log("hide");
+                    toggleCoupon(couponId, 'hide');
+                }
+
+                $('#confirmationModal').modal('hide');
+            }
+
+            function toggleCoupon(couponId, action) {
+                fetch(`/admin/couponActivation`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ couponId, action }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data  );
+                        if (data.success) {
+                            showNotification( data.message, true);
+                        } else {
+                            showNotification(data.message, false);
+                        }
+                    })
+                    .catch(error => console.error('Error toggling coupon:', error));
+            }
+        </script>
 
         <!-- Send data to Edit coupon modal  -->
         <script>
@@ -355,28 +419,26 @@
                 form.querySelector('#expiryDate').value = expiryDate;
                 form.querySelector('#minPurchaseAmount').value = minPurchaseAmount;
                 form.querySelector('#coupon_id').value = coupon_id;
-        
-                // Set the src attribute of the img tag to display the selected bgImage
+
                 var imagePreview = form.querySelector('#imagePreview');
                 imagePreview.src = "/assets/couponBgImages/" + bgImage;
-        
+
                 // Show the modal
                 $('#editCouponModal').modal('show');
-        
+
                 // ------------for Edit coupon-----------
                 document.getElementById('EditCouponForm').addEventListener('submit', async function (event) {
                     event.preventDefault();
-        
+
                     const form = event.target;
                     const formData = new FormData(form);
-        
+
                     const response = await fetch('/admin/editCoupon', {
                         method: "PATCH",
                         body: formData,
                     });
-        
+
                     const result = await response.json();
-                    console.log(result);
                     if (result.success) {
                         $('#tableReload').load('/admin/coupons #tableReload', function () {
                             $('#couponForm').load('/admin/coupons #couponForm', function () {
@@ -389,11 +451,11 @@
                     }
                 });  // <-- Place the closing brace here
             }
-        
+
             function previewEditImage(inputId, previewId) {
                 var imagePreview = document.getElementById(previewId);
                 var couponImageInput = document.getElementById(inputId);
-        
+
                 if (couponImageInput.files.length > 0) {
                     var reader = new FileReader();
                     reader.onload = function (e) {
@@ -413,7 +475,7 @@
         </script>
 
 
-         <!-- ADD COUPON MODAL AND SEND REQUEST -->
+        <!-- ADD COUPON MODAL AND SEND REQUEST -->
         <script>
             $('#addCouponModal form').submit(function (event) {
                 event.preventDefault();
