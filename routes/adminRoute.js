@@ -90,7 +90,8 @@ app.put('/orders/requestAction', authAdmin.isLogin, adminController.requestActio
 
 //------------------------------Coupons-----------------------------
 app.get('/coupons', authAdmin.isLogin, couponController.renderCoupon);
-app.post('/addCoupon', authAdmin.isLogin, couponBgImageUpload.single('couponImage'), couponController.couponDetails);
+app.post('/addCoupon', authAdmin.isLogin, couponBgImageUpload.single('couponImage'), couponController.addCoupon);
+app.patch('/editCoupon', authAdmin.isLogin, couponBgImageUpload.single('couponImage'), couponController.editCoupon);
 
 // ---------------------------Logout-admin--------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);

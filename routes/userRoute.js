@@ -41,12 +41,8 @@ const refundImageStorage = multer.diskStorage({
   
 const refundImageUpload = multer({ storage: refundImageStorage });
 
-
-
-
 // Require custom middlewares
 const authUser = require("../middlewares/AuthUser");
-
 
 // Set view engine
 app.set('view engine','ejs');

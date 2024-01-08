@@ -5,7 +5,7 @@ const  couponSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    diccountPercentage: {
+    discountPercentage: {
         type: Number,
         required:true
     },

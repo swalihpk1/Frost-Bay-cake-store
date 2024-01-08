@@ -124,36 +124,46 @@
                             <tbody>
                                  <% coupons.forEach(coupon =>{  %>
                                 <tr class=" text-center ">
-                                    <td class=" border-0"><%= coupon.couponId %></td>
-                                <td class="border-0"><%= coupon.diccountPercentage %>%</td>
-                                <td class="border-0 table-column-ps-0 d-flex justify-content-center">
-                                    <a class="d-flex align-items-center" href="ecommerce-product-details.html">
-                                        <div class="flex-shrink-0">
-                                            <img class="avatar avatar-lg"
-                                                src="/assets/couponBgImages/<%= coupon.bgImage %>"
-                                                alt="Image Description">
-                                        </div>
-                                    </a>
-                                </td>
-                                <td class="border-0"><%= coupon.description %></td>
-                                <td class="border-0 d-flex align-items-center">
-                                    <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="stocksCheckbox">
-                                    </div>
-                                </td>
-                                <td class="border-0"><%= coupon.expiryDate %></td>
-                                <td class="border-0">RS: <%= coupon.minPurcahaseAmount %></td>
-                                <td class="border-0">
-                                    <div class="btn-group" role="group">
-                                        <a href="#" class="">
-                                            <i class="bi-pencil-fill me-1"></i> Edit
+                                    <td class=" border-0">
+                                <%= coupon.couponId %>
+                                    </td>
+                                    <td class="border-0">
+                                        <%= coupon.discountPercentage %>%
+                                    </td>
+                                    <td class="border-0 table-column-ps-0 d-flex justify-content-center">
+                                        <a class="d-flex align-items-center" href="ecommerce-product-details.html">
+                                            <div class="flex-shrink-0">
+                                                <img class="avatar avatar-lg"
+                                                    src="/assets/couponBgImages/<%= coupon.bgImage %>"
+                                                    alt="Image Description">
+                                            </div>
                                         </a>
-                                    </div>
-                                </td>
-                                </tr>
+                                    </td>
+                                    <td class="border-0">
+                                        <%= coupon.description %>
+                                    </td>
+                                    <td class="border-0 d-flex align-items-center">
+                                        <div class="form-check form-switch">
+                                            <input class="form-check-input" type="checkbox" id="stocksCheckbox">
+                                        </div>
+                                    </td>
+                                    <td class="border-0">
+                                        <%= coupon.expiryDate %>
+                                    </td>
+                                    <td class="border-0">RS: <%= coupon.minPurcahaseAmount %>
+                                    </td>
+                                    <td class="border-0">
+                                        <div class="btn-group" role="group">
+                                            <a href="#" class=""
+                                                onclick="showEditCouponModal('<%= coupon.couponId %>','<%= coupon.description %>','<%= coupon.discountPercentage %>','<%= coupon.bgImage %>', '<%= coupon.expiryDate %>','<%= coupon.minPurcahaseAmount %>','<%= coupon._id %>')">
+                                                <i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i> Edit
+                                            </a>
+                                        </div>
+                                    </td>
+                                    </tr>
 
-                                <% });%>
-                                </tbody>
+                                    <% });%>
+                                        </tbody>
                         </table>
                     </div>
                 </div>
@@ -194,7 +204,7 @@
                                                 <h6>Coupon ID</h6>
                                             </label>
                                             <input type="text" class="form-control" id="couponId" name="couponId"
-                                                placeholder="Enter Coupon ID">
+                                                placeholder="Enter Coupon ID" maxlength="10">
                                             <p class="text-danger" id="couponIdError"></p>
                                         </div>
                                     </div>
@@ -203,7 +213,7 @@
                                             <label for="discount">
                                                 <h6>Discount %</h6>
                                             </label>
-                                            <input type="text" class="form-control" id="discount" name="discount"
+                                            <input type="number" class="form-control" id="discount" name="discount"
                                                 placeholder="Enter Discount %">
                                             <p class="text-danger" id="discountError"></p>
                                         </div>
@@ -218,7 +228,6 @@
                                             </label>
                                             <input type="date" class="form-control" id="expiryDate" name="expiryDate"
                                                 placeholder="Enter Expiry Date">
-                                            <p class="text-danger" id="expiryDateError"></p>
                                         </div>
                                     </div>
                                     <div class="col-md-6 ">
@@ -226,18 +235,105 @@
                                             <label for="minPurchaseAmount">
                                                 <h6>Min Purchase Amount</h6>
                                             </label>
-                                            <input type="text" class="form-control" id="minPurchaseAmount"
+                                            <input type="number" class="form-control" id="minPurchaseAmount"
                                                 name="minPurchaseAmount" placeholder="Enter Min Purchase Amount">
                                             <p class="text-danger" id="minPurchaseAmountError"></p>
                                         </div>
                                     </div>
                                     <div class="col-md-12 ">
                                         <label for="">Description</label>
-                                        <input name="description" class="form-control" type="text">
+                                        <input name="description" class="form-control" type="text"
+                                            placeholder="only contain 45 characters">
                                     </div>
                                 </div>
                                 <div class="col-md-12">
-                                    <button type="submit" onclick="" class="btn btn-primary mt-2">Add couponc </button>
+                                    <button type="submit" onclick="" class="btn btn-primary mt-2">Add coupon </button>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ----------------Edit coupon modal----------------- -->
+        <div class="modal fade" id="editCouponModal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Edit
+                            Coupon</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body m-3 p-0">
+
+                        <form id="EditCouponForm" class="m-3" enctype="multipart/form-data">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6 p-6 d-flex justify-content-center flex-column"
+                                    style="text-align:-webkit-center; border: 1px solid #ccc;">
+                                    <label for="couponImage" style="cursor: pointer;">
+                                        <img alt="Selected Image" class="img-fluid" id="imagePreview">
+                                        <p>Upload coupon background image</p>
+                                    </label>
+                                    <input type="file" id="couponImage" name="couponImage"
+                                        onchange="previewEditImage('couponImage', 'imagePreview')">
+                                </div>
+
+                                <div class="row mt-4 p-0">
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="couponId">
+                                                <h6>Coupon ID</h6>
+                                            </label>
+                                            <input type="text" class="form-control" id="couponId" name="couponId"
+                                                placeholder="Enter Coupon ID" maxlength="10">
+                                            <p class="text-danger" id="couponIdError"></p>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="discount">
+                                                <h6>Discount %</h6>
+                                            </label>
+                                            <input type="number" class="form-control" id="discount" name="discount"
+                                                placeholder="Enter Discount %">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row p-0">
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="expiryDate">
+                                                <h6>Expiry Date</h6>
+                                            </label>
+                                            <input type="date" class="form-control" id="expiryDate" name="expiryDate"
+                                                placeholder="Enter Expiry Date">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6 ">
+                                        <div class="form-group">
+                                            <label for="minPurchaseAmount">
+                                                <h6>Min Purchase Amount</h6>
+                                            </label>
+                                            <input type="number" class="form-control" id="minPurchaseAmount"
+                                                name="minPurchaseAmount" placeholder="Enter Min Purchase Amount">
+                                        </div>
+                                    </div>
+
+                                    <input type="text" class="d-none" id="coupon_id" name="coupon_id">
+
+                                    <div class="col-md-12 ">
+                                        <label for="">Description</label>
+                                        <input id="description" name="description" class="form-control" type="text"
+                                            placeholder="only contain 45 characters">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <button type="submit" onclick="" class="btn btn-primary mt-2">Save changes</button>
                                 </div>
                             </div>
                         </form>
@@ -249,13 +345,80 @@
 
         <div id="notification-container"></div>
 
+        <!-- Send data to Edit coupon modal  -->
         <script>
+            function showEditCouponModal(couponId, description, discountPercentage, bgImage, expiryDate, minPurchaseAmount, coupon_id) {
+                var form = document.getElementById('EditCouponForm');
+                form.querySelector('#couponId').value = couponId;
+                form.querySelector('#description').value = description;
+                form.querySelector('#discount').value = discountPercentage;
+                form.querySelector('#expiryDate').value = expiryDate;
+                form.querySelector('#minPurchaseAmount').value = minPurchaseAmount;
+                form.querySelector('#coupon_id').value = coupon_id;
+        
+                // Set the src attribute of the img tag to display the selected bgImage
+                var imagePreview = form.querySelector('#imagePreview');
+                imagePreview.src = "/assets/couponBgImages/" + bgImage;
+        
+                // Show the modal
+                $('#editCouponModal').modal('show');
+        
+                // ------------for Edit coupon-----------
+                document.getElementById('EditCouponForm').addEventListener('submit', async function (event) {
+                    event.preventDefault();
+        
+                    const form = event.target;
+                    const formData = new FormData(form);
+        
+                    const response = await fetch('/admin/editCoupon', {
+                        method: "PATCH",
+                        body: formData,
+                    });
+        
+                    const result = await response.json();
+                    console.log(result);
+                    if (result.success) {
+                        $('#tableReload').load('/admin/coupons #tableReload', function () {
+                            $('#couponForm').load('/admin/coupons #couponForm', function () {
+                                $('#editCouponModal').modal('hide');
+                            });
+                        });
+                        showNotification("Coupon edited successfully", true);
+                    } else {
+                        showNotification("Coupon edited failed", false);
+                    }
+                });  // <-- Place the closing brace here
+            }
+        
+            function previewEditImage(inputId, previewId) {
+                var imagePreview = document.getElementById(previewId);
+                var couponImageInput = document.getElementById(inputId);
+        
+                if (couponImageInput.files.length > 0) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        imagePreview.src = e.target.result;
+                    };
+                    reader.readAsDataURL(couponImageInput.files[0]);
+                }
+            }
+        </script>
 
+        <!-- Disable previous days in calendar -->
+        <script>
+            window.onload = function () {
+                var today = new Date().toISOString().split('T')[0];
+                document.getElementById('expiryDate').setAttribute('min', today);
+            };
+        </script>
+
+
+         <!-- ADD COUPON MODAL AND SEND REQUEST -->
+        <script>
             $('#addCouponModal form').submit(function (event) {
                 event.preventDefault();
 
                 const formData = new FormData(this);
-
 
                 $.ajax({
                     url: '/admin/addCoupon',
@@ -282,7 +445,7 @@
 
             });
 
-
+            // Image added to coupon modal
             function previewImage() {
                 var imagePreview = document.getElementById('imagePreview');
                 var couponImageInput = document.getElementById('couponImage');
@@ -296,7 +459,7 @@
                 }
             }
 
-            // <!------------showing notification------------->
+            // showing notification
             function showNotification(message, success = true) {
                 const notificationContainer = document.getElementById('notification-container');
                 notificationContainer.innerHTML = message;
