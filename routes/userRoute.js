@@ -10,7 +10,8 @@ const app = express();
 const userController = require("../controllers/userController");
 const productController = require("../controllers/productController");
 const cartControllers = require("../controllers/cartController");
-const orderController = require("../controllers/orderController")
+const orderController = require("../controllers/orderController");
+const couponController = require("../controllers/couponController");
 
 // Static path set
 app.use(
@@ -93,6 +94,9 @@ app.post('/account/editUser',upload.single('userImage'),authUser.isLogin,userCon
 app.post('/account/addAddress',authUser.isLogin,userController.addAddress);
 app.delete('/account/deleteAddress',authUser.isLogin,userController.deleteAddress);
 app.patch('/account/editAddress', authUser.isLogin, userController.editAddress);
+
+// ----------------------------------COUPONS-----------------------------------
+app.post('/checkout/verifyCoupon',authUser.isLogin,couponController.verifyCoupon)
 
 // -----------------------------------Orders-----------------------------------------
 app.delete('/account/cancelOrderItem', authUser.isLogin, orderController.cancelOrder);

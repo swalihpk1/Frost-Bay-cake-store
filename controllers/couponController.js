@@ -1,5 +1,6 @@
 
 const Coupon = require('../models/couponModel');
+const { findOne } = require('../models/usersModel');
 
 // ----------------Coupon(Admin side)---------------
 const renderCoupon = async (req, res) => {
@@ -76,8 +77,6 @@ const activation = async (req, res) => {
     try {
         const { couponId, action } = req.body;
 
-        
-
         if (action === 'show') {
           var activate = await Coupon.findByIdAndUpdate(couponId, { isActive: true }, { new: true });
         } else if (action === 'hide') {
@@ -99,10 +98,29 @@ const activation = async (req, res) => {
     }
 }
 
+// ------------------------ Coupon( User-side )----------------------
+const verifyCoupon = async (req, res) => {
+    try {
+        const couponCode = req.body.couponCode;
+
+        const coupon = await Coupon.findOne({ couponId: couponCode });
+
+        if (coupon) {
+            res.json({ coupon, message : "Coupon is valid"});
+        } else {
+            res.json({ message : 'Coupon not found' });
+        }
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
 
 module.exports = {
     renderCoupon,
     addCoupon,
     editCoupon,
-    activation
+    activation,
+    verifyCoupon
 }

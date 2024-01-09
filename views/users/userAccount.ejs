@@ -366,6 +366,11 @@
                                                                 with no fuss. Just share a pic & reason, and your next
                                                                 slice
                                                                 comes with a sweet discount. Cheers!</p>
+
+                                                                <p>NB : <span class="text-danger">
+                                                                    If you need refund for this order, we will deduct the offer amount 10%
+                                                                </span>
+                                                                </p>
                                                             <form action="" class="m-3">
                                                                 <label for="">Cake image(damage) <span
                                                                         class="text-danger">*</span></label>
@@ -1051,7 +1056,7 @@
             function refundRequest(orderId, productId) {
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: 'Do you want to send a refund request for this order?',
+                    html: 'Do you want to send a refund request for this order? <br><br><span style="color: red;">NB: If you got the coupon, it will be deducted</span>',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',
@@ -1145,7 +1150,7 @@
             function cancelOrder(productId, orderId) {
                 Swal.fire({
                     title: 'Are you sure?',
-                    text: 'Do you wan\'t  cancel this order!',
+                    html: 'Do you want to cancel this order!<br><br><span style="color: red;">NB: If you got the coupon, it will be deducted</span>',
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#d33',

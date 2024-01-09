@@ -392,11 +392,9 @@ const changeStatus = async (req, res) => {
 
 const requestAction = async (req, res) => {
     try {
-
+        console.log(req.body);
         const productId = req.body.productId;
         const orderId = req.body.orderId;
-        console.log(req.body);
-
         const deleteRequest = await Refundreqests.findOneAndDelete({
             orderId: orderId,
             productId: productId
@@ -416,7 +414,18 @@ const requestAction = async (req, res) => {
                 },
                 { new: true }
             );
+            return
         }
+
+        let requestAmount = parseFloat(req.body.requestAmount);
+
+        const order = await Orders.findById(orderId);
+        if (order.couponOff) {
+             var minPurcahaseAmount = order.couponMinPurchase
+             var couponOff = order.couponOff
+             var discoutAmount = requestAmount - (requestAmount / couponOff)
+        }
+
 
         await Orders.findOneAndUpdate(
             {
@@ -433,8 +442,8 @@ const requestAction = async (req, res) => {
         );
 
         const newTransactionHistory = {
-            type:"Order refund",
-            amount: req.body.amount,
+            type: "Order refund",
+            amount: discoutAmount ? discoutAmount : requestAmount,
             direction: 'Recieved',
             transactionDate: Date.now()
         };
@@ -445,18 +454,17 @@ const requestAction = async (req, res) => {
                 $push: {
                     'wallet.transactionHistory': newTransactionHistory
                 },
-                $inc: { 'wallet.balance': req.body.amount }
+                $inc: { 'wallet.balance': newTransactionHistory.amount}
             },
             { upsert: true }
         );
 
         if (deleteRequest) {
-         res.json({ success: true })
+            res.json({ success: true })
         }
-         res.json({ success: false })
+        res.json({ success: false })
 
     } catch (error) {
-
         console.log(error.message);
     }
 }

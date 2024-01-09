@@ -416,6 +416,7 @@
                                         </td>
                                         <td class="p-0">
                                             <% if (refundRequest) { %>
+
                                                 <button id="viewDetailsbtn" class="text-center p-1 viewDetailsbtn"
                                                     data-toggle="modal" data-target="#refundRequestDetails"
                                                     data-cake-image="<%= refundRequest.productImage %>"
@@ -424,9 +425,9 @@
                                                 </button>
                                                 <br>
                                                 <a style="cursor: pointer;" class=" mx-1  declineBtn"
-                                                    onclick="requestAction('<%= order._id %>','<%= product.productId %>','<%= order.totalAmount %>','<%= order.userId %>','decline')">decline</a>
+                                                    onclick="requestAction('<%= order._id %>','<%= product.productId %>','<%= order.totalAmount %>','<%= order.userId %>','<%= refundRequest.cakeAmount%>','decline')">decline</a>
                                                 <a style="cursor: pointer;" class=" mx-1 acceptBtn"
-                                                    onclick="requestAction('<%= order._id %>','<%= product.productId %>','<%= order.totalAmount %>','<%= order.userId %>','accept')">accept</a>
+                                                    onclick="requestAction('<%= order._id %>','<%= product.productId %>','<%= order.totalAmount %>','<%= order.userId %>','<%= refundRequest.cakeAmount %>','accept')">accept</a>
                                                 <% } else { %>
                                                     <!-- Add some default content or hide buttons -->
                                                     <!-- <button class="btn-btn primary" style="display: none;"></button> -->
@@ -2734,13 +2735,13 @@
 
         <!-- Refund request Actions -->
         <script>
-            function requestAction(orderId, productId,amount,userId,action) {
+            function requestAction(orderId, productId, totalOrderAmount,userId, requestAmount ,action) {
                 fetch('/admin/orders/requestAction', {
                     method: 'PUT',
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({ productId, orderId, amount, userId ,action })
+                    body: JSON.stringify({ productId, orderId, totalOrderAmount, userId,requestAmount,action })
                 })
                     .then(response => response.json())
                     .then(data => {

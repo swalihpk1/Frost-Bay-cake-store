@@ -5,7 +5,9 @@ const Products = require("../models/productModel")
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
 const { products } = require("./adminController");
-const Refundrequests = require("../models/refundReqModel")
+const Refundrequests = require("../models/refundReqModel");
+const Coupon = require("../models/couponModel")
+
 
 
 // ----Razorpay--------
@@ -16,6 +18,8 @@ const razorpayInstance = new Razorpay({
 
 const addOrder = async (req, res) => {
     try {
+
+        console.log(req.body);
         const userId = req.session.user_id;
         const user = await User.findOne({ _id: userId });
         const cartUser = await User.populate(user, { path: 'cart.productId', model: 'products' });
@@ -56,6 +60,13 @@ const addOrder = async (req, res) => {
             hour12: true
         });
 
+        if (req.body.couponCode) {
+            var coupon = await Coupon.findOne({ couponId: req.body.couponCode });  
+        }
+
+        console.log(coupon);
+
+
         var products = cartUser.cart.map(item => ({
             productId: item.productId._id,
             quantity: item.quantity,
@@ -91,6 +102,9 @@ const addOrder = async (req, res) => {
             purchaseTime: formattedTime,
             totalAmount: req.body.total,
             paymentMethod: req.body.paymentMethod,
+            couponOff: coupon ? coupon.discountPercentage : null,
+            couponMinPurchase: coupon ? coupon.minPurcahaseAmount : null
+
         });
         const newOrders = await orders.save()
 
@@ -240,11 +254,17 @@ const cancelOrder = async (req, res) => {
 
 const refundRequest = async (req, res) => {
     try {
+
+        const product = await Products.findOne({_id:req.body.productId})
+
+
         const returnRequest = new Refundrequests({
             orderId: req.body.orderId,
             productId:req.body.productId,
             productImage: req.file.filename,
-            reasonNote: req.body.reasonNote.trim()
+            reasonNote: req.body.reasonNote.trim(),
+            cakeAmount:product.price
+
         })
         await returnRequest.save()
 

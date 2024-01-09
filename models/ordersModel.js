@@ -123,6 +123,12 @@ const ordersSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    couponOff: {
+        type:Number
+    },
+    couponMinPurchase:{
+        type:Number
+    }
 });
 
 module.exports = mongoose.model("Orders", ordersSchema);

@@ -202,6 +202,19 @@ border-style:double;
     border-radius: 1.25rem;
     padding: 2rem;
   }
+  .verify-button {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    display: none;
+    color: #c96;
+    }
+
     
 
 

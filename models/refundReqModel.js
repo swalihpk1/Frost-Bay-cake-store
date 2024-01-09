@@ -18,7 +18,11 @@ const refundReqSchema = new mongoose.Schema({
     reasonNote: {
         type: String,
         required: true
-    }
+    },
+    cakeAmount: {
+        type: Number,
+        required:true
+    } 
 });
 
 module.exports = mongoose.model("Refund requests", refundReqSchema);

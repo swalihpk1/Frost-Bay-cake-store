@@ -9,6 +9,10 @@
 
 
 
+    <style>
+
+
+    </style>
     </head>
 
     <body>
@@ -34,11 +38,14 @@
                     <div class="page-content">
                         <div class="checkout">
                             <div class="container">
+                                <p id="couponMessage" class=""></p>
                                 <div class="checkout-discount">
                                     <form action="#">
-                                        <input type="text" class="form-control" required id="checkout-discount-input">
+                                        <input type="text" class="form-control" required id="checkout-discount-input"
+                                            maxlength="10">
                                         <label for="checkout-discount-input" class="text-truncate">Have a coupon?
                                             <span>Click here to enter your code</span></label>
+                                        <button type="button" id="verifyButton" class="verify-button">Apply</button>
                                     </form>
                                 </div><!-- End .checkout-discount -->
                                 <div class="row">
@@ -197,9 +204,18 @@
                                                                 <td>Free shipping</td>
                                                             </tr>
                                                             <tr class="summary-total">
-                                                                <td>Total:</td>
+                                                                <td class="">Total:</td>
                                                                 <td id="total">$</td>
-                                                            </tr><!-- End .summary-total -->
+                                                            </tr><!-- End .summary-tofftal -->
+                                                            <tr>
+                                                                <td>
+                                                                    <p id="couponApply" class=""></p>
+                                                                </td>
+                                                                <td>
+                                                                    <p id="offPercentage"></p>
+                                                                </td>
+                                                            </tr>
+
 
                                                 </tbody>
                                             </table><!-- End .table table-summary -->
@@ -228,13 +244,16 @@
                                                                 <a class="sf-with-ul p-0 text-dark">Wallet</a>
                                                                 <ul>
                                                                     <li>
-                                                                        <p class="text-danger" id="walletError" ></p>
+                                                                        <p class="text-danger" id="walletError"></p>
                                                                         <input type="radio" class="mx-4"
                                                                             name="paymentMethod" id="wallet">
                                                                         <i class="fa-solid fa-wallet fa-lg mr-2"
                                                                             style="color: #121b2b;"></i>
                                                                         <label for="wallet">Wallet </label>
-                                                                        <p class="mx-5">Wallet amount:<span id="walletAmount"><%= user.wallet.balance %></span></p>
+                                                                        <p class="mx-5">Wallet amount:<span
+                                                                                id="walletAmount">
+                                                                                <%= user.wallet.balance %>
+                                                                            </span></p>
                                                                     </li>
                                                                 </ul>
                                                             </li>
@@ -746,7 +765,7 @@
 
         <div id="notification-container"></div>
 
-        <!-- ----------Select address and send datas when click placeOder---------- -->
+        <!-- ----------Select address and send datas to backend when click placeOder---------- -->
 
         <script>
             document.getElementById('placeOrderBtn').addEventListener('click', function () {
@@ -755,6 +774,8 @@
                 const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
                 const orderNotes = document.getElementById('orderNotes').value;
                 const totalValue = parseFloat(document.getElementById('total').textContent.replace('$', ''));
+                const couponCode = document.getElementById('checkout-discount-input').value.trim();
+                const couponAppled = document.getElementById('couponApply').textContent
 
                 if (selectedRadioButton) {
                     // Radio button is selected, send data to /cart/placeOrder route
@@ -767,6 +788,10 @@
 
                     formData.append('orderNotes', orderNotes);
                     formData.append('total', totalValue);
+
+                    if (couponAppled === 'Coupon is applied ') {
+                            formData.append('couponCode', couponCode);
+                    }
 
                     $.ajax({
                         url: '/cart/placeOrder',
@@ -787,7 +812,7 @@
                                         }
                                     });
 
-                            }else if(data.success && data.paymentMethod === 'razorpay'){
+                            } else if (data.success && data.paymentMethod === 'razorpay') {
                                 const options = {
                                     key: 'rzp_test_9WWhpgu9IlsKe3',
                                     amount: data.amount,
@@ -796,10 +821,10 @@
                                     name: 'Frost-Bay',
                                     description: 'Payment for your order',
                                     theme: {
-                                        color: '#cc9966', 
-                                        
+                                        color: '#cc9966',
+
                                     },
-                                     prefill: {
+                                    prefill: {
                                         "email": "frostBay@gmail.com",
                                         "contact": "7306477519"
                                     },
@@ -817,7 +842,7 @@
                                     console.error('Payment failed:', response.error.code, response.error.description);
                                 });
                                 rzr.open();
-                            }else {
+                            } else {
                                 showNotification(data.message, false);
                             }
                         },
@@ -836,6 +861,7 @@
 
                         formData.append('orderNotes', orderNotes);
                         formData.append('total', totalValue);
+                        formData.append('couponCode', couponCode);
 
                         $.ajax({
                             url: '/cart/placeOrder',
@@ -862,20 +888,20 @@
                 }
             });
 
-            function verifyPayment(payment,order) {
-                    $.ajax({
-                        url: "/cart/verifyPayment",
-                        method: "post",
-                        data: {
-                            payment: payment,
-                            amount: order.amount,
-                            order: order,
-                        },
-                        success: (response) => {
-                            
-       console.log("response",response);
-                            if (response) {
-                                 showSuccessAlert(response.success, response.message)
+            function verifyPayment(payment, order) {
+                $.ajax({
+                    url: "/cart/verifyPayment",
+                    method: "post",
+                    data: {
+                        payment: payment,
+                        amount: order.amount,
+                        order: order,
+                    },
+                    success: (response) => {
+
+                        console.log("response", response);
+                        if (response) {
+                            showSuccessAlert(response.success, response.message)
                                 .then((clickedButton) => {
                                     console.log('Clicked Button:', clickedButton);
 
@@ -886,18 +912,18 @@
                                     }
                                 });
 
-                            } else {
-                                swal.fire({
-                                    positon: "center",
-                                    icon: "error",
-                                    title: "Payment failed",
-                                    showConfirmButton: false,
-                                    timer: 1500,
-                                });
-                            }
-                        },
-                    });
-                }
+                        } else {
+                            swal.fire({
+                                positon: "center",
+                                icon: "error",
+                                title: "Payment failed",
+                                showConfirmButton: false,
+                                timer: 1500,
+                            });
+                        }
+                    },
+                });
+            }
         </script>
 
 
@@ -1115,7 +1141,6 @@
                 const allRadioButtons = document.querySelectorAll('input[name="addressRadioButton"]');
                 const allCards = document.querySelectorAll('.card-dashboard');
                 const addAddressForm = document.getElementById('addAddressForm');
-
                 // Uncheck all radio buttons and remove 'selected' class
                 allRadioButtons.forEach((radioBtn) => {
                     radioBtn.checked = false;
@@ -1133,11 +1158,39 @@
 
         <!-- for display totals -->
         <script>
+
+        </script>
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                console.log("working");
+                var totalElement = document.getElementById("total");
+                var walletAmountElement = document.getElementById("walletAmount");
+                var walletError = document.getElementById("walletError");
+
+                var totalAmount = parseFloat(totalElement.innerHTML.replace("$", ""));
+                var walletAmount = parseFloat(walletAmountElement.innerHTML.replace("Wallet amount: $", ""));
+
+                if (totalAmount > walletAmount) {
+
+                    walletError.innerHTML = "Insufficient funds in the wallet.";
+
+                    // Disable the wallet radio button
+                    var walletRadioButton = document.getElementById("wallet");
+                    if (walletRadioButton) {
+                        walletRadioButton.disabled = true;
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            var total = 0;
+            var subTotal = 0;
+
             document.addEventListener('DOMContentLoaded', function () {
                 var productTotalElements = document.querySelectorAll('#productTotal');
-
-                var subTotal = 0;
-                var total = 0;
 
                 productTotalElements.forEach(function (productTotalElement) {
                     var productTotalValue = parseFloat(productTotalElement.innerText.replace('$', ''));
@@ -1151,31 +1204,73 @@
                 subTotalElement.innerText = '$' + subTotal.toFixed(2);
                 totalElement.innerText = '$' + total.toFixed(2);
             });
+
+            document.getElementById('verifyButton').addEventListener('click', function () {
+                const inputElement = document.getElementById('checkout-discount-input');
+                const inputValue = inputElement.value.trim();
+
+                fetch('/checkout/verifyCoupon', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ couponCode: inputValue }),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const couponMessageElement = document.getElementById('couponMessage');
+                        const couponMessageOnTotal = document.getElementById('couponApply');
+                        const couponOff = document.getElementById('offPercentage');
+                        const totalAmount = document.getElementById('total');
+
+                        if (data.coupon) {
+
+                            if (total < data.coupon.minPurcahaseAmount) {
+                                couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> min purchase upto $${data.coupon.minPurcahaseAmount}`;
+                                couponMessageElement.className = 'text-danger';
+                                return
+                            }
+
+                            couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-check text-success"></i> Coupon is applied`;
+                            couponMessageElement.className = 'text-success';
+                            couponMessageOnTotal.innerHTML = `Coupon is applied <i class="fa-solid fa-circle-check text-primary"></i>`;
+                            couponOff.innerHTML = `${data.coupon.discountPercentage}% off`;
+
+                            total -= total * (data.coupon.discountPercentage / 100);
+                            totalAmount.innerHTML = `$${total.toFixed(2)}`;
+
+                            // Check if the updated total is less than 1000
+
+                        } else {
+                            couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> Coupon is not valid`;
+                            couponMessageElement.className = 'text-danger';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error during coupon verification:', error);
+                    });
+
+                // Hide the "Verify" button
+                document.getElementById('verifyButton').style.display = 'none';
+            });
+
+            document.getElementById('checkout-discount-input').addEventListener('focus', function () {
+                document.getElementById('verifyButton').style.display = 'block';
+            });
+
+            document.addEventListener('click', function (event) {
+                const inputElement = document.getElementById('checkout-discount-input');
+                const verifyButton = document.getElementById('verifyButton');
+
+                if (event.target !== inputElement && !inputElement.contains(event.target)) {
+                    verifyButton.style.display = 'none';
+                }
+            });
+
         </script>
 
 
-       <script >
-        document.addEventListener("DOMContentLoaded", function () {
-            console.log("working");
-            var totalElement = document.getElementById("total");
-            var walletAmountElement = document.getElementById("walletAmount");
-            var walletError =  document.getElementById("walletError");
 
-            var totalAmount = parseFloat(totalElement.innerHTML.replace("$", ""));
-            var walletAmount = parseFloat(walletAmountElement.innerHTML.replace("Wallet amount: $", ""));
-
-            if (totalAmount > walletAmount) {
-
-                walletError.innerHTML = "Insufficient funds in the wallet.";
-
-                // Disable the wallet radio button
-                var walletRadioButton = document.getElementById("wallet");
-                if (walletRadioButton) {
-                    walletRadioButton.disabled = true;
-                }
-            }
-        });
-    </script>
 
 
 
