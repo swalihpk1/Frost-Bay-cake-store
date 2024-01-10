@@ -13,80 +13,8 @@
         <script
             src="/assets/admin/vendor/hs-navbar-vertical-aside/dist/hs-navbar-vertical-aside-mini-cache.js"></script>
 
-        <!-- ========== HEADER ========== -->
+        <%-include('../layouts/admin/navbar')-%> </header>
 
-        <header id="header"
-            class="navbar navbar-expand-lg navbar-fixed navbar-height navbar-container navbar-bordered bg-white">
-            <div class="navbar-nav-wrap">
-
-            </div>
-        </header>
-
-        <aside
-            class="js-navbar-vertical-aside navbar navbar-vertical-aside navbar-vertical navbar-vertical-fixed navbar-expand-xl navbar-bordered bg-white  ">
-            <div class="navbar-vertical-container">
-                <div class="navbar-vertical-footer-offset">
-                    <!-- Logo -->
-
-                    <div class="navbar-vertical-content">
-                        <div id="navbarVerticalMenu" class="nav nav-pills nav-vertical card-navbar-nav">
-                            <!-- Collapse -->
-                            <div class="nav-item">
-                                <a class="nav-link" href="/admin/dashboard">
-                                    <i class="bi-house-door nav-icon"></i>
-                                    <span class="nav-link-title">Dashboards</span>
-                                </a>
-                            </div>
-                            <!-- End Collapse -->
-
-                            <span class="dropdown-header mt-4">Actions</span>
-                            <small class="bi-three-dots nav-subtitle-replacer"></small>
-
-                            <!-- Collapse -->
-                            <div class="navbar-nav nav-compact">
-
-                            </div>
-                            <div id="navbarVerticalMenuPagesMenu">
-                                <!-- Collapse -->
-                                <div class="nav-item">
-                                    <a class="nav-link" href="/admin/products">
-                                        <i class="bi-people nav-icon"></i>
-                                        <span class="nav-link-title">Cakes</span>
-                                    </a>
-                                </div>
-
-                                <div class="nav-item">
-                                    <a class="nav-link " href="/admin/users">
-                                        <i class="bi-people nav-icon"></i>
-                                        <span class="nav-link-title">Users</span>
-                                    </a>
-                                </div>
-
-                                <div class="nav-item">
-                                    <a class="nav-link " href="/admin/orders">
-                                        <i class="bi-people nav-icon"></i>
-                                        <span class="nav-link-title">Orders</span>
-                                    </a>
-                                </div>
-
-                                <div class="nav-item">
-                                    <a class="nav-link " href="/admin/category">
-                                        <i class="bi-people nav-icon"></i>
-                                        <span class="nav-link-title">Category</span>
-                                    </a>
-                                </div>
-
-                                <div class="nav-item">
-                                    <a class="nav-link active" href="/admin/coupons">
-                                        <i class="bi-people nav-icon"></i>
-                                        <span class="nav-link-title">Coupons</span>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </aside>
 
         <main id="content" role="main" class="main">
             <!-- Content -->
@@ -543,5 +471,5 @@
 
 
 
-
+   
         <%-include('../layouts/admin/footer')-%>

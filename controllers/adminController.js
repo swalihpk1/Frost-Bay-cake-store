@@ -51,7 +51,7 @@ const dashboard = async (req, res) => {
         const adminEmail = process.env.ADMIN_EMAIL.trim();
         const adminName = process.env.ADMIN_NAME.trim();
 
-        res.render('dashboard', { adminName: adminName, adminEmail: adminEmail });
+        res.render('dashboard', { adminName: adminName, adminEmail: adminEmail,currentPath:"/admin/dashboard" });
 
     } catch (error) {
         console.log(error.message);
@@ -62,7 +62,7 @@ const dashboard = async (req, res) => {
 const products = async (req, res) => {
     try {
         const products = await Products.find({}).populate('category');
-        res.render('products', { products: products });
+        res.render('products', { products: products ,currentPath:"/admin/products"});
     } catch (error) {
         console.log(error.message);
     }
@@ -74,7 +74,7 @@ const users = async (req, res) => {
 
         const userData = await User.find({})
 
-        res.render('users', { user: userData });
+        res.render('users', { user: userData,currentPath:"/admin/users"});
 
     } catch (error) {
         console.log(error.message);
@@ -177,7 +177,7 @@ const insertProduct = async (req, res) => {
 const category = async (req, res) => {
     try {
         const categoryName = await Category.find({})
-        res.render('category', { category: categoryName })
+        res.render('category', { category: categoryName ,currentPath:"/admin/category"})
     } catch (error) {
         console.log(error.message);
     }
@@ -259,7 +259,7 @@ const editProduct = async (req, res) => {
         const product = await Products.findOne({ _id: productId });
         const categoryName = await Category.find({});
 
-        res.render('editProduct', { product: product, category: categoryName });
+        res.render('editProduct', { product: product, category: categoryName, currentPath:"/admin/editCategory"});
     } catch (error) {
         console.log(error.message);
     }
@@ -354,7 +354,7 @@ const userOrders = async (req, res) => {
     try {
         const orders = await Orders.find({}).sort({ createdAt: -1 });
         const refundRequests = await Refundreqests.find({})
-        res.render('orders', { orders: orders, refundRequests: refundRequests });
+        res.render('orders', { orders: orders, refundRequests: refundRequests ,currentPath:"/admin/orders"});
     } catch (error) {
         console.log(error.message);
     }

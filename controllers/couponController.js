@@ -6,7 +6,7 @@ const { findOne } = require('../models/usersModel');
 const renderCoupon = async (req, res) => {
     try {
         const coupons = await Coupon.find({});
-        res.render('coupon', { coupons });
+        res.render('coupon', { coupons, currentPath:"/admin/coupons"});
     } catch (error) {
         console.log(error.message);
     }
