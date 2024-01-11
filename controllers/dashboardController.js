@@ -41,9 +41,6 @@ const dashboard = async (req, res) => {
             [method]: (paymentMethodPercentages.find((item) => item[method]) || { [method]: '0.00' })[method],
         }));
         
-        console.log(PaymentMethodPercentages);
-
-
 
 
         // -----------------------Total Sales Amount------------------
@@ -63,9 +60,6 @@ const dashboard = async (req, res) => {
         
         const totalDeliveredAmountResult = await Orders.aggregate(totalDeliveredAmountPipeline).exec();
         const totalDeliveredAmount = totalDeliveredAmountResult.length > 0 ? totalDeliveredAmountResult[0].totalDeliveredAmount : 0;
-        
-        console.log("Total Delivered Amount:", totalDeliveredAmount);
-
 
 
 
@@ -84,8 +78,7 @@ const dashboard = async (req, res) => {
         ];
         
         const latestPlacedOrders = await Orders.aggregate(latestPlacedOrdersPipeline).exec();
-        
-        console.log("Latest Placed Orders:", latestPlacedOrders);
+
 
         res.render('dashboard', {
             adminName: adminName,
@@ -151,7 +144,6 @@ const graphDetails = async (req, res) => {
             };
         });
 
-        console.log(monthlySales);
 
 
         // ------------------------------------Monthly Orders--------------------------------
@@ -200,8 +192,6 @@ const graphDetails = async (req, res) => {
                 totalOrders: monthData ? monthData.totalOrders : 0,
             };
         });
-
-        console.log(monthlyOrders);
 
 
         // ------------------------------------Yearly Sales------------------------------
@@ -253,10 +243,6 @@ const graphDetails = async (req, res) => {
             };
         });
 
-        console.log(yearlySales);
-
-
-
 
 
         // -----------------------------------------Yearly Orders------------------------------------
@@ -296,8 +282,6 @@ const graphDetails = async (req, res) => {
                 totalOrders: yearData ? yearData.totalOrders : 0,
             };
         });
-
-        console.log(yearlyOrders);
 
 
         // ---------------------Weekly Sales--------------------
@@ -354,9 +338,6 @@ const graphDetails = async (req, res) => {
             };
         });
 
-        console.log(weeklySales);
-
-
 
         const weeklyOrdersPipeline = [
             {
@@ -398,8 +379,6 @@ const graphDetails = async (req, res) => {
                 totalOrders: dayData ? dayData.totalOrders : 0,
             };
         });
-
-        console.log(weeklyOrders);
 
         res.json({
             monthlyOrders,

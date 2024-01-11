@@ -99,6 +99,7 @@ app.patch('/couponActivation', authAdmin.isLogin, couponController.activation);
 
 //------------------------------Sales report-----------------------------
 app.get('/salesReport', authAdmin.isLogin, adminController.salesReport);
+app.post('/salesReport', authAdmin.isLogin, adminController.salesReportDataFetch);
 
 // ---------------------------Logout-admin--------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);

@@ -6,6 +6,7 @@ const Sharp = require("sharp");
 const path = require("path");
 const Orders = require('../models/ordersModel');
 const Refundreqests = require("../models/refundReqModel")
+const moment = require("moment")
 
 
 // --------Admin-login-------
@@ -465,6 +466,26 @@ const salesReport = async (req, res) => {
 }
 
 
+const salesReportDataFetch = async (req, res) => {
+    try {
+        const start = moment(req.body.start, 'YYYY-MM-DD').startOf('day');
+        const end = moment(req.body.end, 'YYYY-MM-DD').endOf('day');
+
+        const orders = await Orders.find({
+            $and: [
+                { createdAt: { $gte: start.toDate(), $lte: end.toDate() } }
+            ]
+        });
+
+          res.json(orders);
+    
+    } catch (error) {
+        console.log(error.message);
+    }
+
+}
+
+
 
 
 module.exports = {
@@ -489,6 +510,7 @@ module.exports = {
     requestAction,
     userOrders,
     salesReport,
+    salesReportDataFetch,
     logout
 
 }

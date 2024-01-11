@@ -16,76 +16,156 @@
         <%-include('../layouts/admin/navbar')-%> </header>
 
 
-        <main id="content" role="main" class="main">
-            <!-- Content -->
-            <div class="content container-fluid">
-                <div class="card text-center">
-                    <h2 class="card-header">Sales reports</h2>
+            <main id="content" role="main" class="main">
+                <!-- Content -->
+                <div class="content container-fluid">
+                    <div class="card text-center">
+                        <h2 class="card-header">Sales reports</h2>
 
-                    <!-- Table -->
-                    <div class="table-responsive datatable-custom position-relative">
-                        <table class="table table-bordered text-center" id="tableReload">
-                            <thead class="thead-light"">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <div class="">
+                                <!-- Daterangepicker -->
+                                <button id="js-daterangepicker-predefined"
+                                    class="btn btn-outline-primary  dropdown-toggle">
+                                    <i class="bi-calendar-week"></i>
+                                    <span class="js-daterangepicker-predefined-preview ms-1"></span>
+                                </button>
+                                <!-- End Daterangepicker -->
+                            </div>
+
+                            <div class="d-flex m-3">
+                                <select name="status" class="btn btn-outline-primary  form-select  px-6 "
+                                    autocomplete="off" data-product-id="" data-order-id="">
+                                    <option value="" selected>PDF</option>
+                                    <option value=""> EXCEL</option>
+                                </select>
+                                <button class="btn"><i class="fa-solid fa-download fa-xl"
+                                        style="color:rgb(65, 65, 65);"></i></button>
+
+                            </div>
+                            <!-- End Dropdown -->
+                        </div>
+
+                        <!-- Table -->
+                        <div class="table-responsive datatable-custom position-relative">
+                            <div id="noDataImageContainer" style="display: none;">
+                                <img src="/assets/admin/img/No data.gif" alt="No Data">
+                            </div>
+                            <table class="table table-bordered text-center p-" id="orderTableBody">
+                                <thead class="thead-light"">
                                 <tr>
 
-                                        <th>Coupon ID</th>
-                                        <th>Discount</th>
-                                        <th>Background image</th>
-                                        <th>Description</th>
-                                        <th>Activation</th>
-                                        <th>Expiry Date</th>
-                                        <th>Min purchase amount</th>
-                                        <th></th>
+                                        <th>SL.NO</th>  
+                                        <th>Cake name</th>  
+                                        <th>User name</th>
+                                        <th>User email</th>
+                                        <th>Quantity</th>
+                                        <th>Total amount</th>
+                                        <th>Ordered date</th>
+                                        <th>Payment method</th>
 
                                 </tr>
                             </thead>
         
-                            <tbody class=" text-center">
-                                <tr class=" text-center ">
-                                    <td class=" border-0">
-                                12341234
-                                    </td>
-                                    <td class="border-0">
-                                       10%
-                                    </td>
-                                    <td class="border-0 table-column-ps-0 d-flex justify-content-center">
-                                        <a class="d-flex align-items-center" href="ecommerce-product-details.html">
-                                            <div class="flex-shrink-0">
-                                                <img class="avatar avatar-lg"
-                                                    src="/assets/couponBgImages/
-                                                    alt="Image Description">
-                                            </div>
-                                        </a>
-                                    </td>
-                                    <td class="border-0">
-                                        dfgsdfgsdfgsdgf
-                                    </td>
-                                    <td class="border-0 d-flex align-items-center">
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input" type="checkbox"
-                                                id="">
-                                        </div>
-                                    </td>
-                                    <td class="border-0">
-                                       23/34/234
-                                    </td>
-                                    <td class="border-0">RS: 1234
-                                    </td>
-                                    <td class="border-0">
-                                        <div class="btn-group" role="group">
-                                            <a href="#" class="">
-                                                <i class="fa-regular fa-pen-to-square" style="color: #ffffff;"></i> Edit
-                                            </a>
-                                        </div>
-                                    </td>
-                                    </tr>
-                                        </tbody>
+                            <tbody >
+                                <tr >
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </main>
 
-        <div id="notification-container"></div>
-   
-        <%-include('../layouts/admin/footer')-%>
+
+
+        <div id=" notification-container">
+                        </div>
+
+                        <script src="/assets/admin/js/vendor.min.js"></script>
+
+
+                        <script>
+                  $(document).on('ready', function () {
+    // INITIALIZATION OF DATERANGEPICKER
+    // =======================================================
+    var start = moment();
+    var end = moment();
+
+    function cb(start, end) {
+        var previewElement = $('#js-daterangepicker-predefined .js-daterangepicker-predefined-preview');
+        previewElement.html(start.format('MMM D') + ' - ' + end.format('MMM D, YYYY'));
+
+        if (start.isSame(moment().subtract(1, 'month').startOf('month')) && end.isSame(moment().subtract(1, 'month').endOf('month'))) {
+            previewElement.html('<select class="form-select"><option value="1">Option 1</option><option value="2">Option 2</option></select>');
+        }
+    }
+
+    // Initialize the daterangepicker
+    $('#js-daterangepicker-predefined').daterangepicker({
+        startDate: start,
+        endDate: end,
+        ranges: {
+            'Today': [moment(), moment()],
+            'This Week': [moment().startOf('week'), moment()],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment()],
+        }
+    }, cb);
+
+    // Set the initial text content of the preview element to "Today"
+    $('#js-daterangepicker-predefined .js-daterangepicker-predefined-preview').html('Today');
+
+    // Trigger the 'apply.daterangepicker' event to fetch and display orders for the initial "Today" range
+    $('#js-daterangepicker-predefined').trigger('apply.daterangepicker');
+
+    // --------------Showing sales reports----------------
+    fetchOrders(start, end);
+
+    // Handle the daterangepicker date change
+    $('#js-daterangepicker-predefined').on('apply.daterangepicker', function (ev, picker) {
+        fetchOrders(picker.startDate, picker.endDate);
+    });
+
+    function fetchOrders(start, end) {
+        $.ajax({
+            url: '/admin/salesReport',
+            method: 'POST',
+            data: {
+                start: start.format('YYYY-MM-DD'),
+                end: end.format('YYYY-MM-DD')
+            },
+            dataType: 'json',
+            success: function (data) {
+                populateOrdersTable(data);
+                $('#noDataImageContainer').toggle(data.length === 0);
+            },
+            error: function (error) {
+                console.error('Error fetching orders:', error);
+            }
+        });
+    }
+
+    function populateOrdersTable(orders) {
+        var tableBody = $('#orderTableBody');
+        tableBody.empty(); // Clear existing rows
+
+        orders.forEach(function (order, index) {
+            var row = '<tr>' +
+                '<td>' + (index + 1) + '</td>' +
+                '<td>' + order.orderedProducts[0].productDetails.name + '</td>' +
+                '<td>' + order.userName + '</td>' +
+                '<td>' + order.shipAddress[0].email + '</td>' +
+                '<td>' + order.orderedProducts[0].quantity + '</td>' +
+                '<td>Rs: ' + order.totalAmount + '</td>' +
+                '<td>' + order.purchaseDate + '</td>' +
+                '<td>' + order.paymentMethod + '</td>' +
+                '</tr>';
+
+            tableBody.append(row);
+        });
+    }
+});
+
+
+                        </script>
+                        <%-include('../layouts/admin/footer')-%>
