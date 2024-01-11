@@ -82,6 +82,11 @@
 
                             <!-- Nav -->
                             <ul class="nav nav-segment nav-fill" id="projectsTab" role="tablist">
+                                <li class="nav-item" data-bs-toggle="chart" data-datasets="1" data-trigger="click"
+                                    data-action="toggle">
+                                    <a class="nav-link" href="javascript:;" data-bs-toggle="tab"
+                                        onclick="updateLabels('weekly')">Weekly</a>
+                                </li>
                                 <li class="nav-item" data-bs-toggle="chart" data-datasets="0" data-trigger="click"
                                     data-action="toggle">
                                     <a class="nav-link active" href="javascript:;" data-bs-toggle="tab"
@@ -100,25 +105,17 @@
                         <!-- Body -->
                         <div class="card-body">
                             <div class="row align-items-sm-center mb-4">
-                                <div class="col-sm mb-3 mb-sm-0">
-                                    <div class="d-flex align-items-center">
-                                        <span class="h1 mb-0">$7,431.14 USD</span>
 
-                                        <span class="text-success ms-2">
-                                            <i class="bi-graph-up"></i> 25.3%
-                                        </span>
-                                    </div>
-                                </div>
                                 <!-- End Col -->
 
                                 <div class="col-sm-auto">
                                     <!-- Legend Indicators -->
                                     <div class="row fs-6">
                                         <div class="col-auto">
-                                            <span class="legend-indicator bg-primary"></span> Income
+                                            <span class="legend-indicator bg-primary"></span> Orders
                                         </div>
                                         <div class="col-auto">
-                                            <span class="legend-indicator bg-info"></span> Orders
+                                            <span class="legend-indicator bg-info"></span> Income
                                         </div>
                                     </div>
                                     <!-- End Legend Indicators -->
@@ -168,11 +165,11 @@
                                       "ticks": {
                                         "min": 0,
                                         "max": 100,
-                                        "stepSize": 20,
+                                        "stepSize": 200,
                                         "fontColor": "#97a4af",
                                         "fontFamily": "Open Sans, sans-serif",
                                         "padding": 10,
-                                        "postfix": "k"
+                                        "postfix": ""
                                       }
                                     },
                                     "x": {
@@ -188,10 +185,11 @@
                                       }
                                     }
                                 },
+                               
                                 "plugins": {
                                   "tooltip": {
-                                    "prefix": "$",
-                                    "postfix": "k",
+                                    "prefix": "",
+                                    "postfix": "",
                                     "hasIndicator": true,
                                     "mode": "index",
                                     "intersect": false,
@@ -236,46 +234,34 @@
                                     </div>
                                     <!-- End Badge -->
 
+                                       
+
+                                   
+                                   
                                     <!-- Chart Half -->
                                     <div class="chartjs-doughnut-custom" style="height: 12rem;">
                                         <canvas id="doughnutHalfChart" class="js-chartjs-doughnut-half"
-                                            data-hs-chartjs-options='{
-                                "type": "doughnut",
-                                "data": {
-                                  "labels": ["Current status", "Goal"],
-                                  "datasets": [{
-                                    "data": [64, 35],
-                                    "backgroundColor": ["#377dff", "rgba(55,125,255,.35)"],
-                                    "borderWidth": 4,
-                                    "borderColor": "#fff",
-                                    "hoverBorderColor": "#ffffff"
-                                  }]
-                                }
-                              }'></canvas>
+                                        data-hs-chartjs-options='{
+                                            "type": "doughnut",
+                                            "data": {
+                                                "labels": ["Cash on Delivery", "Online payment", "Wallet"],
+                                                "datasets": [{
+                                                    "data": [<%= PaymentMethodPercentages.map(method => method[Object.keys(method)[0]]).join(',') %>],
+                                                    "backgroundColor": ["#377dff", "#00c9db", "rgba(55,125,255,.35)"],
+                                                    "borderWidth": 4,
+                                                    "borderColor": "#fff",
+                                                    "hoverBorderColor": "#ffffff"
+                                                }]
+                                            }
+                                        }'></canvas>
+                            
 
                                         <div class="chartjs-doughnut-custom-stat">
-                                            <small class="text-cap">Project balance</small>
-                                            <span class="h1">$150,238.00</span>
+                                            <small class="text-cap">Total Shop Revenue</small>
+                                            <span class="h1">$<%=totalDeliveredAmount%></span>
                                         </div>
                                     </div>
                                     <!-- End Chart Half -->
-
-                                    <hr>
-
-                                    <div class="row col-divider">
-                                        <div class="col text-end">
-                                            <span class="d-block h4 mb-0">$72.46</span>
-                                            <span class="d-block">last transaction</span>
-                                        </div>
-
-                                        <div class="col text-start">
-                                            <span class="d-block h4 text-success mb-0">
-                                                <i class="bi-graph-up"></i> 12%
-                                            </span>
-                                            <span class="d-block">since last visit</span>
-                                        </div>
-                                    </div>
-                                    <!-- End Row -->
                                 </div>
                                 <!-- End Body -->
                             </div>
@@ -287,216 +273,57 @@
                             <div class="card h-100">
                                 <!-- Header -->
                                 <div class="card-header card-header-content-between">
-                                    <h4 class="card-header-title">Latest transactions</h4>
+                                    <h4 class="card-header-title">Recent placed orders</h4>
 
                                 </div>
                                 <!-- Body -->
-                                <div class="card-body card-body-height">
-                                    <ul class="list-group list-group-flush list-group-no-gutters">
-                                        <!-- List Item -->
-                                        <li class="list-group-item">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <div class="avatar avatar-sm avatar-soft-dark avatar-circle">
-                                                        <span class="avatar-initials">B</span>
+                                <div>
+                                    <table class="w-100" >
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+        
+        
+        
+                                    <tbody>
+                                        <% latestPlacedOrders.forEach(order => { %>
+                                            <tr class="d-flex justify-content-between align-items-center">
+                                                <td class="">
+                                                    <div class="avatar avatar-circle m-3" style="height: 60px; width: 60px;">
+                                                        <img class="w-100 rounded" src="/assets/productImages/uploadImages/<%= order.orderedProducts[0].productDetails.productImage %>"
+                                                         alt="Product Image">
                                                     </div>
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="flex-grow-1 ms-3">
-                                                    <div class="row">
-                                                        <div class="col-7 col-md-5 order-md-1">
-                                                            <h5 class="mb-0">Bob Dean</h5>
-                                                            <span class="fs-6 text-body">Transfer to bank account</span>
-                                                        </div>
-
-                                                        <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
-                                                            <h5 class="mb-0">-$290.00 USD</h5>
-                                                            <span class="fs-6 text-body">15 May, 2020</span>
-                                                        </div>
-
-                                                        <div class="col-auto col-md-3 order-md-2">
-                                                            <span
-                                                                class="badge bg-soft-warning text-warning rounded-pill">Pending</span>
-                                                        </div>
-                                                    </div>
-                                                    <!-- End Row -->
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <!-- End List Item -->
-
-                                        <!-- List Item -->
-                                        <li class="list-group-item">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <img class="avatar avatar-sm avatar-circle"
-                                                        src="assets/svg/brands/slack-icon.svg" alt="Image Description">
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="flex-grow-1 ms-3">
-                                                    <div class="row">
-                                                        <div class="col-7 col-md-5 order-md-1">
-                                                            <h5 class="mb-0">Slack</h5>
-                                                            <span class="fs-6 text-body">Subscription payment</span>
-                                                        </div>
-
-                                                        <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
-                                                            <h5 class="mb-0">-$11.00 USD</h5>
-                                                            <span class="fs-6 text-body">12 May, 2020</span>
-                                                        </div>
-
-                                                        <div class="col-auto col-md-3 order-md-2">
-                                                            <span
-                                                                class="badge bg-soft-success text-success rounded-pill">Completed</span>
-                                                        </div>
-                                                    </div>
-                                                    <!-- End Row -->
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <!-- End List Item -->
-
-                                        <!-- List Item -->
-                                        <li class="list-group-item">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <img class="avatar avatar-sm avatar-circle"
-                                                        src="assets/svg/brands/bank-of-america-icon.svg"
-                                                        alt="Image Description">
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="flex-grow-1 ms-3">
-                                                    <div class="row">
-                                                        <div class="col-7 col-md-5 order-md-1">
-                                                            <h5 class="mb-0">Bank of America</h5>
-                                                            <span class="fs-6 text-body">Withdrawal to bank
-                                                                account</span>
-                                                        </div>
-
-                                                        <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
-                                                            <h5 class="text-success mb-0">$3500.00 USD</h5>
-                                                            <span class="fs-6 text-body">10 May, 2020</span>
-                                                        </div>
-
-                                                        <div class="col-auto col-md-3 order-md-2">
-                                                            <span
-                                                                class="badge bg-soft-success text-success rounded-pill">Completed</span>
-                                                        </div>
-                                                    </div>
-                                                    <!-- End Row -->
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <!-- End List Item -->
-
-                                        <!-- List Item -->
-                                        <li class="list-group-item">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <img class="avatar avatar-sm avatar-circle"
-                                                        src="assets/svg/brands/spotify-icon.svg"
-                                                        alt="Image Description">
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="flex-grow-1 ms-3">
-                                                    <div class="row">
-                                                        <div class="col-7 col-md-5 order-md-1">
-                                                            <h5 class="mb-0">Spotify</h5>
-                                                            <span class="fs-6 text-body">Subscription payment</span>
-                                                        </div>
-
-                                                        <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
-                                                            <h5 class="mb-0">-$10.00 USD</h5>
-                                                            <span class="fs-6 text-body">12 May, 2020</span>
-                                                        </div>
-
-                                                        <div class="col-auto col-md-3 order-md-2">
-                                                            <span
-                                                                class="badge bg-soft-danger text-danger rounded-pill">Failed</span>
-                                                        </div>
-                                                    </div>
-                                                    <!-- End Row -->
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <!-- End List Item -->
-
-                                        <!-- List Item -->
-                                        <li class="list-group-item">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <div class="avatar avatar-sm avatar-soft-dark avatar-circle">
-                                                        <span class="avatar-initials">R</span>
-                                                    </div>
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="flex-grow-1 ms-3">
-                                                    <div class="row">
-                                                        <div class="col-7 col-md-5 order-md-1">
-                                                            <h5 class="mb-0">Rachel Doe</h5>
-                                                            <span class="fs-6 text-body">Transfer to bank account</span>
-                                                        </div>
-
-                                                        <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
-                                                            <h5 class="text-success mb-0">$290.00 USD</h5>
-                                                            <span class="fs-6 text-body">28 April, 2020</span>
-                                                        </div>
-
-                                                        <div class="col-auto col-md-3 order-md-2">
-                                                            <span
-                                                                class="badge bg-soft-success text-success rounded-pill">Completed</span>
-                                                        </div>
-                                                    </div>
-                                                    <!-- End Row -->
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <!-- End List Item -->
-
-                                        <!-- List Item -->
-                                        <li class="list-group-item">
-                                            <div class="d-flex">
-                                                <div class="flex-shrink-0">
-                                                    <!-- Avatar -->
-                                                    <img class="avatar avatar-sm avatar-circle"
-                                                        src="assets/img/160x160/img9.jpg" alt="Image Description">
-                                                    <!-- End Avatar -->
-                                                </div>
-
-                                                <div class="flex-grow-1 ms-3">
-                                                    <div class="row">
-                                                        <div class="col-7 col-md-5 order-md-1">
-                                                            <h5 class="mb-0">Ella Lauda</h5>
-                                                            <span class="fs-6 text-body">Transfer to bank account</span>
-                                                        </div>
-
-                                                        <div class="col-5 col-md-4 order-md-3 text-end mt-2 mt-md-0">
-                                                            <h5 class="mb-0">-$250.00 USD</h5>
-                                                            <span class="fs-6 text-body">01 May, 2020</span>
-                                                        </div>
-
-                                                        <div class="col-auto col-md-3 order-md-2">
-                                                            <span
-                                                                class="badge bg-soft-success text-success rounded-pill">Completed</span>
-                                                        </div>
-                                                    </div>
-                                                    <!-- End Row -->
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <!-- End List Item -->
-                                    </ul>
-                                </div>
+                                                    <p class="d-inline">
+                                                        <%= order.orderedProducts[0].productDetails.name %>
+                                                    </p>
+                                                </td>
+                                                <td>
+                                                    <%= order.userName %>
+                                                </td>
+                                                <td>
+                                                    <%= order.purchaseTime %>
+                                                </td>
+                                                <td>
+                                                    <%= order.shipAddress[0].city %>, <br>
+                                                    <%= order.shipAddress[0].zipcode %>
+                                                </td>
+                                                <td>
+                                                    <span class="badge bg-soft-success text-success rounded-pill"> <%= order.orderedProducts[0].status %></span>
+                                                   
+                                                </td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+        
+        
+                                </table>
+                            </div>
                                 <!-- End Body -->
                             </div>
                             <!-- End Card -->
@@ -524,10 +351,12 @@
                     if (timeframe === "monthly") {
                         chart.data.labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
                     } else if (timeframe === "yearly") {
-                        chart.data.labels = ["2022", "2023", "2024",];
+                        chart.data.labels = ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"];
+                    } else if (timeframe === "weekly") {
+                        chart.data.labels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
                     }
 
-                    chart.update(); // Update the chart to reflect the changes
+                    chart.update();
                 }
             </script>
 
@@ -575,8 +404,8 @@
                 });
             </script>
 
-            <!-- JS Plugins Init. -->
-            <script>
+
+            <!-- <script>
                 (function () {
                     window.onload = function () {
 
@@ -607,12 +436,14 @@
                         // =======================================================
                         var updatingChartDatasets = [
                             [
-                                [18, 51, 60, 38, 88, 50, 40, 52, 88, 80, 60, 70],
-                                [27, 38, 60, 77, 40, 50, 49, 29, 42, 27, 42, 50]
+                                //monthly
+                                [2, 0, 60, 38, 88, 50, 40, 52, 88, 80, 60, 70],//orders
+                                [27, 38, 60, 77, 40, 50, 49, 29, 42, 27, 42, 50]//income
                             ],
                             [
-                                [77, 40, 50, 49, 27, 38, 60, 42, 50, 29, 42, 27],
-                                [60, 38, 18, 51, 88, 50, 40, 52, 60, 70, 88, 80]
+                                //Yearly
+                                [77, 40, 50, 49, 27, 38, 60, 42, 50, 29, 42, 27],//orders
+                                [60, 38, 18, 51, 88, 50, 40, 52, 60, 70, 88, 80]//income
                             ]
                         ]
 
@@ -713,9 +544,104 @@
                         })
                     }
                 })()
+            </script> -->
+
+
+            <script>
+                (function () {
+                    window.onload = function () {
+                        // INITIALIZATION OF NAVBAR VERTICAL ASIDE
+                        // =======================================================
+                        new HSSideNav('.js-navbar-vertical-aside').init()
+
+                        // INITIALIZATION OF NAV SCROLLER
+                        // =======================================================
+                        new HsNavScroller('.js-nav-scroller', {
+                            delay: 400
+                        })
+
+                        // INITIALIZATION OF FORM SEARCH
+                        // =======================================================
+                        new HSFormSearch('.js-form-search')
+
+                        // INITIALIZATION OF BOOTSTRAP DROPDOWN
+                        // =======================================================
+                        HSBsDropdown.init()
+
+                        // Fetch data from the server
+                        fetch('/admin/graphDetails')
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+
+
+                                const monthlySales = data.monthlySales;
+                                const monthlyOrders = data.monthlyOrders;
+                                const yearlySales = data.yearlySales;
+                                const yearlyOrders = data.yearlyOrders;
+                                const weeklySales = data.weeklySales;
+                                const weeklyOrders = data.weeklyOrders;
+
+                                var updatingChartDatasets = [
+                                    monthlyOrders.map(item => item.totalOrders),
+                                    monthlySales.map(item => item.total),
+                                    yearlyOrders.map(item => item.totalOrders),
+                                    yearlySales.map(item => item.total),
+                                    weeklyOrders.map(item => item.totalOrders),
+                                    weeklySales.map(item => item.total),
+                                ];
+
+                                // INITIALIZATION OF CHARTJS
+                                // =======================================================
+                                HSCore.components.HSChartJS.init(document.querySelector('#updatingLineChart'), {
+                                    data: {
+                                        datasets: [
+                                            {
+                                                data: updatingChartDatasets[0] 
+                                            },
+                                            {
+                                                data: updatingChartDatasets[1] 
+                                            }
+                                        ]
+                                    }
+                                })
+
+                                 HSCore.components.HSChartJS.init(document.querySelector('.js-chartjs-doughnut-half'), {
+                            options: {
+                                plugins: {
+                                    tooltip: {
+                                        postfix: "%"
+                                    }
+                                },
+                                cutout: '85%',
+                                rotation: '270',
+                                circumference: '180'
+                            }
+                            });   
+
+                                const updatingLineChart = HSCore.components.HSChartJS.getItem(0)
+
+                                let selectedDataset = 0; 
+
+                                document.querySelectorAll('[data-bs-toggle="chart"]')
+                                    .forEach($item => {
+                                        $item.addEventListener('click', e => {
+                                            selectedDataset = parseInt(e.currentTarget.getAttribute('data-datasets'), 10);
+
+                                            updatingLineChart.data.datasets.forEach((dataset, key) => {
+                                                dataset.data = updatingChartDatasets[selectedDataset * 2 + key]; 
+                                            });
+
+                                            updatingLineChart.update();
+                                        })
+                                    })
+                            })
+                            .catch(error => console.error('Error fetching data:', error));
+                    }
+                })()
             </script>
 
-            <!-- Style Switcher JS -->
+
 
 
 

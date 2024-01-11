@@ -141,6 +141,13 @@
                                 <span class="nav-link-title">Coupons</span>
                             </a>
                         </div>
+
+                        <div class="nav-item">
+                            <a class="nav-link <%= currentPath === '/admin/salesReport' ? 'active' : '' %>" href="/admin/salesReport">
+                                <i class="bi-people nav-icon"></i>
+                                <span class="nav-link-title">Sales reports</span>
+                            </a>
+                        </div>
                     </div>
                     <% } else { %>
 
@@ -194,6 +201,13 @@
                                 <a class="nav-link " href="/admin/coupons">
                                     <i class="bi-people nav-icon"></i>
                                     <span class="nav-link-title">Coupons</span>
+                                </a>
+                            </div>
+
+                            <div class="nav-item">
+                                <a class="nav-link " href="/admin/salesReport">
+                                    <i class="bi-people nav-icon"></i>
+                                    <span class="nav-link-title">Sales reports</span>
                                 </a>
                             </div>
                         </div>

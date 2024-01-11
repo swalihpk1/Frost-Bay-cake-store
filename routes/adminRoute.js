@@ -12,6 +12,7 @@ const authAdmin = require("../middlewares/authAdmin");
 // Require admin Controllers
 const adminController = require("../controllers/adminController");
 const couponController = require("../controllers/couponController");
+const dashboardController = require("../controllers/dashboardController");
 
 
 // Multer Configuration for  add productImgaes
@@ -54,7 +55,8 @@ app.get('/', authAdmin.isLogout, adminController.login)
 app.post('/', adminController.verifyLogin)
 
 // ---------------------------Dashboard----------------------------
-app.get('/dashboard', authAdmin.isLogin, adminController.dashboard);
+app.get('/dashboard', authAdmin.isLogin,dashboardController.dashboard);
+app.all('/graphDetails', authAdmin.isLogin,dashboardController.graphDetails);
 
 // --------------------------Product-----------------------------
 app.get('/products', authAdmin.isLogin, adminController.products);
@@ -92,7 +94,11 @@ app.put('/orders/requestAction', authAdmin.isLogin, adminController.requestActio
 app.get('/coupons', authAdmin.isLogin, couponController.renderCoupon);
 app.post('/addCoupon', authAdmin.isLogin, couponBgImageUpload.single('couponImage'), couponController.addCoupon);
 app.patch('/editCoupon', authAdmin.isLogin, couponBgImageUpload.single('couponImage'), couponController.editCoupon);
-app.patch('/couponActivation', authAdmin.isLogin, couponController.activation );
+app.patch('/couponActivation', authAdmin.isLogin, couponController.activation);
+
+
+//------------------------------Sales report-----------------------------
+app.get('/salesReport', authAdmin.isLogin, adminController.salesReport);
 
 // ---------------------------Logout-admin--------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);

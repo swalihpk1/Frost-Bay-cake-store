@@ -45,19 +45,6 @@ const logout = async (req, res) => {
     }
 }
 
-// -------Dashboards------
-const dashboard = async (req, res) => {
-    try {
-        const adminEmail = process.env.ADMIN_EMAIL.trim();
-        const adminName = process.env.ADMIN_NAME.trim();
-
-        res.render('dashboard', { adminName: adminName, adminEmail: adminEmail,currentPath:"/admin/dashboard" });
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
 // --------Products------
 const products = async (req, res) => {
     try {
@@ -469,13 +456,20 @@ const requestAction = async (req, res) => {
     }
 }
 
+const salesReport = async (req, res) => {
+    try {
+        res.render('salesReports');
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
 
 
 
 module.exports = {
     login,
     verifyLogin,
-    dashboard,
     products,
     users,
     blockUser,
@@ -494,6 +488,7 @@ module.exports = {
     changeStatus,
     requestAction,
     userOrders,
+    salesReport,
     logout
 
 }
