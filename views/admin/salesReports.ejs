@@ -3,6 +3,9 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.13/dist/jspdf.plugin.autotable.min.js"></script>
+
 
     </head>
 
@@ -34,14 +37,13 @@
                             </div>
 
                             <div class="d-flex m-3">
-                                <select name="status" class="btn btn-outline-primary  form-select  px-6 "
-                                    autocomplete="off" data-product-id="" data-order-id="">
-                                    <option value="" selected>PDF</option>
-                                    <option value=""> EXCEL</option>
+                                <select id="documentType" name="status" class="btn btn-outline-primary form-select px-6"
+                                    autocomplete="off">
+                                    <option value="pdf" selected>PDF</option>
+                                    <option value="excel">EXCEL</option>
                                 </select>
-                                <button class="btn"><i class="fa-solid fa-download fa-xl"
+                                <button class="btn" id="downloadButton"><i class="fa-solid fa-download fa-xl"
                                         style="color:rgb(65, 65, 65);"></i></button>
-
                             </div>
                             <!-- End Dropdown -->
                         </div>
@@ -86,85 +88,130 @@
 
 
                         <script>
-                  $(document).on('ready', function () {
-    // INITIALIZATION OF DATERANGEPICKER
-    // =======================================================
-    var start = moment();
-    var end = moment();
+                            $(document).on('ready', function () {
+                                // INITIALIZATION OF DATERANGEPICKER
+                                // =======================================================
+                                var start = moment();
+                                var end = moment();
 
-    function cb(start, end) {
-        var previewElement = $('#js-daterangepicker-predefined .js-daterangepicker-predefined-preview');
-        previewElement.html(start.format('MMM D') + ' - ' + end.format('MMM D, YYYY'));
+                                function cb(start, end) {
+                                    var previewElement = $('#js-daterangepicker-predefined .js-daterangepicker-predefined-preview');
+                                    previewElement.html(start.format('MMM D') + ' - ' + end.format('MMM D, YYYY'));
 
-        if (start.isSame(moment().subtract(1, 'month').startOf('month')) && end.isSame(moment().subtract(1, 'month').endOf('month'))) {
-            previewElement.html('<select class="form-select"><option value="1">Option 1</option><option value="2">Option 2</option></select>');
-        }
-    }
+                                    if (start.isSame(moment().subtract(1, 'month').startOf('month')) && end.isSame(moment().subtract(1, 'month').endOf('month'))) {
+                                        previewElement.html('<select class="form-select"><option value="1">Option 1</option><option value="2">Option 2</option></select>');
+                                    }
+                                }
 
-    // Initialize the daterangepicker
-    $('#js-daterangepicker-predefined').daterangepicker({
-        startDate: start,
-        endDate: end,
-        ranges: {
-            'Today': [moment(), moment()],
-            'This Week': [moment().startOf('week'), moment()],
-            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment()],
-        }
-    }, cb);
+                                // Initialize the daterangepicker
+                                $('#js-daterangepicker-predefined').daterangepicker({
+                                    startDate: start,
+                                    endDate: end,
+                                    ranges: {
+                                        'Today': [moment(), moment()],
+                                        'This Week': [moment().startOf('week'), moment()],
+                                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment()],
+                                    }
+                                }, cb);
 
-    // Set the initial text content of the preview element to "Today"
-    $('#js-daterangepicker-predefined .js-daterangepicker-predefined-preview').html('Today');
+                                // Set the initial text content of the preview element to "Today"
+                                $('#js-daterangepicker-predefined .js-daterangepicker-predefined-preview').html('Today');
 
-    // Trigger the 'apply.daterangepicker' event to fetch and display orders for the initial "Today" range
-    $('#js-daterangepicker-predefined').trigger('apply.daterangepicker');
+                                // Trigger the 'apply.daterangepicker' event to fetch and display orders for the initial "Today" range
+                                $('#js-daterangepicker-predefined').trigger('apply.daterangepicker');
 
-    // --------------Showing sales reports----------------
-    fetchOrders(start, end);
+                                // --------------Showing sales reports----------------
+                                fetchOrders(start, end);
 
-    // Handle the daterangepicker date change
-    $('#js-daterangepicker-predefined').on('apply.daterangepicker', function (ev, picker) {
-        fetchOrders(picker.startDate, picker.endDate);
-    });
+                                // Handle the daterangepicker date change
+                                $('#js-daterangepicker-predefined').on('apply.daterangepicker', function (ev, picker) {
+                                    fetchOrders(picker.startDate, picker.endDate);
+                                });
 
-    function fetchOrders(start, end) {
-        $.ajax({
-            url: '/admin/salesReport',
-            method: 'POST',
-            data: {
-                start: start.format('YYYY-MM-DD'),
-                end: end.format('YYYY-MM-DD')
-            },
-            dataType: 'json',
-            success: function (data) {
-                populateOrdersTable(data);
-                $('#noDataImageContainer').toggle(data.length === 0);
-            },
-            error: function (error) {
-                console.error('Error fetching orders:', error);
-            }
-        });
-    }
+                                function fetchOrders(start, end) {
+                                    $.ajax({
+                                        url: '/admin/salesReport',
+                                        method: 'POST',
+                                        data: {
+                                            start: start.format('YYYY-MM-DD'),
+                                            end: end.format('YYYY-MM-DD')
+                                        },
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            populateOrdersTable(data);
+                                            $('#noDataImageContainer').toggle(data.length === 0);
+                                        },
+                                        error: function (error) {
+                                            console.error('Error fetching orders:', error);
+                                        }
+                                    });
+                                }
 
-    function populateOrdersTable(orders) {
-        var tableBody = $('#orderTableBody');
-        tableBody.empty(); // Clear existing rows
+                                function populateOrdersTable(orders) {
+                                    var tableBody = $('#orderTableBody');
+                                    tableBody.empty(); // Clear existing rows
 
-        orders.forEach(function (order, index) {
-            var row = '<tr>' +
-                '<td>' + (index + 1) + '</td>' +
-                '<td>' + order.orderedProducts[0].productDetails.name + '</td>' +
-                '<td>' + order.userName + '</td>' +
-                '<td>' + order.shipAddress[0].email + '</td>' +
-                '<td>' + order.orderedProducts[0].quantity + '</td>' +
-                '<td>Rs: ' + order.totalAmount + '</td>' +
-                '<td>' + order.purchaseDate + '</td>' +
-                '<td>' + order.paymentMethod + '</td>' +
-                '</tr>';
+                                    orders.forEach(function (order, index) {
+                                        var row = '<tr>' +
+                                            '<td>' + (index + 1) + '</td>' +
+                                            '<td>' + order.orderedProducts[0].productDetails.name + '</td>' +
+                                            '<td>' + order.userName + '</td>' +
+                                            '<td>' + order.shipAddress[0].email + '</td>' +
+                                            '<td>' + order.orderedProducts[0].quantity + '</td>' +
+                                            '<td>Rs: ' + order.totalAmount + '</td>' +
+                                            '<td>' + order.purchaseDate + '</td>' +
+                                            '<td>' + order.paymentMethod + '</td>' +
+                                            '</tr>';
 
-            tableBody.append(row);
-        });
-    }
-});
+                                        tableBody.append(row);
+                                    });
+                                }
+
+
+                                // -----------Generating Documents----------------
+                                $('#downloadButton').on('click', function () {
+                                    console.log('Download button clicked');
+                                    const start = $('#js-daterangepicker-predefined').data('daterangepicker').startDate;
+                                    const end = $('#js-daterangepicker-predefined').data('daterangepicker').endDate;
+
+                                    $.ajax({
+                                        url: '/admin/generateSalesDocuments',
+                                        method: 'POST',
+                                        data: {
+                                            start: start.format('YYYY-MM-DD'),
+                                            end: end.format('YYYY-MM-DD')
+                                        },
+                                        responseType: 'blob', // Use responseType instead of dataType
+                                        xhrFields: {
+                                            responseType: 'blob'
+                                        },
+                                        success: function (data) {
+
+                                            // Generate a filename based on the current date
+                                            const currentDate = new Date();
+                                            const filename = `Sales report of ${start.format('YYYY-MM-DD')} to ${end.format('YYYY-MM-DD')}.pdf`;
+
+                                            // Create a link element
+                                            const link = document.createElement('a');
+                                            link.href = window.URL.createObjectURL(data);
+
+                                            // Set the appropriate file name
+                                            link.download = filename;
+
+                                            // Append the link to the document and trigger a click event to start the download
+                                            document.body.appendChild(link);
+                                            link.click();
+
+                                            // Remove the link element
+                                            document.body.removeChild(link);
+                                        },
+                                        error: function (error) {
+                                            console.error('Error generating sales documents:', error);
+                                        }
+                                    });
+                                });
+                            });
+
 
 
                         </script>

@@ -6,7 +6,9 @@ const Sharp = require("sharp");
 const path = require("path");
 const Orders = require('../models/ordersModel');
 const Refundreqests = require("../models/refundReqModel")
-const moment = require("moment")
+const moment = require("moment");
+const PDFDocument = require('pdfkit');
+const Excel = require("excel4node");
 
 
 // --------Admin-login-------
@@ -50,7 +52,7 @@ const logout = async (req, res) => {
 const products = async (req, res) => {
     try {
         const products = await Products.find({}).populate('category');
-        res.render('products', { products: products ,currentPath:"/admin/products"});
+        res.render('products', { products: products, currentPath: "/admin/products" });
     } catch (error) {
         console.log(error.message);
     }
@@ -62,7 +64,7 @@ const users = async (req, res) => {
 
         const userData = await User.find({})
 
-        res.render('users', { user: userData,currentPath:"/admin/users"});
+        res.render('users', { user: userData, currentPath: "/admin/users" });
 
     } catch (error) {
         console.log(error.message);
@@ -165,7 +167,7 @@ const insertProduct = async (req, res) => {
 const category = async (req, res) => {
     try {
         const categoryName = await Category.find({})
-        res.render('category', { category: categoryName ,currentPath:"/admin/category"})
+        res.render('category', { category: categoryName, currentPath: "/admin/category" })
     } catch (error) {
         console.log(error.message);
     }
@@ -247,7 +249,7 @@ const editProduct = async (req, res) => {
         const product = await Products.findOne({ _id: productId });
         const categoryName = await Category.find({});
 
-        res.render('editProduct', { product: product, category: categoryName, currentPath:"/admin/editCategory"});
+        res.render('editProduct', { product: product, category: categoryName, currentPath: "/admin/editCategory" });
     } catch (error) {
         console.log(error.message);
     }
@@ -342,7 +344,7 @@ const userOrders = async (req, res) => {
     try {
         const orders = await Orders.find({}).sort({ createdAt: -1 });
         const refundRequests = await Refundreqests.find({})
-        res.render('orders', { orders: orders, refundRequests: refundRequests ,currentPath:"/admin/orders"});
+        res.render('orders', { orders: orders, refundRequests: refundRequests, currentPath: "/admin/orders" });
     } catch (error) {
         console.log(error.message);
     }
@@ -409,9 +411,9 @@ const requestAction = async (req, res) => {
 
         const order = await Orders.findById(orderId);
         if (order.couponOff) {
-             var minPurcahaseAmount = order.couponMinPurchase
-             var couponOff = order.couponOff
-             var discoutAmount = requestAmount - (requestAmount / couponOff)
+            var minPurcahaseAmount = order.couponMinPurchase
+            var couponOff = order.couponOff
+            var discoutAmount = requestAmount - (requestAmount / couponOff)
         }
 
 
@@ -442,7 +444,7 @@ const requestAction = async (req, res) => {
                 $push: {
                     'wallet.transactionHistory': newTransactionHistory
                 },
-                $inc: { 'wallet.balance': newTransactionHistory.amount}
+                $inc: { 'wallet.balance': newTransactionHistory.amount }
             },
             { upsert: true }
         );
@@ -477,13 +479,65 @@ const salesReportDataFetch = async (req, res) => {
             ]
         });
 
-          res.json(orders);
-    
+        res.json(orders);
+
     } catch (error) {
         console.log(error.message);
     }
-
 }
+
+const generateSalesDocuments = async (req, res) => {
+    try {
+        const start = new Date(req.body.start);
+        const end = new Date(req.body.end);
+
+        const orders = await Orders.find({
+            createdAt: { $gte: start, $lte: end },
+        });
+
+        const doc = new PDFDocument({ size: [1000, 700] }); // Adjust the width as needed
+
+        // Adding content to the PDF based on fetched orders
+        doc.fontSize(9).text('Sales Report', { align: 'center' });
+        doc.moveDown();
+
+        // Header row
+        doc.font('Helvetica-Bold').text('No', 50, doc.y);
+        doc.text('Product Name', 120, doc.y); // Increased the X-coordinate
+        doc.text('User Name', 270, doc.y);
+        doc.text('Email', 420, doc.y);
+        doc.text('Quantity', 560, doc.y);
+        doc.text('Total Amount', 670, doc.y);
+        doc.text('Purchase Date', 770, doc.y);
+        doc.text('Payment Method', 870, doc.y);
+        doc.moveDown();
+
+        // Row data with reduced spacing and left alignment
+        orders.forEach((order, index) => {
+            doc.text(index + 1, 50, doc.y);
+            doc.text(order.orderedProducts[0].productDetails.name, 120, doc.y); // Increased the X-coordinate
+            doc.text(order.userName, 270, doc.y);
+            doc.text(order.shipAddress[0].email, 420, doc.y);
+            doc.text(order.orderedProducts[0].quantity, 560, doc.y);
+            doc.text(`Rs: ${order.totalAmount}`, 670, doc.y);
+            doc.text(order.purchaseDate, 770, doc.y);
+            doc.text(order.paymentMethod, 870, doc.y);
+            doc.moveDown();
+        });
+
+      
+        // Pipe the PDF directly to the response
+        doc.pipe(res);
+        // Finalize the PDF file
+        doc.end();
+
+    } catch (error) {
+        console.error("Error:", error.message);
+        res.status(500).send({ error: 'Internal Server Error' });
+    }
+};
+
+
 
 
 
@@ -511,6 +565,7 @@ module.exports = {
     userOrders,
     salesReport,
     salesReportDataFetch,
+    generateSalesDocuments,
     logout
 
 }
