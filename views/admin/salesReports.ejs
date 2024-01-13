@@ -170,7 +170,7 @@
 
                                 // -----------Generating Documents----------------
                                 $('#downloadButton').on('click', function () {
-                                    console.log('Download button clicked');
+                                    const docType = $('#documentType').val();
                                     const start = $('#js-daterangepicker-predefined').data('daterangepicker').startDate;
                                     const end = $('#js-daterangepicker-predefined').data('daterangepicker').endDate;
 
@@ -179,30 +179,32 @@
                                         method: 'POST',
                                         data: {
                                             start: start.format('YYYY-MM-DD'),
-                                            end: end.format('YYYY-MM-DD')
+                                            end: end.format('YYYY-MM-DD'),
+                                            docType: docType
                                         },
-                                        responseType: 'blob', // Use responseType instead of dataType
+                                        responseType: 'blob',
                                         xhrFields: {
                                             responseType: 'blob'
                                         },
                                         success: function (data) {
-
-                                            // Generate a filename based on the current date
                                             const currentDate = new Date();
-                                            const filename = `Sales report of ${start.format('YYYY-MM-DD')} to ${end.format('YYYY-MM-DD')}.pdf`;
+                                            let filename;
 
-                                            // Create a link element
+                                            if (docType === 'excel') {
+                                                filename = `Sales reports of ${start.format('YYYY-MM-DD')} to ${end.format('YYYY-MM-DD')}.xlsx`;
+                                            } else if (docType === 'pdf') {
+                                                filename = `Sales reports of ${start.format('YYYY-MM-DD')} to ${end.format('YYYY-MM-DD')}.pdf`;
+                                            } else {
+                                                console.error('Invalid document type:', docType);
+                                                return;
+                                            }
+
                                             const link = document.createElement('a');
                                             link.href = window.URL.createObjectURL(data);
-
-                                            // Set the appropriate file name
                                             link.download = filename;
 
-                                            // Append the link to the document and trigger a click event to start the download
                                             document.body.appendChild(link);
                                             link.click();
-
-                                            // Remove the link element
                                             document.body.removeChild(link);
                                         },
                                         error: function (error) {

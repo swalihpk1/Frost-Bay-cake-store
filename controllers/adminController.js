@@ -8,7 +8,8 @@ const Orders = require('../models/ordersModel');
 const Refundreqests = require("../models/refundReqModel")
 const moment = require("moment");
 const PDFDocument = require('pdfkit');
-const Excel = require("excel4node");
+const Excel = require('exceljs');
+const fs = require("fs");
 
 
 // --------Admin-login-------
@@ -490,57 +491,90 @@ const generateSalesDocuments = async (req, res) => {
     try {
         const start = new Date(req.body.start);
         const end = new Date(req.body.end);
+        const docType = req.body.docType;
 
         const orders = await Orders.find({
             createdAt: { $gte: start, $lte: end },
         });
 
-        const doc = new PDFDocument({ size: [1000, 700] }); // Adjust the width as needed
+        if (docType === 'pdf') {
+            const doc = new PDFDocument({ size: [1000, 700] });
 
-        // Adding content to the PDF based on fetched orders
-        doc.fontSize(9).text('Sales Report', { align: 'center' });
-        doc.moveDown();
-
-        // Header row
-        doc.font('Helvetica-Bold').text('No', 50, doc.y);
-        doc.text('Product Name', 120, doc.y); // Increased the X-coordinate
-        doc.text('User Name', 270, doc.y);
-        doc.text('Email', 420, doc.y);
-        doc.text('Quantity', 560, doc.y);
-        doc.text('Total Amount', 670, doc.y);
-        doc.text('Purchase Date', 770, doc.y);
-        doc.text('Payment Method', 870, doc.y);
-        doc.moveDown();
-
-        // Row data with reduced spacing and left alignment
-        orders.forEach((order, index) => {
-            doc.text(index + 1, 50, doc.y);
-            doc.text(order.orderedProducts[0].productDetails.name, 120, doc.y); // Increased the X-coordinate
-            doc.text(order.userName, 270, doc.y);
-            doc.text(order.shipAddress[0].email, 420, doc.y);
-            doc.text(order.orderedProducts[0].quantity, 560, doc.y);
-            doc.text(`Rs: ${order.totalAmount}`, 670, doc.y);
-            doc.text(order.purchaseDate, 770, doc.y);
-            doc.text(order.paymentMethod, 870, doc.y);
+            doc.fontSize(9).text('Sales Report', { align: 'center' });
             doc.moveDown();
-        });
 
-      
-        // Pipe the PDF directly to the response
-        doc.pipe(res);
-        // Finalize the PDF file
-        doc.end();
+            // Header row
+            doc.font('Helvetica-Bold').text('No', 50, doc.y);
+            doc.text('Product Name', 120, doc.y);
+            doc.text('User Name', 270, doc.y);
+            doc.text('Email', 420, doc.y);
+            doc.text('Quantity', 560, doc.y);
+            doc.text('Total Amount', 670, doc.y);
+            doc.text('Purchase Date', 770, doc.y);
+            doc.text('Payment Method', 870, doc.y);
+            doc.moveDown();
 
+            orders.forEach((order, index) => {
+                doc.text(index + 1, 50, doc.y);
+                doc.text(order.orderedProducts[0].productDetails.name, 120, doc.y);
+                doc.text(order.userName, 270, doc.y);
+                doc.text(order.shipAddress[0].email, 420, doc.y);
+                doc.text(order.orderedProducts[0].quantity, 560, doc.y);
+                doc.text(`Rs: ${order.totalAmount}`, 670, doc.y);
+                doc.text(order.purchaseDate, 770, doc.y);
+                doc.text(order.paymentMethod, 870, doc.y);
+                doc.moveDown();
+            });
+
+            doc.pipe(res);
+            doc.end();
+        } else if (docType === 'excel') {
+
+            const workbook = new Excel.Workbook();
+            const worksheet = workbook.addWorksheet('Sales Report');
+
+            // Populate the worksheet with headers
+            worksheet.addRow([
+                'No',
+                'Product Name',
+                'User Name',
+                'Email',
+                'Quantity',
+                'Total Amount',
+                'Purchase Date',
+                'Payment Method'
+            ]);
+
+            // Populate the worksheet with data from orders
+            orders.forEach((order, index) => {
+                worksheet.addRow([
+                    index + 1,
+                    order.orderedProducts[0].productDetails.name,
+                    order.userName,
+                    order.shipAddress[0].email,
+                    order.orderedProducts[0].quantity,
+                    `Rs: ${order.totalAmount}`,
+                    order.purchaseDate,
+                    order.paymentMethod
+                ]);
+            });
+
+            // Set content type and headers
+            res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            res.setHeader('Content-Disposition', `attachment; filename="SalesReport_${start.toISOString()}_${end.toISOString()}.xlsx`);
+
+            // Write the workbook to the response stream
+            await workbook.xlsx.write(res);
+
+            // End the response
+            res.end();
+        }
+        
     } catch (error) {
-        console.error("Error:", error.message);
+        console.error('Error:', error.message);
         res.status(500).send({ error: 'Internal Server Error' });
     }
 };
-
-
-
-
-
 
 module.exports = {
     login,
