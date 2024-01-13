@@ -9,7 +9,7 @@ const Refundreqests = require("../models/refundReqModel")
 const moment = require("moment");
 const PDFDocument = require('pdfkit');
 const Excel = require('exceljs');
-const fs = require("fs");
+const Offers = require("../models/offerModel");
 
 
 // --------Admin-login-------
@@ -569,12 +569,41 @@ const generateSalesDocuments = async (req, res) => {
             // End the response
             res.end();
         }
-        
+
     } catch (error) {
         console.error('Error:', error.message);
         res.status(500).send({ error: 'Internal Server Error' });
     }
 };
+
+
+const offers = async (req, res) => {
+    try {
+        const offers = await Offers.find({})
+        res.render('offers',{offers ,currentPath: "/admin/offers"})
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const addOffer = async (req, res) => {
+    try {
+        const offer = new Offers({
+            offerName: req.body.offerName,
+            description: req.body.description,
+            offPercentage: req.body.discount
+        })
+        const newOffer = await offer.save();
+
+        if (newOffer) {
+            res.json({ success: true });
+        } else {
+            res.json({ success: false });
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 module.exports = {
     login,
@@ -600,6 +629,8 @@ module.exports = {
     salesReport,
     salesReportDataFetch,
     generateSalesDocuments,
+    offers,
+    addOffer,
     logout
 
 }

@@ -1,0 +1,320 @@
+<%-include('../layouts/admin/header')-%>
+    </head>
+
+    <body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl   footer-offset">
+
+        <%-include('../layouts/admin/navbar')-%>
+
+            <main id="content" role="main" class="main">
+                <!-- Content -->
+                <div class="content container-fluid">
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center mb-3">
+                            <div class="col-sm mb-2 mb-sm-0">
+                                <h1 class="page-header-title">Categorys <span
+                                        class="badge bg-soft-dark text-dark ms-2">4</span></h1>
+                            </div>
+                            <!-- End Col -->
+                            <!-- End Col -->
+                        </div>
+                        <!-- End Row -->
+
+                        <!-- Nav Scroller -->
+                        <div class="js-nav-scroller hs-nav-scroller-horizontal">
+                            <span class="hs-nav-scroller-arrow-prev" style="display: none;">
+                                <a class="hs-nav-scroller-arrow-link" href="javascript:;">
+                                    <i class="bi-chevron-left"></i>
+                                </a>
+                            </span>
+
+                            <span class="hs-nav-scroller-arrow-next" style="display: none;">
+                                <a class="hs-nav-scroller-arrow-link" href="javascript:;">
+                                    <i class="bi-chevron-right"></i>
+                                </a>
+                            </span>
+
+                            <!-- Nav -->
+                            <ul class="nav nav-tabs page-header-tabs" id="pageHeaderTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#">All Categorys</a>
+                                </li>
+                            </ul>
+                            <!-- End Nav -->
+                        </div>
+                        <!-- End Nav Scroller -->
+                    </div>
+                    <!-- End Page Header -->
+
+
+                    <!-- End Row -->
+
+                    <!-- Card -->
+                    <div class="card">
+                        <!-- Header -->
+                        <div class="card-header card-header-content">
+                            <div class="card-header card-header-content-md-between">
+                                <div class="mb-2 mb-md-0">
+                                    <form>
+                                        <!-- Search -->
+                                        <div class="input-group input-group-merge input-group-flush">
+                                            <div class="input-group-prepend input-group-text">
+                                                <i class="bi-search"></i>
+                                            </div>
+                                            <input id="datatableSearch" type="search" class="form-control"
+                                                placeholder="Search offers" aria-label="Search users">
+                                        </div>
+                                        <!-- End Search -->
+                                    </form>
+                                </div>
+
+                                <div class="d-grid d-sm-flex gap-2">
+
+                                    <div class="col-sm-auto">
+                                        <a href="#" class="btn btn-primary" data-toggle="modal" data-target="#addOffersModal">Add Offer</a>
+                                    </div>
+                                    <!-- End Dropdown -->
+                                </div>
+                            </div>
+
+
+                        </div>
+                        <!-- End Header -->
+
+                        <!-- Table -->
+                        <%if(offers.length > 0 ){%>
+                        <div class="table-responsive datatable-custom ">
+                            <table id="tableReload"
+                                class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
+                                data-hs-datatables-options>
+                                <thead class="thead-light text-center">
+                                    <tr>
+                                        <th>Sl.No</th>
+                                        <th>Offer Name</th>
+                                        <th>description</th>
+                                        <th>Off percentage</th>
+                                        <th>Actions</th>
+                                    </tr>
+
+
+                                 <tbody class="text-center">
+                                   <% for(i=0;i<offers.length ; i++){%>
+                                        <tr>
+                                            <td>
+                                                <%=i+1%>
+                                            </td>
+                                            <td><%= offers[i].offerName %></td>
+                                            <td>
+                                                <%= offers[i].description %>
+                                            </td>
+                                            <td><%= offers[i].offPercentage %>%</td>
+                                            <td class="text-center align-middle">
+                                                <div class="d-flex justify-content-center">
+                                                    <a class="btn btn-white btn-sm delete-category-btn me-2"
+                                                    data-toggle="modal" data-target="#editCategoryModal">
+                                                    Edit
+                                                 </a>
+                                                    <a class="btn btn-white btn-sm  edit-category-btn delete m-0  " href="#"">
+                                                        <i class=" fas fa-trash "></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                   <% } %>
+                            </tbody>
+                            <% } else{%>
+
+                                <div class="d-flex justify-content-center m-5">
+                                    <img src="/assets/images/noOffers.webp" alt="">
+                                </div>
+                            <% } %>
+                        </table
+                    </div>
+                   
+
+                </div>
+
+            </div>
+
+        </main>
+
+         <!-- Add Category Modal -->
+         <div class="modal fade" id="addOffersModal" tabindex="-1" role="dialog" aria-labelledby="addOfferModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title" id="">Add
+                            Offer</h3>
+                            <button type="button" class="btn-close" data-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body m-3 p-0">
+                        <form  action=""  method="" id="addOfferForm">
+                        <div class="row mt-4 p-0">
+                            <div class="col-md-6 ">
+                                <div class="form-group">
+                                    <label for="couponId">
+                                        <h6>Offer name</h6> 
+                                    </label>
+                                    <input type="text" class="form-control" id="offerName" name="offerName"
+                                        placeholder="Enter offer name">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="discount">
+                                        <h6>Off %</h6>
+                                    </label>
+                                    <input type="number" class="form-control" id="discount" name="discount"
+                                        placeholder="Enter off percentage">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                    <label for="discount">
+                                        <h6>Description %</h6>
+                                    </label>
+                                    <input type="text" class="form-control" id="description" name="description"
+                                        placeholder="About offer...">
+                             </div>
+                        </div>
+                        <div class="col-sm-auto text-end">
+                            <button type="submit" class="btn btn-success" >Save</button>
+                        </div>
+                    </form>
+                    
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Edit Category Modal -->
+        <div class="modal fade" id="editOfferModal" tabindex="-1"
+             role="dialog" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="">Add
+                            Offer</h5>
+                            <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body m-3 p-0">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="notification-container"></div>
+
+    <script src="/assets/admin/js/vendor.min.js"></script>
+
+
+     <!-- -----------Add offer------------------- -->
+    <script>
+     $('#addOfferForm').submit(async function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const formObj = Object.fromEntries(Array.from(formData.entries()));
+                try {
+                    const response = await $.ajax({
+                        url: '/admin/addOffer',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify(formObj),
+                    });
+
+                    const result = response;
+
+                    if (result.success) {
+                        showNotification("Offer Created",true)
+                        setTimeout(() => {
+                             location.reload()
+                        },1500);
+                      
+
+                    } else { 
+                        showNotification("Something went wrong",false)
+                        setTimeout(() => {
+                             location.reload()
+                        }, 2200);
+                      
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                }
+            });
+
+            
+
+
+        // showing notification
+        function showNotification(message, success = true) {
+            const notificationContainer = document.getElementById('notification-container');
+            notificationContainer.innerHTML = message;
+
+            if (success) {
+                notificationContainer.style.color = 'green';
+            } else {
+                notificationContainer.style.color = 'red';
+            }
+
+            notificationContainer.style.display = 'block';
+
+            setTimeout(() => {
+                notificationContainer.style.display = 'none';
+            }, 3000);
+        }
+
+    </script>
+
+    <!-- <script>
+        function showEditCouponModal(couponId, description, discountPercentage, bgImage, expiryDate, minPurchaseAmount, coupon_id) {
+            var form = document.getElementById('EditCouponForm');
+            form.querySelector('#couponId').value = couponId;
+            form.querySelector('#description').value = description;
+            form.querySelector('#discount').value = discountPercentage;
+            form.querySelector('#expiryDate').value = expiryDate;
+            form.querySelector('#minPurchaseAmount').value = minPurchaseAmount;
+            form.querySelector('#coupon_id').value = coupon_id;
+
+            var imagePreview = form.querySelector('#imagePreview');
+            imagePreview.src = "/assets/couponBgImages/" + bgImage;
+
+            // Show the modal
+            $('#editCouponModal').modal('show');
+
+            // ------------for Edit coupon-----------
+            document.getElementById('EditCouponForm').addEventListener('submit', async function (event) {
+                event.preventDefault();
+
+                const form = event.target;
+                const formData = new FormData(form);
+
+               // Only unblock the user if they are currently blocked
+               
+                
+            });  // <-- Place the closing brace here
+        }
+
+        function previewEditImage(inputId, previewId) {
+            var imagePreview = document.getElementById(previewId);
+            var couponImageInput = document.getElementById(inputId);
+
+            if (couponImageInput.files.length > 0) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.src = e.target.result;
+                };
+                reader.readAsDataURL(couponImageInput.files[0]);
+            }
+        }
+    </script> -->
+
+
+
+
+<%-include('../layouts/admin/footer')-%>

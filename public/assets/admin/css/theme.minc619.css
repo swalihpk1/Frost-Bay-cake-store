@@ -34290,3 +34290,16 @@ a:hover .text-inherit {
 .table-bordered td {
     padding: 1rem;
 }
+.delete{
+    color: gray;
+    transition: all .35s ease;
+    margin: 1rem;
+    margin-top: 0;
+    height: 2.5rem;
+    border: 0;
+    background-color: #fff;
+}
+.delete:hover {
+    color: #ff0000;
+
+ }

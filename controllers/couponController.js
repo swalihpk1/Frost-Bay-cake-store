@@ -34,7 +34,7 @@ const addCoupon = async (req, res) => {
     } catch (error) {
         console.log(error.message);
     }
-}
+}   
 
 const editCoupon = async (req, res) => {
     try {

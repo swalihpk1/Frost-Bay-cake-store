@@ -102,6 +102,9 @@ app.get('/salesReport', authAdmin.isLogin, adminController.salesReport);
 app.post('/salesReport', authAdmin.isLogin, adminController.salesReportDataFetch);
 app.post('/generateSalesDocuments', authAdmin.isLogin, adminController.generateSalesDocuments);
 
+//------------------------------Offers-----------------------------
+app.get('/offers', authAdmin.isLogin, adminController.offers);
+app.post('/addOffer', authAdmin.isLogin, adminController.addOffer);
 
 // ---------------------------Logout-admin--------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);
