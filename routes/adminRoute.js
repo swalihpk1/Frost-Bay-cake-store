@@ -105,6 +105,7 @@ app.post('/generateSalesDocuments', authAdmin.isLogin, adminController.generateS
 //------------------------------Offers-----------------------------
 app.get('/offers', authAdmin.isLogin, adminController.offers);
 app.post('/addOffer', authAdmin.isLogin, adminController.addOffer);
+app.post('/product/productApplyoffer', authAdmin.isLogin, adminController.productApplyOffer);
 
 // ---------------------------Logout-admin--------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);

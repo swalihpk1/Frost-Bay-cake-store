@@ -52,8 +52,10 @@ const logout = async (req, res) => {
 // --------Products------
 const products = async (req, res) => {
     try {
-        const products = await Products.find({}).populate('category');
-        res.render('products', { products: products, currentPath: "/admin/products" });
+        const products = await Products.find({}).populate('category').populate('offer');
+        console.log(products);
+        const offers = await Offers.find({})
+        res.render('products', { products: products, offers, currentPath: "/admin/products" });
     } catch (error) {
         console.log(error.message);
     }
@@ -580,7 +582,7 @@ const generateSalesDocuments = async (req, res) => {
 const offers = async (req, res) => {
     try {
         const offers = await Offers.find({})
-        res.render('offers',{offers ,currentPath: "/admin/offers"})
+        res.render('offers', { offers, currentPath: "/admin/offers" })
     } catch (error) {
         console.log(error.message);
     }
@@ -604,6 +606,33 @@ const addOffer = async (req, res) => {
         console.log(error.message);
     }
 }
+
+const productApplyOffer = async (req, res) => {
+    try {
+        const offerId = req.body.offerId;
+        const productId = req.body.offerProductId;
+
+        console.log('Request Body:', req.body);  // Add this log
+
+        const applyOffer = await Products.findOneAndUpdate(
+            { _id: productId },
+            { offer: offerId },
+            { new: true }
+        );
+
+
+        console.log('Apply Offer:', applyOffer);
+
+        if (applyOffer) {
+            res.json({ success:true});
+        } else {
+            res.json({ success:false });
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ json: 'error' });
+    }
+};
 
 module.exports = {
     login,
@@ -631,6 +660,7 @@ module.exports = {
     generateSalesDocuments,
     offers,
     addOffer,
+    productApplyOffer,
     logout
 
 }
