@@ -8,6 +8,11 @@ const categorySchema = new mongoose.Schema({
     isListed:{
         type:Number,
         default:0
+    },
+    offer: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Offers',
+        required: true
     }
 });
 module.exports = mongoose.model("Categorys", categorySchema);

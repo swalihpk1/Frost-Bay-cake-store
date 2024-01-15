@@ -72,6 +72,9 @@ app.post('/products/editProduct', authAdmin.isLogin, upload.fields([
 ]), adminController.inserEditedProduct);
 app.put('/products/hideProduct', authAdmin.isLogin, adminController.hideProduct);
 app.put('/products/showProduct', authAdmin.isLogin, adminController.showProduct);
+app.post('/products/productApplyoffer', authAdmin.isLogin, adminController.productApplyOffer);
+app.patch('/products/removeProductOffer', authAdmin.isLogin, adminController.removeProductOffer);
+
 
 // ---------------------------User-------------------------
 app.get('/users', authAdmin.isLogin, adminController.users);
@@ -84,6 +87,8 @@ app.post('/category', authAdmin.isLogin, adminController.insertCategory);
 app.put('/category/editCategory', authAdmin.isLogin, adminController.editCategory);
 app.put('/category/listCategory', authAdmin.isLogin, adminController.listCatogory);
 app.put('/category/UnListCategory', authAdmin.isLogin, adminController.UnListCatogory);
+app.post('/category/categoryApplyoffer', authAdmin.isLogin, adminController.categoryApplyOffer);
+app.patch('/category/removeCategoryOffer', authAdmin.isLogin, adminController.removeCategoryOffer);
 
 // --------------------------Users Orders--------------------
 app.get('/orders', authAdmin.isLogin, adminController.userOrders);
@@ -105,7 +110,7 @@ app.post('/generateSalesDocuments', authAdmin.isLogin, adminController.generateS
 //------------------------------Offers-----------------------------
 app.get('/offers', authAdmin.isLogin, adminController.offers);
 app.post('/addOffer', authAdmin.isLogin, adminController.addOffer);
-app.post('/product/productApplyoffer', authAdmin.isLogin, adminController.productApplyOffer);
+app.delete('/deleteOffer', authAdmin.isLogin, adminController.deleteOffer);
 
 // ---------------------------Logout-admin--------------------
 app.get('/logout', authAdmin.isLogin, adminController.logout);

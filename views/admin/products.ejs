@@ -183,7 +183,7 @@
 
                                                 <% if (products[i].offer) { %>
                                                 <div class="btn-group shadow-lg" role="group">
-                                                    <a href=""><i class="fa-solid fa-x fa-xs text-danger"></i></a>
+                                                    <a onclick="removeOffer('<%= products[i]._id %>')" ><i class="fa-solid fa-x fa-xs text-danger"></i></a>
                                                 </div>
                                                 <% } %>
                                                
@@ -220,8 +220,7 @@
                                     <% for (let i=0; i < offers.length; i++) { %>
                                         <div class="col-md-4 mb-3 "
                                             style="width: calc(33.333% - 10px); margin-right: 10px;">
-                                            <div class="card p-3 h-100 " data-offer-id="<%= offers[i]._id %>"
-                                                style="border-radius: 0;">
+                                            <div class="card p-3 h-100" id="offerCard" data-offer-id="<%= offers[i]._id %>">
                                                 <h6>
                                                     <%= offers[i].offerName %>
                                                 </h6>
@@ -280,6 +279,37 @@
             <script src="/assets/admin/js/demo.js"></script>
             <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+            <script>
+                function removeOffer(productId) {
+
+                    fetch('/admin/products/removeProductOffer', {
+                                method: 'PATCH',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                  productId
+                                }),
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data);
+                                    if (data.success) {
+                                        showNotification("Offer removed", true)
+                                        setTimeout(() => {
+                                            location.reload()
+                                        }, 2000);
+                                    } else {
+                                        showNotification("Something went wrong", false)
+                                        setTimeout(() => {
+                                            location.reload()
+                                        }, 2000);
+                                    }
+                                })
+                                .catch(error => console.error('Error sending offer ID:', error));
+                }
+            </script>
 
 
             <script>
@@ -343,22 +373,16 @@
                 document.addEventListener('DOMContentLoaded', function () {
                     const modal = new bootstrap.Modal(document.getElementById('OffersModal'));
 
-
-                    // This event will be triggered when the modal is hidden
                     modal._element.addEventListener('hidden.bs.modal', function () {
-                        // Reset selection when the modal is closed
                         const selectedCard = document.querySelector('#OffersModal .card.selected');
                         if (selectedCard) {
                             selectedCard.classList.remove('selected');
                         }
 
-                        // Clear the product ID data attribute
                         modal._element.setAttribute('data-product-id', '');
                     });
 
-                    // Your existing click event listener for the modal
                     modal._element.addEventListener('click', function (event) {
-                        // Deselect the card when clicking outside the cards
                         if (!event.target.closest('.card') && !event.target.closest('#applyOfferBtn')) {
                             const selectedCard = document.querySelector('#OffersModal .card.selected');
                             if (selectedCard) {
@@ -367,7 +391,6 @@
                         }
                     });
 
-                    // Your existing code for handling card clicks
                     const cards = document.querySelectorAll('#OffersModal .card');
                     cards.forEach(card => {
                         card.addEventListener('click', function () {
@@ -384,7 +407,7 @@
                             console.log('Offer ID:', offerId);
                             console.log('Product ID:', offerProductId);
 
-                            fetch('/admin/product/productApplyoffer', {
+                            fetch('/admin/products/productApplyoffer', {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -437,8 +460,6 @@
                 }
 
             </script>
-
-
 
 
             <%-include('../layouts/admin/footer')-%>

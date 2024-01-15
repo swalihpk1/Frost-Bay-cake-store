@@ -93,6 +93,7 @@
                                         <th>Offer Name</th>
                                         <th>description</th>
                                         <th>Off percentage</th>
+                                        <th>For (category/product)</th>
                                         <th>Actions</th>
                                     </tr>
 
@@ -108,13 +109,14 @@
                                                 <%= offers[i].description %>
                                             </td>
                                             <td><%= offers[i].offPercentage %>%</td>
+                                            <td><%= offers[i].type %></td>
                                             <td class="text-center align-middle">
                                                 <div class="d-flex justify-content-center">
                                                     <a class="btn btn-white btn-sm delete-category-btn me-2"
                                                     data-toggle="modal" data-target="#editCategoryModal">
                                                     Edit
                                                  </a>
-                                                    <a class="btn btn-white btn-sm  edit-category-btn delete m-0  " href="#"">
+                                                    <a class="btn btn-white btn-sm  edit-category-btn delete m-0" onclick="deleteOffer('<%= offers[i]._id %>')">
                                                         <i class=" fas fa-trash "></i>
                                                     </a>
                                                 </div>
@@ -130,12 +132,8 @@
                             <% } %>
                         </table
                     </div>
-                   
-
                 </div>
-
             </div>
-
         </main>
 
          <!-- Add Category Modal -->
@@ -152,8 +150,8 @@
                     <div class="modal-body m-3 p-0">
                         <form  action=""  method="" id="addOfferForm">
                         <div class="row mt-4 p-0">
-                            <div class="col-md-6 ">
-                                <div class="form-group">
+                            <div class="col-md-12 py-2">
+                                <div class="form-group ">
                                     <label for="couponId">
                                         <h6>Offer name</h6> 
                                     </label>
@@ -161,7 +159,19 @@
                                         placeholder="Enter offer name">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-6 py-2">
+                                <div class="form-group ">
+                                    <label for="">
+                                        <h6>For (category/product)</h6>
+                                    </label>
+                                        <select id="" name="offerType" class="form-select"
+                                            autocomplete="off">
+                                            <option value="Product" selected>Product</option>
+                                            <option value="Category">Category</option>
+                                        </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6 py-2">
                                 <div class="form-group">
                                     <label for="discount">
                                         <h6>Off %</h6>
@@ -211,14 +221,49 @@
 
     <script src="/assets/admin/js/vendor.min.js"></script>
 
+    <script>
 
-     <!-- -----------Add offer------------------- -->
+        // -----------DeleteOffer----------------
+        function deleteOffer(offerId) {
+
+            fetch('/admin/deleteOffer', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                          offerId
+                        }),
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            if (data.success) {
+                            $('#tableReload').load('/admin/offers #tableReload')
+                                // showNotification("Offer deleted successfully", true)
+                                // setTimeout(() => {
+                                //     location.reload()
+                                // }, 2000);
+                            } else {
+                                showNotification("Something went wrong", false)
+                                setTimeout(() => {
+                                    location.reload()
+                                }, 2000);
+                            }
+                        })
+                        .catch(error => console.error('Error sending offer ID:', error));
+        }
+    </script>
+
+
+     <!-------------Add offer--------------------->
     <script>
      $('#addOfferForm').submit(async function (event) {
                 event.preventDefault();
 
                 const formData = new FormData(this);
                 const formObj = Object.fromEntries(Array.from(formData.entries()));
+                // formObj.offerType = $('#offerType').val();
                 try {
                     const response = await $.ajax({
                         url: '/admin/addOffer',
@@ -270,50 +315,6 @@
         }
 
     </script>
-
-    <!-- <script>
-        function showEditCouponModal(couponId, description, discountPercentage, bgImage, expiryDate, minPurchaseAmount, coupon_id) {
-            var form = document.getElementById('EditCouponForm');
-            form.querySelector('#couponId').value = couponId;
-            form.querySelector('#description').value = description;
-            form.querySelector('#discount').value = discountPercentage;
-            form.querySelector('#expiryDate').value = expiryDate;
-            form.querySelector('#minPurchaseAmount').value = minPurchaseAmount;
-            form.querySelector('#coupon_id').value = coupon_id;
-
-            var imagePreview = form.querySelector('#imagePreview');
-            imagePreview.src = "/assets/couponBgImages/" + bgImage;
-
-            // Show the modal
-            $('#editCouponModal').modal('show');
-
-            // ------------for Edit coupon-----------
-            document.getElementById('EditCouponForm').addEventListener('submit', async function (event) {
-                event.preventDefault();
-
-                const form = event.target;
-                const formData = new FormData(form);
-
-               // Only unblock the user if they are currently blocked
-               
-                
-            });  // <-- Place the closing brace here
-        }
-
-        function previewEditImage(inputId, previewId) {
-            var imagePreview = document.getElementById(previewId);
-            var couponImageInput = document.getElementById(inputId);
-
-            if (couponImageInput.files.length > 0) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    imagePreview.src = e.target.result;
-                };
-                reader.readAsDataURL(couponImageInput.files[0]);
-            }
-        }
-    </script> -->
-
 
 
 

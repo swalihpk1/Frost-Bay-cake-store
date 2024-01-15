@@ -34305,16 +34305,20 @@ a:hover .text-inherit {
     color: #ff0000;
 
 }
+#offerCard{
+     border-radius: 0;
+}
 
 #OffersModal .card:hover {
     transform: scale(1.1);
     background-color: #f0f0f0;
     cursor: pointer;
     transition: all .35s ease;
+   
 }
 
 #OffersModal .card.selected {
-    border: 2px solid #c96;
+    border: 3px solid #c96;
     background: #cc99663b;
     color: black;
 }

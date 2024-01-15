@@ -10,6 +10,8 @@ const moment = require("moment");
 const PDFDocument = require('pdfkit');
 const Excel = require('exceljs');
 const Offers = require("../models/offerModel");
+const { ObjectId } = require('mongodb');
+const { type } = require("os");
 
 
 // --------Admin-login-------
@@ -52,9 +54,8 @@ const logout = async (req, res) => {
 // --------Products------
 const products = async (req, res) => {
     try {
-        const products = await Products.find({}).populate('category').populate('offer');
-        console.log(products);
-        const offers = await Offers.find({})
+        const products = await Products.find({}).populate('category').populate('offer')
+        const offers = await Offers.find({ type: "Product" })
         res.render('products', { products: products, offers, currentPath: "/admin/products" });
     } catch (error) {
         console.log(error.message);
@@ -169,8 +170,9 @@ const insertProduct = async (req, res) => {
 //----Render-categry-page----
 const category = async (req, res) => {
     try {
-        const categoryName = await Category.find({})
-        res.render('category', { category: categoryName, currentPath: "/admin/category" })
+        const categoryName = await Category.find({}).populate('offer')
+        const offers = await Offers.find({ type: "Category" })
+        res.render('category', { category: categoryName, offers ,currentPath: "/admin/category" })
     } catch (error) {
         console.log(error.message);
     }
@@ -590,15 +592,17 @@ const offers = async (req, res) => {
 
 const addOffer = async (req, res) => {
     try {
+        console.log(req.body);
         const offer = new Offers({
             offerName: req.body.offerName,
             description: req.body.description,
-            offPercentage: req.body.discount
+            offPercentage: req.body.discount,
+            type: req.body.offerType
         })
         const newOffer = await offer.save();
 
         if (newOffer) {
-            res.json({ success: true });
+            res.json({ success: true }); 
         } else {
             res.json({ success: false });
         }
@@ -612,16 +616,11 @@ const productApplyOffer = async (req, res) => {
         const offerId = req.body.offerId;
         const productId = req.body.offerProductId;
 
-        console.log('Request Body:', req.body);  // Add this log
-
         const applyOffer = await Products.findOneAndUpdate(
             { _id: productId },
             { offer: offerId },
             { new: true }
         );
-
-
-        console.log('Apply Offer:', applyOffer);
 
         if (applyOffer) {
             res.json({ success:true});
@@ -633,6 +632,92 @@ const productApplyOffer = async (req, res) => {
         res.status(500).json({ json: 'error' });
     }
 };
+const removeProductOffer = async (req, res) => {
+    try {
+        const { productId } = req.body;
+
+        const removeOffer = await Products.findOneAndUpdate(
+            { _id: productId },
+            { $unset: { offer: "" } },
+            { new: true } 
+        );
+
+        console.log(removeOffer);
+
+        if (removeOffer) {
+            res.json({ success: true });
+        } else {
+            res.json({ success: false });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
+}
+
+const deleteOffer = async (req, res) => {
+    try {
+        const { offerId } = req.body
+        const deleteOffer = await Offers.findOneAndDelete({ _id: offerId })
+        
+        if (deleteOffer) {
+            res.json({ success: true });
+        } else {
+            res.json({ success: false });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const categoryApplyOffer = async (req, res) => {
+    try {
+        console.log(req.body);
+        const offerId = req.body.offerId;
+        const categoryId = req.body.offerCategoryId;
+
+        const applyOffer = await Category.findOneAndUpdate(
+            { _id: categoryId },
+            { offer: offerId },
+            { new: true }
+        );
+
+        if (applyOffer) {
+            res.json({ success:true});
+        } else {
+            res.json({ success:false });
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ json: 'error' });
+    }
+};
+
+const removeCategoryOffer = async (req, res) => {
+    try {
+        const { categoryId } = req.body;
+
+        const removeOffer = await Category.findOneAndUpdate(
+            { _id: categoryId },
+            { $unset: { offer: "" } },
+            { new: true } 
+        );
+
+        console.log(removeOffer);
+
+        if (removeOffer) {
+            res.json({ success: true });
+        } else {
+            res.json({ success: false });
+        }
+
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ success: false, error: error.message });
+    }
+}
 
 module.exports = {
     login,
@@ -661,6 +746,10 @@ module.exports = {
     offers,
     addOffer,
     productApplyOffer,
+    removeProductOffer,
+    deleteOffer,
+    categoryApplyOffer,
+    removeCategoryOffer,
     logout
 
 }

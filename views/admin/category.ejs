@@ -1,5 +1,5 @@
 <%-include('../layouts/admin/header')-%>
-    
+
     </head>
 
     <body class="has-navbar-vertical-aside navbar-vertical-aside-show-xl   footer-offset">
@@ -11,320 +11,523 @@
 
         <%-include('../layouts/admin/navbar')-%>
 
-        <main id="content" role="main" class="main">
-            <!-- Content -->
-            <div class="content container-fluid">
-                <!-- Page Header -->
-                <div class="page-header">
-                    <div class="row align-items-center mb-3">
-                        <div class="col-sm mb-2 mb-sm-0">
-                            <h1 class="page-header-title">Categorys <span
-                                    class="badge bg-soft-dark text-dark ms-2">4</span></h1>
-                        </div>
-                        <!-- End Col -->
-                        <!-- End Col -->
-                    </div>
-                    <!-- End Row -->
-
-                    <!-- Nav Scroller -->
-                    <div class="js-nav-scroller hs-nav-scroller-horizontal">
-                        <span class="hs-nav-scroller-arrow-prev" style="display: none;">
-                            <a class="hs-nav-scroller-arrow-link" href="javascript:;">
-                                <i class="bi-chevron-left"></i>
-                            </a>
-                        </span>
-
-                        <span class="hs-nav-scroller-arrow-next" style="display: none;">
-                            <a class="hs-nav-scroller-arrow-link" href="javascript:;">
-                                <i class="bi-chevron-right"></i>
-                            </a>
-                        </span>
-
-                        <!-- Nav -->
-                        <ul class="nav nav-tabs page-header-tabs" id="pageHeaderTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#">All Categorys</a>
-                            </li>
-                        </ul>
-                        <!-- End Nav -->
-                    </div>
-                    <!-- End Nav Scroller -->
-                </div>
-                <!-- End Page Header -->
-
-
-                <!-- End Row -->
-
-                <!-- Card -->
-                <div class="card">
-                    <!-- Header -->
-                    <div class="card-header card-header-content">
-                        <div class="mb-2 mb-md-0">
-                            <form>
-                                <!-- Search -->
-                                <div class="input-group input-group-merge input-group-flush">
-                                    <div class="input-group-prepend input-group-text">
-                                        <i class="bi-search"></i>
-                                    </div>
-                                    <input id="datatableSearch" type="search" class="form-control" placeholder="Search"
-                                        aria-label="Search users">
-                                </div>
-                                <!-- End Search -->
-                            </form>
-                        </div>
-                        
-                         <% if(typeof message !== 'undefined'){ %>
-                            <% if( message == 'Category added'){ %>
-                            <h5 class="text-center text-success"><%= message %></h5>
-                            <%  }else{ %>
-                                <h5 class="text-center text-danger"><%= message %></h5>
-                          <%  } %>
-                        <%  } %>
-                    </div>
-                    <!-- End Header -->
-
-                    <!-- Table -->
-                    <div class="table-responsive datatable-custom">
-                        <table id="datatable"
-                            class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
-                            data-hs-datatables-options>
-                            <thead class="thead-light text-center">
-                                <tr>
-                                    <th>Sl.No</th>
-                                    <th>Category Name</th>
-                                    <th>Total Cakes</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="text-center">
-                                <% for (let i=0; i < category.length; i++) { %>
-                                    <tr>
-
-                                        <td>
-                                            <%=i+1%>.
-                                        </td>
-                                        <td>
-                                            <%=category[i].categoryName%>
-                                        </td>
-                                        <td>34</td>
-                                        <td class="text-center align-middle">
-                                            <div class="d-flex justify-content-center">
-                                                <a class="btn btn-white btn-sm  edit-category-btn" href="#"
-                                                  onclick="editCategory(('<%=category[i].categoryName%>'),('<%=category[i]._id%>'))">
-                                                    <i class="bi-pencil-fill me-1"></i> Edit
-                                                </a>
-                                                <% if(category[i].isListed == 0 ){ %>
-                                                <button class="btn btn-white btn-sm delete-category-btn" id="listButtton<%=category[i]._id%>" onclick="showConfirmationModal('<%=category[i]._id%>')">
-                                                     Unlist</button>
-                                               <% }else if(category[i].isListed == 1 ){ %>
-                                                <button class="btn btn-white btn-sm delete-category-btn" id="listButtton<%=category[i]._id%>" onclick="showConfirmationModal('<%=category[i]._id%>')">
-                                                List</button>
-                                               <% } %>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <%}%>
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- End Table -->
-
-                    <!-- Footer -->
-                    <div class="card-footer">
-                        <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
+            <main id="content" role="main" class="main">
+                <!-- Content -->
+                <div class="content container-fluid">
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <div class="row align-items-center mb-3">
                             <div class="col-sm mb-2 mb-sm-0">
-                                <div class=" justify-content-center justify-content-sm-start align-items-center">
-
-                                    <h5 id="addCategoryBtn" onclick="toggleAddCategoryForm()">Add Category</h5>
-                                    <!-- Pagination Quantity -->
-
-                                    <form method="post" class="my-4" id="addCategoryForm" style="display: none;">
-                                        
-                                        <input type="text" class="form-control w-25" name="categoryName"
-                                            placeholder="Enter the category name">
-                                        <button type="submit" class="btn btn-primary">Add</button>
-                                    </form>
-
-
-                                </div>
+                                <h1 class="page-header-title">Categorys <span
+                                        class="badge bg-soft-dark text-dark ms-2">4</span></h1>
                             </div>
                             <!-- End Col -->
-
-                            <div class="col-sm-auto">
-                                <div class="d-flex justify-content-center justify-content-sm-end">
-                                    <!-- Pagination -->
-                                    <nav id="datatablePagination" aria-label="Activity pagination"></nav>
-                                </div>
-                            </div>
                             <!-- End Col -->
                         </div>
                         <!-- End Row -->
+
+                        <!-- Nav Scroller -->
+                        <div class="js-nav-scroller hs-nav-scroller-horizontal">
+                            <span class="hs-nav-scroller-arrow-prev" style="display: none;">
+                                <a class="hs-nav-scroller-arrow-link" href="javascript:;">
+                                    <i class="bi-chevron-left"></i>
+                                </a>
+                            </span>
+
+                            <span class="hs-nav-scroller-arrow-next" style="display: none;">
+                                <a class="hs-nav-scroller-arrow-link" href="javascript:;">
+                                    <i class="bi-chevron-right"></i>
+                                </a>
+                            </span>
+
+                            <!-- Nav -->
+                            <ul class="nav nav-tabs page-header-tabs" id="pageHeaderTab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#">All Categorys</a>
+                                </li>
+                            </ul>
+                            <!-- End Nav -->
+                        </div>
+                        <!-- End Nav Scroller -->
                     </div>
-                    <!-- End Footer -->
+                    <!-- End Page Header -->
+
+                    <!-- Card -->
+                    <div class="card">
+                        <!-- Header -->
+                        <div class="card-header card-header-content">
+                            <div class="mb-2 mb-md-0">
+                                <form>
+                                    <!-- Search -->
+                                    <div class="input-group input-group-merge input-group-flush">
+                                        <div class="input-group-prepend input-group-text">
+                                            <i class="bi-search"></i>
+                                        </div>
+                                        <input id="datatableSearch" type="search" class="form-control"
+                                            placeholder="Search" aria-label="Search users">
+                                    </div>
+                                    <!-- End Search -->
+                                </form>
+                            </div>
+
+                            <% if(typeof message !=='undefined' ){ %>
+                                <% if( message=='Category added' ){ %>
+                                    <h5 class="text-center text-success">
+                                        <%= message %>
+                                    </h5>
+                                    <% }else{ %>
+                                        <h5 class="text-center text-danger">
+                                            <%= message %>
+                                        </h5>
+                                        <% } %>
+                                            <% } %>
+                        </div>
+                        <!-- End Header -->
+
+                        <!-- Table -->
+                        <div class="table-responsive datatable-custom">
+                            <table id="datatable"
+                                class="table table-borderless table-thead-bordered table-nowrap table-align-middle card-table"
+                                data-hs-datatables-options>
+                                <thead class="thead-light text-center">
+                                    <tr>
+                                        <th>Sl.No</th>
+                                        <th>Category Name</th>
+                                        <th>Total Cakes</th>
+                                        <th>Offers</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody class="text-center">
+                                    <% for (let i=0; i < category.length; i++) { %>
+                                        <tr>
+
+                                            <td>
+                                                <%=i+1%>.
+                                            </td>
+                                            <td>
+                                                <%=category[i].categoryName%>
+                                            </td>
+                                            <td>34</td>
+                                            <td>
+                                                <div class="btn-group shadow-lg" role="group" style="min-width: 5rem;">
+                                                    <% if (category[i].offer) { %>
+                                                        <a class="btn btn-white btn-sm" data-toggle="modal"
+                                                            data-target="#OffersModal"
+                                                            onclick="sendCategoryId('<%= category[i]._id %>')">
+                                                            <strong style="color: #c96;">
+                                                                <%= category[i].offer.offPercentage %>% Off
+                                                            </strong>
+                                                        </a>
+
+
+                                                        <% } else { %>
+                                                            <a class="btn btn-white btn-sm" data-toggle="modal"
+                                                                data-target="#OffersModal"
+                                                                onclick="sendCategoryId('<%= category[i]._id %>')">
+                                                                No Offers
+                                                            </a>
+                                                            <% } %>
+                                                </div>
+
+                                                <% if (category[i].offer) { %>
+                                                    <div class="btn-group shadow-lg" role="group">
+                                                        <a onclick="removeOffer('<%= category[i]._id %>')"><i
+                                                                class="fa-solid fa-x fa-xs text-danger"></i></a>
+                                                    </div>
+                                                    <% } %>
+
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <div class="d-flex justify-content-center">
+                                                    <a class="btn btn-white btn-sm  edit-category-btn" href="#"
+                                                        onclick="editCategory(('<%=category[i].categoryName%>'),('<%=category[i]._id%>'))">
+                                                        <i class="bi-pencil-fill me-1"></i> Edit
+                                                    </a>
+                                                    <% if(category[i].isListed==0 ){ %>
+                                                        <button class="btn btn-white btn-sm delete-category-btn"
+                                                            id="listButtton<%=category[i]._id%>"
+                                                            onclick="showConfirmationModal('<%=category[i]._id%>')">
+                                                            Unlist</button>
+                                                        <% }else if(category[i].isListed==1 ){ %>
+                                                            <button class="btn btn-white btn-sm delete-category-btn"
+                                                                id="listButtton<%=category[i]._id%>"
+                                                                onclick="showConfirmationModal('<%=category[i]._id%>')">
+                                                                List</button>
+                                                            <% } %>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <%}%>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- End Table -->
+
+                        <div class="modal fade" id="OffersModal" tabindex="-1" role="dialog"
+                            aria-labelledby="OffersModalLabel" aria-hidden="true" id="modalBody">
+                            <div class="modal-dialog">
+                                <div class="modal-content" style="background-color: #e0e0e0;">
+                                    <div class="modal-header bg-soft-dark p-2 text-center">
+                                        <h3 class="modal-title" id="OffersModalLabel">Select an Offer</h3>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body d-flex flex-wrap p-2 " style="background-color: #e0e0e0;"
+                                        id="modalBody">
+                                        <% for (let i=0; i < offers.length; i++) { %>
+                                            <div class="col-md-4 mb-3 "
+                                                style="width: calc(33.333% - 10px); margin-right: 10px;">
+                                                <div class="card p-3 h-100" id="offerCard"
+                                                    data-offer-id="<%= offers[i]._id %>">
+                                                    <h6>
+                                                        <%= offers[i].offerName %>
+                                                    </h6>
+                                                    <p>
+                                                        <%= offers[i].description %>
+                                                    </p>
+                                                    <h3>
+                                                        <%= offers[i].offPercentage %>%
+                                                    </h3>
+                                                </div>
+                                            </div>
+                                            <% } %>
+                                    </div>
+                                    <div class="m-2 text-center">
+                                        <button type="button" class="btn btn-info" id="applyOfferBtn">Apply
+                                            offer</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer -->
+                        <div class="card-footer">
+                            <div class="row justify-content-center justify-content-sm-between align-items-sm-center">
+                                <div class="col-sm mb-2 mb-sm-0">
+                                    <div class=" justify-content-center justify-content-sm-start align-items-center">
+
+                                        <h5 id="addCategoryBtn" onclick="toggleAddCategoryForm()">Add Category</h5>
+                                        <!-- Pagination Quantity -->
+
+                                        <form method="post" class="my-4" id="addCategoryForm" style="display: none;">
+
+                                            <input type="text" class="form-control w-25" name="categoryName"
+                                                placeholder="Enter the category name">
+                                            <button type="submit" class="btn btn-primary">Add</button>
+                                        </form>
+
+
+                                    </div>
+                                </div>
+                                <!-- End Col -->
+
+                                <div class="col-sm-auto">
+                                    <div class="d-flex justify-content-center justify-content-sm-end">
+                                        <!-- Pagination -->
+                                        <nav id="datatablePagination" aria-label="Activity pagination"></nav>
+                                    </div>
+                                </div>
+                                <!-- End Col -->
+                            </div>
+                            <!-- End Row -->
+                        </div>
+                        <!-- End Footer -->
+                    </div>
+
                 </div>
 
+            </main>
+
+            <!-- Edit Category Modal -->
+            <div class="modal" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" class="form-control d-none" value="categoryId" id="categoryId"
+                                placeholder="">
+                            <input type="text" class="form-control" value="" id="editedCategoryInput" placeholder="">
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button class="btn btn-primary" onclick="saveEditedCategory()" type="button">Save</button>
+
+                        </div>
+                    </div>
+                </div>
             </div>
 
-        </main>
-
-        <!-- Edit Category Modal -->
-        <div class="modal" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <input type="text" class="form-control d-none" value="categoryId" id="categoryId"
-                        placeholder="">
-                        <input type="text" class="form-control" value="" id="editedCategoryInput"
-                            placeholder="">
-                    </div>
-                
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button  class="btn btn-primary" onclick="saveEditedCategory()"  type="button">Save</button>
-
+            <!--list Modal -->
+            <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to List this Category?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-danger" onclick="confirmListCategory()">List</button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!--list Modal -->
-        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="confirmationModalLabel">Confirmation</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  Are you sure you want to List this Category?
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                  <button type="button" class="btn btn-danger" onclick="confirmListCategory()">List</button>
-                </div>
-              </div>
-            </div>
-          </div>     
-        
-        <!-- List / Unlist Modal with function-->
-        <script>
-            function showConfirmationModal(categoryId) {
+            <div id="notification-container"></div>
 
-              $('#confirmationModal').data('categoryId', categoryId);
 
-              $('#confirmationModal').modal('show');
-            }
-          
-            function confirmListCategory() {
+                <!-- -----------remove offer ------------- -->
+            <script>
+                function removeOffer(categoryId) {
 
-              const categoryId = $('#confirmationModal').data('categoryId');
-              const listButtton = document.getElementById(`listButtton${categoryId}`);
-
-              const text = listButtton.innerHTML
-
-             //   listCategory(categoryId);
-                if (text.trim() === "List" ) {
-                    console.log("1ith");
-                    fetch(`/admin/category/listCategory`, {
-                        method: 'PUT',
+                    fetch('/admin/category/removeCategoryOffer', {
+                        method: 'PATCH',
                         headers: {
-                            "Content-Type": "application/json"
+                            'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ categoryId })
+                        body: JSON.stringify({
+                            categoryId
+                        }),
                     })
                         .then(response => response.json())
                         .then(data => {
                             console.log(data);
-                            window.location.href = '/admin/category';
+                            if (data.success) {
+                                showNotification("Offer removed", true)
+                                setTimeout(() => {
+                                    location.reload()
+                                }, 2000);
+                            } else {
+                                showNotification("Something went wrong", false)
+                                setTimeout(() => {
+                                    location.reload()
+                                }, 2000);
+                            }
                         })
-                        .catch(error => console.error('Error Listing Category:', error));
-        
-                } else{
-                    console.log("2ith");
-                    fetch(`/admin/category/UnListCategory`, {
-                        method: 'PUT',
-                        headers: {
+                        .catch(error => console.error('Error sending offer ID:', error));
+                }
+            </script>
+
+            <!-- -------Apply offer ------------- -->
+            <script>
+
+                var offerCategoryId;
+
+                function sendCategoryId(categoryId) {
+                    this.offerCategoryId = categoryId
+
+                }
+                document.addEventListener('DOMContentLoaded', function () {
+                    const modal = new bootstrap.Modal(document.getElementById('OffersModal'));
+
+                    modal._element.addEventListener('hidden.bs.modal', function () {
+                        const selectedCard = document.querySelector('#OffersModal .card.selected');
+                        if (selectedCard) {
+                            selectedCard.classList.remove('selected');
+                        }
+                    });
+
+                    modal._element.addEventListener('click', function (event) {
+                        if (!event.target.closest('.card') && !event.target.closest('#applyOfferBtn')) {
+                            const selectedCard = document.querySelector('#OffersModal .card.selected');
+                            if (selectedCard) {
+                                selectedCard.classList.remove('selected');
+                            }
+                        }
+                    });
+
+                    const cards = document.querySelectorAll('#OffersModal .card');
+                    cards.forEach(card => {
+                        card.addEventListener('click', function () {
+                            cards.forEach(c => c.classList.remove('selected'));
+                            this.classList.add('selected');
+                        });
+                    });
+
+                    document.getElementById('applyOfferBtn').addEventListener('click', function () {
+                        const selectedCard = document.querySelector('#OffersModal .card.selected');
+
+                        if (selectedCard) {
+                            const offerId = selectedCard.getAttribute('data-offer-id');
+                            console.log('Offer ID:', offerId);
+
+                            fetch('/admin/category/categoryApplyoffer', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({
+                                    offerId,
+                                    offerCategoryId,
+                                }),
+                            })
+                                .then(response => response.json())
+                                .then(data => {
+                                    console.log(data);
+                                    if (data.success) {
+                                        showNotification("Offer applied", true)
+                                        setTimeout(() => {
+                                            location.reload()
+                                        }, 2000);
+                                    } else {
+                                        showNotification("Something went wrong", false)
+                                        setTimeout(() => {
+                                            location.reload()
+                                        }, 2000);
+                                    }
+                                })
+                                .catch(error => console.error('Error sending offer ID:', error));
+                        } else {
+                            console.log('No offer selected or no category ID');
+                        }
+                    });
+                });
+
+                // showing notification
+                function showNotification(message, success = true) {
+                    const notificationContainer = document.getElementById('notification-container');
+                    notificationContainer.innerHTML = message;
+
+                    if (success) {
+                        notificationContainer.style.color = 'green';
+                    } else {
+                        notificationContainer.style.color = 'red';
+                    }
+
+                    notificationContainer.style.display = 'block';
+
+                    setTimeout(() => {
+                        notificationContainer.style.display = 'none';
+                    }, 2000);
+                }
+
+            </script>
+
+            <!-- List / Unlist Modal with function-->
+            <script>
+                function showConfirmationModal(categoryId) {
+
+                    $('#confirmationModal').data('categoryId', categoryId);
+
+                    $('#confirmationModal').modal('show');
+                }
+
+                function confirmListCategory() {
+
+                    const categoryId = $('#confirmationModal').data('categoryId');
+                    const listButtton = document.getElementById(`listButtton${categoryId}`);
+
+                    const text = listButtton.innerHTML
+
+                    //   listCategory(categoryId);
+                    if (text.trim() === "List") {
+                        console.log("1ith");
+                        fetch(`/admin/category/listCategory`, {
+                            method: 'PUT',
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ categoryId })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data);
+                                window.location.href = '/admin/category';
+                            })
+                            .catch(error => console.error('Error Listing Category:', error));
+
+                    } else {
+                        console.log("2ith");
+                        fetch(`/admin/category/UnListCategory`, {
+                            method: 'PUT',
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ categoryId })
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                window.location.href = '/admin/category';
+                            })
+                            .catch(error => console.error('Error Unlisting Category:', error));
+                    }
+
+                    $('#confirmationModal').modal('hide');
+                }
+            </script>
+
+            <!-- Your JavaScript to handle the modal -->
+            <script>
+                var categoryId;
+                // Function to set the input value and show the edit category modal
+                function editCategory(categoryName, categoryId) {
+                    this.categoryId = categoryId
+                    console.log(categoryName);
+                    document.getElementById('editedCategoryInput').value = categoryName;
+                    document.getElementById('categoryId').value = categoryId;
+
+                    // Show the edit category modal using Bootstrap method
+                    $('#editCategoryModal').modal('show');
+                }
+
+                // Function to save the edited category
+                function saveEditedCategory() {
+                    // Gather form data
+                    const editedCategoryName = document.getElementById('editedCategoryInput').value
+                    // Send a POST request using Fetch API
+                    fetch('/admin/category/editCategory', {
+                        method: 'PUT', headers: {
                             "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify({ categoryId })
+                        }, body: JSON.stringify({ categoryId, editedCategoryName })
                     })
                         .then(response => response.json())
                         .then(data => {
-                            window.location.href = '/admin/category';
+                            if (data.status === 'success') {
+                                // Redirect on the client side
+                                window.location.href = '/admin/category';
+                            }
+
                         })
-                        .catch(error => console.error('Error Unlisting Category:', error));
+                        .catch((error) => {
+                            console.error('Error:', error);
+                        });
+
+                    // Close the edit category modal using Bootstrap method
+                    $('#editCategoryModal').modal('hide');
+                }
+            </script>
+
+
+            <script>
+                function toggleAddCategoryForm() {
+                    var form = document.getElementById('addCategoryForm');
+                    form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
                 }
 
-              $('#confirmationModal').modal('hide');
-            }
-        </script>
 
-        <!-- Your JavaScript to handle the modal -->
-       <script>
-        var categoryId;
-        // Function to set the input value and show the edit category modal
-        function editCategory(categoryName,categoryId) {
-         this.categoryId = categoryId
-            console.log(categoryName);
-            document.getElementById('editedCategoryInput').value = categoryName;
-            document.getElementById('categoryId').value = categoryId;
+            </script>
 
-            // Show the edit category modal using Bootstrap method
-            $('#editCategoryModal').modal('show');
-        }
+            <!-- End Product Filter Modal -->
+            <!-- ========== END SECONDARY CONTENTS ========== -->
 
-         // Function to save the edited category
-        function saveEditedCategory() {
-        // Gather form data
-        const editedCategoryName = document.getElementById('editedCategoryInput').value
-        // Send a POST request using Fetch API
-        fetch('/admin/category/editCategory', {
-            method: 'PUT',headers: {
-            "Content-Type": "application/json"
-        },body:JSON.stringify({categoryId,editedCategoryName})
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-            // Redirect on the client side
-            window.location.href = '/admin/category';
-        }
- 
-        })
-        .catch((error) => {
-            console.error('Error:', error);
-        });
+            <!-- JS Implementing Plugins -->
+            <script src="/assets/admin/js/vendor.min.js"></script>
 
-            // Close the edit category modal using Bootstrap method
-            $('#editCategoryModal').modal('hide');
-        }
-    </script>
+            <!-- JS Front -->
+            <script src="/assets/admin/js/theme.min.js"></script>
 
 
-        <script>
-            function toggleAddCategoryForm() {
-                var form = document.getElementById('addCategoryForm');
-                form.style.display = (form.style.display === 'none' || form.style.display === '') ? 'block' : 'none';
-            }
 
-
-        </script>
-
-        <!-- End Product Filter Modal -->
-        <!-- ========== END SECONDARY CONTENTS ========== -->
-
-        <!-- JS Implementing Plugins -->
-        <script src="/assets/admin/js/vendor.min.js"></script>
-
-        <!-- JS Front -->
-        <script src="/assets/admin/js/theme.min.js"></script>
-
-       
-
-        <%-include('../layouts/admin/footer')-%></div>
+            <%-include('../layouts/admin/footer')-%></div>
