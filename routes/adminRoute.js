@@ -62,7 +62,7 @@ app.all('/graphDetails', authAdmin.isLogin,dashboardController.graphDetails);
 app.get('/products', authAdmin.isLogin, adminController.products);
 app.get('/products/addProduct', authAdmin.isLogin, adminController.addProduct);
 app.post('/products/addProduct', authAdmin.isLogin, upload.array("productImages", 4), adminController.insertProduct);
-app.get('/products/editProduct/:productId', adminController.editProduct);
+app.get('/products/editProduct/:productId', authAdmin.isLogin, adminController.editProduct);
 app.post('/products/editProduct', authAdmin.isLogin, upload.fields([
     { name: "image1", maxCount: 1 },
     { name: "image2", maxCount: 1 },

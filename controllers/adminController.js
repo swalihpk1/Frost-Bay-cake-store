@@ -26,6 +26,7 @@ const login = async (req, res) => {
 //--Admin-Login-verification-----
 const verifyLogin = async (req, res) => {
     try {
+       console.log('aayi');
         const adminEmail = process.env.ADMIN_EMAIL.trim();
         const adminPass = process.env.ADMIN_PASSWORD.trim();
 

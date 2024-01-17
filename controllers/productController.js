@@ -2,6 +2,7 @@ const User = require("../models/usersModel");
 const Products = require("../models/productModel");
 const Category = require("../models/categoryModel");
 const session = require("express-session");
+const Offers = require("../models/offerModel")
 
 
 const shop = async (req, res) => {
@@ -48,6 +49,7 @@ const shop = async (req, res) => {
 
         const products = await Products.find(query)
             .populate({ path: 'category', model: 'Categorys', select: 'categoryName' })
+            .populate('offer')
             .sort(sortCriteria)
             .skip((currentPage - 1) * 6)
             .limit(6);
@@ -96,7 +98,7 @@ const productDetails = async (req, res) => {
         const userId = req.userId;
         const user = await User.findOne({ _id: userId })
         const productId = req.params.productId
-        const product = await Products.findOne({ _id: productId })
+        const product = await Products.findOne({ _id: productId }).populate('offer')
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
         res.render('productDetails', { product: product, user: userDetails })
     } catch (error) {

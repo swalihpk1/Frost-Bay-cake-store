@@ -15,21 +15,8 @@
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><a href="index.html">Home</a></li>
                                 <li class="breadcrumb-item"><a href="#">Products</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Centered</li>
                             </ol>
-
                             <nav class="product-pager ml-auto" aria-label="Product">
-                                <a class="product-pager-link product-pager-prev" href="#" aria-label="Previous"
-                                    tabindex="-1">
-                                    <i class="icon-angle-left"></i>
-                                    <span>Prev</span>
-                                </a>
-
-                                <a class="product-pager-link product-pager-next" href="#" aria-label="Next"
-                                    tabindex="-1">
-                                    <span>Next</span>
-                                    <i class="icon-angle-right"></i>
-                                </a>
                             </nav><!-- End .pager-nav -->
                         </div><!-- End .container -->
                     </nav><!-- End .breadcrumb-nav -->
@@ -80,7 +67,12 @@
                                             </div><!-- End .rating-container -->
 
                                             <div class="product-price">
-                                                $<%= product.price %>
+                                                <% if (product.offer) { %>
+                                                    <strike>₹<%= product.price %></strike>&nbsp;
+                                                    ₹<%= product.price - (product.price * product.offer.offPercentage / 100) %>
+                                                <% } else { %>
+                                                    <%= product.price %>
+                                                <% } %>
                                             </div><!-- End .product-price -->
 
                                             <div class="product-content">
@@ -91,7 +83,7 @@
 
 
                                             <div class="my-5">
-                                                <label for="qty">Qty:</label>
+
                                                 <div class="input-group product-details-quantity d-inline-flex ">
                                                     <input type="text" id="qty"
                                                         class="form-control qnty bg-primary font-weight-bold text-white"
@@ -112,10 +104,6 @@
                                                 <form action="">
                                                 <a href="/shop/addProductCart/<%= product._id %>" 4 class="btn-product btn-cart"><span>add to cart</span></a>
 
-                                                <div class="details-action-wrapper">
-                                                    <a href="#" class="btn-product btn-wishlist"
-                                                        title="Wishlist"><span>Add to Wishlist</span></a>
-                                                </div><!-- End .details-action-wrapper -->
                                             </form>
                                             </div><!-- End .product-details-action -->
 

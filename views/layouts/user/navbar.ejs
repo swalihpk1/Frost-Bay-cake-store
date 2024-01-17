@@ -9,18 +9,12 @@
       <!-- End .header-left -->
 
       <div class="header-right">
-        <a href="wishlist.html" class="wishlist-link">
-          <i class="icon-heart-o"></i>
-          <span class="wishlist-count">3</span>
-          <span class="wishlist-txt">My Wishlist</span>
-        </a>
-
         <div class="dropdown cart-dropdown">
           <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false" data-display="static">
-            <i class="icon-shopping-cart"></i>
+            <img src="/assets/images/icons/cart.png" style="max-width: 30px;" alt="">
             <span class="cart-count">2</span>
-            <span class="cart-txt">$ 164,00</span>
+            <span class="cart-txt">₹ 164,00</span>
           </a>
 
           <div class="dropdown-menu dropdown-menu-right">
@@ -37,7 +31,7 @@
                         <span class="cart-product-qty">
                           <%= cartItem.quantity %>
                         </span>
-                        x $<%= cartItem.productId.price %>
+                        x ₹<%= cartItem.productId.price %>
                       </span>
                     </div>
                     <!-- End .product-cart-details -->
@@ -54,7 +48,7 @@
                   <!-- End .product -->
                   <% }); %>
                     <% } else { %>
-                      <div class="text-center">
+                      <div class="text-center border-1">
                         <p style="color: #949494">No cakes have been added yet.</p>
                         <a href="/shop" class="btn btn-outline-primary-2">
                           <span>GO SHOP</span><i class="icon-long-arrow-right"></i>
@@ -66,12 +60,12 @@
                           <div class="dropdown-cart-total">
                             <span>Total</span>
 
-                            <span class="cart-total-price">$160.00</span>
+                            <span class="cart-total-price">₹160.00</span>
                           </div>
                           <!-- End .dropdown-cart-total -->
 
-                          <div class="dropdown-cart-action">
-                            <a href="/cart" class="btn btn-secondary">View Cart</a>
+                          <div class="dropdown-cart-action ">
+                            <a href="/cart" class="btn btn-secondary text-white">View Cart</a>
                             <a href="/cart/checkout" class="btn btn-outline-primary-2"><span>Checkout</span><i
                                 class="icon-long-arrow-right"></i></a>
                           </div>

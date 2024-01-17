@@ -66,7 +66,7 @@
                                                                     </h3><!-- End .product-title -->
                                                                 </div><!-- End .product -->
                                                             </td>
-                                                            <td class="price-col">$<%= cartItem.productId.price %>
+                                                            <td class="price-col">₹<%= cartItem.productId.price %>
                                                             </td>
                                                             <td class="quantity-col">
                                                                 <div class="cart-product-quantity py-2">
@@ -81,7 +81,7 @@
                                                                 </div><!-- End cart-product-quantity -->
                                                             </td>
                                                             <td class="total-col cart-total"
-                                                                id="total<%= cartItem.productId._id %>">$<%=
+                                                                id="total<%= cartItem.productId._id %>">₹<%=
                                                                     cartItem.productId.price * cartItem.quantity %>
                                                             </td>
                                                             <td class="remove-col">
@@ -152,7 +152,7 @@
                                                                 <label for="free-shipping">Free Shipping</label>
                                                             </div><!-- End .custom-control -->
                                                         </td>
-                                                        <td class="">$0.00</td>
+                                                        <td class="">₹0.00</td>
                                                     </tr><!-- End .summary-shipping-row -->
 
 
@@ -354,10 +354,10 @@
 
                 let sum = 0;
                 totalColumns.forEach(column => {
-                    sum += parseFloat(column.textContent.replace('$', ''));
+                    sum += parseFloat(column.textContent.replace('₹', ''));
                 });
 
-                subtotalElement.textContent = '$' + sum.toFixed(2);
+                subtotalElement.textContent = '₹' + sum.toFixed(2);
                 document.getElementById('billAmount').innerHTML = document.getElementById('subtotal').innerHTML;
             }
 
@@ -366,7 +366,7 @@
                 const totalElement = document.getElementById('total' + productId);
                 const newTotal = price * newQuantity;
 
-                totalElement.innerText = '$' + newTotal.toFixed(2);
+                totalElement.innerText = '₹' + newTotal.toFixed(2);
 
                 updateSubtotal(); // Call the function to update the subtotal
 

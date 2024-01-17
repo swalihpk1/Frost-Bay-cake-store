@@ -76,6 +76,7 @@ app.get('/logout',authUser.isLogin,userController.logout);
 app.get('/shop',authUser.noAuth,productController.shop);
 app.get('/shop/productDetails/:productId',authUser.noAuth,productController.productDetails);
 app.get('/shop/addProductCart/:productId',authUser.isLogin,cartControllers.addProductCart);
+app.get('/shop/addProductCart',authUser.isLogin,cartControllers.addProductCart);
 
 // -------------------CART-MANAGEMENT---------------------
 app.get('/cart',authUser.isLogin,cartControllers.viewCart);

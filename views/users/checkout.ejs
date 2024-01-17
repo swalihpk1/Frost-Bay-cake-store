@@ -58,34 +58,32 @@
                                                     <div class="card card-dashboard" onclick="selectAddress(this)">
                                                         <div class="card-body p-0 m-1">
                                                             <input type="radio" class="pl-4 ml-3 mr-1"
-                                                                name="addressRadioButton" id="<%= address[i]._id %>">
+                                                                name="addressRadioButton" id="<%= address[i]._id %>"
+                                                                <% if(address[i].default == true) { %> checked <% } %>>
                                                             <h6 class="m-0 d-inline">
                                                                 <%= address[i].name %>
                                                             </h6>
-                                                            <%if(address[i].default==true){%>
-                                                                <span class="text-info"
-                                                                    style="font-size: small;">(default)</span>
-                                                                <%}%>
-                                                                    <br>
-                                                                    <div class="pl-5">
-                                                                        <%= address[i].houseName %>,
-                                                                            <%= address[i].appartmentNumber %>,
-                                                                                <%=address[i].city %>
-                                                                                    <%= address[i].zipcode%>,
-                                                                                        <%= address[i].state%>,
-                                                                                            <%=address[i].country %>
-                                                                                                <br>
-                                                                                                <%= address[i].email%>
-                                                                                                    ,
-                                                                                                    <%=address[i].phone%>
-                                                                                                        <br>
-                                                                                                        <%= address[i].company
-                                                                                                            %><br>
-                                                                                                            <a href="#"
-                                                                                                                onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
-                                                                                                                <i class="fa-sharp fa-solid fa-pen"
-                                                                                                                    style="color: #cc9966;"></i></a>
-                                                                    </div>
+                                                            <% if(address[i].default == true) { %>
+                                                                <span class="text-info" style="font-size: small;">(default)</span>
+                                                            <% } %>
+                                                            <br>
+                                                            <div class="pl-5">
+                                                                <%= address[i].houseName %>,
+                                                                <%= address[i].appartmentNumber %>,
+                                                                <%= address[i].city %>
+                                                                <%= address[i].zipcode %>,
+                                                                <%= address[i].state %>,
+                                                                <%= address[i].country %>
+                                                                <br>
+                                                                <%= address[i].email %>
+                                                                ,
+                                                                <%= address[i].phone %>
+                                                                <br>
+                                                                <%= address[i].company %><br>
+                                                                <a href="#"
+                                                                    onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
+                                                                    <i class="fa-sharp fa-solid fa-pen" style="color: #cc9966;"></i></a>
+                                                            </div>
                                                         </div><!-- End .card-body -->
                                                     </div><!-- End .card-dashboard -->
                                                 </div><!-- End .col-lg-6 -->
@@ -189,7 +187,7 @@
                                                                     <%= cartItem.productId.productName %> <span>X</span>
                                                                         <%= cartItem.quantity %>
                                                                 </a></td>
-                                                            <td id="productTotal">$ <%= cartItem.productId.price *
+                                                            <td id="productTotal">₹ <%= cartItem.productId.price *
                                                                     cartItem.quantity %>
                                                             </td>
                                                         </tr>
@@ -205,7 +203,7 @@
                                                             </tr>
                                                             <tr class="summary-total">
                                                                 <td class="">Total:</td>
-                                                                <td id="total">$</td>
+                                                                <td id="total">₹</td>
                                                             </tr><!-- End .summary-tofftal -->
                                                             <tr>
                                                                 <td>
@@ -252,7 +250,7 @@
                                                                         <label for="wallet">Wallet </label>
                                                                         <p class="mx-5">Wallet amount:<span
                                                                                 id="walletAmount">
-                                                                                <%= user.wallet.balance %>
+                                                                                ₹ <%= user.wallet.balance %>
                                                                             </span></p>
                                                                     </li>
                                                                 </ul>
@@ -773,7 +771,7 @@
                 const selectedRadioButton = document.querySelector('input[name="addressRadioButton"]:checked');
                 const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked');
                 const orderNotes = document.getElementById('orderNotes').value;
-                const totalValue = parseFloat(document.getElementById('total').textContent.replace('$', ''));
+                const totalValue = parseFloat(document.getElementById('total').textContent.replace('₹', ''));
                 const couponCode = document.getElementById('checkout-discount-input').value.trim();
                 const couponAppled = document.getElementById('couponApply').textContent
 
@@ -1115,75 +1113,82 @@
 
         <!-- ---------Radio active------------ -->
         <script>
+            // Function to select a specific address card
             function selectAddress(card) {
                 const radioBtn = card.querySelector('input[type="radio"]');
                 const allCards = document.querySelectorAll('.card-dashboard');
                 const addAddressForm = document.getElementById('addAddressForm');
-
+        
                 // Hide the addAddressForm
                 addAddressForm.style.display = 'none';
-
+        
                 // Uncheck all radio buttons and remove 'selected' class
                 allCards.forEach((c) => {
                     const otherRadioBtn = c.querySelector('input[type="radio"]');
                     otherRadioBtn.checked = false;
                     c.classList.remove('selected');
                 });
-
+        
                 // Check the selected radio button and add 'selected' class
                 radioBtn.checked = true;
                 card.classList.add('selected');
             }
-
+        
+            // Function to select the default address when the page loads
+            function selectDefaultAddress() {
+                const defaultAddressCard = document.querySelector('.card-dashboard [data-default="true"]');
+                
+                if (defaultAddressCard) {
+                    // If there is a default address card, select it
+                    selectAddress(defaultAddressCard);
+                }
+            }
+        
+            // Call the function to select the default address when the page loads
+            window.addEventListener('load', selectDefaultAddress);
+        
             document.getElementById('addBtn').addEventListener('click', (event) => {
                 event.preventDefault();
-
+        
                 const allRadioButtons = document.querySelectorAll('input[name="addressRadioButton"]');
                 const allCards = document.querySelectorAll('.card-dashboard');
                 const addAddressForm = document.getElementById('addAddressForm');
+        
                 // Uncheck all radio buttons and remove 'selected' class
                 allRadioButtons.forEach((radioBtn) => {
                     radioBtn.checked = false;
                 });
-
+        
                 allCards.forEach((card) => {
                     card.classList.remove('selected');
                 });
-
-                // Display the addAddressForm
+        
                 addAddressForm.style.display = 'block';
+        
+                selectDefaultAddress();
             });
         </script>
 
 
-        <!-- for display totals -->
-        <script>
+<script>
+    window.onload = function () {
+        var totalElement = document.getElementById("total");
+        var walletAmountElement = document.getElementById("walletAmount");
+        var walletError = document.getElementById("walletError");
 
-        </script>
+        var totalAmount = parseFloat(totalElement.innerHTML.replace("₹", ""));
+        var walletAmount = parseFloat(walletAmountElement.innerHTML.replace("Wallet amount: ₹", ""));
 
+        if (totalAmount > walletAmount) {
+            walletError.innerHTML = "Insufficient funds in the wallet.";
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                console.log("working");
-                var totalElement = document.getElementById("total");
-                var walletAmountElement = document.getElementById("walletAmount");
-                var walletError = document.getElementById("walletError");
-
-                var totalAmount = parseFloat(totalElement.innerHTML.replace("$", ""));
-                var walletAmount = parseFloat(walletAmountElement.innerHTML.replace("Wallet amount: $", ""));
-
-                if (totalAmount > walletAmount) {
-
-                    walletError.innerHTML = "Insufficient funds in the wallet.";
-
-                    // Disable the wallet radio button
-                    var walletRadioButton = document.getElementById("wallet");
-                    if (walletRadioButton) {
-                        walletRadioButton.disabled = true;
-                    }
-                }
-            });
-        </script>
+            var walletRadioButton = document.getElementById("wallet");
+            if (walletRadioButton) {
+                walletRadioButton.disabled = true;
+            }
+        }
+    };
+</script>
 
         <script>
             var total = 0;
@@ -1193,7 +1198,7 @@
                 var productTotalElements = document.querySelectorAll('#productTotal');
 
                 productTotalElements.forEach(function (productTotalElement) {
-                    var productTotalValue = parseFloat(productTotalElement.innerText.replace('$', ''));
+                    var productTotalValue = parseFloat(productTotalElement.innerText.replace('₹', ''));
 
                     subTotal += productTotalValue;
                     total += productTotalValue;
@@ -1201,8 +1206,8 @@
 
                 var subTotalElement = document.getElementById('subTotal');
                 var totalElement = document.getElementById('total');
-                subTotalElement.innerText = '$' + subTotal.toFixed(2);
-                totalElement.innerText = '$' + total.toFixed(2);
+                subTotalElement.innerText = '₹' + subTotal.toFixed(2);
+                totalElement.innerText = '₹' + total.toFixed(2);
             });
 
             document.getElementById('verifyButton').addEventListener('click', function () {
@@ -1226,7 +1231,7 @@
                         if (data.coupon) {
 
                             if (total < data.coupon.minPurcahaseAmount) {
-                                couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> min purchase upto $${data.coupon.minPurcahaseAmount}`;
+                                couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> min purchase upto ₹${data.coupon.minPurcahaseAmount}`;
                                 couponMessageElement.className = 'text-danger';
                                 return
                             }
@@ -1237,7 +1242,7 @@
                             couponOff.innerHTML = `${data.coupon.discountPercentage}% off`;
 
                             total -= total * (data.coupon.discountPercentage / 100);
-                            totalAmount.innerHTML = `$${total.toFixed(2)}`;
+                            totalAmount.innerHTML = `₹${total.toFixed(2)}`;
 
                             // Check if the updated total is less than 1000
 

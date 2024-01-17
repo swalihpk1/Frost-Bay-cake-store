@@ -73,6 +73,11 @@
                                                     <img class="w-100 rounded"
                                                         src="/assets/productImages/uploadImages/<%= product.productDetails.productImage%>"
                                                         alt="Image Description">
+                                                        <% if (refundRequest) { %>
+                                                        <span class="position-absolute top-0 start-0 translate-middle p-1  border border-light rounded-circle" style="background-color: #ff3c3c;">
+                                                          </span>
+                                                          <%}%>
+                                                        
                                                 </div>
                                                 <div class="ms-3">
                                                     <span class="d-block h5 text-inherit mb-0">
