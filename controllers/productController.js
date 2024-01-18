@@ -66,6 +66,8 @@ const shop = async (req, res) => {
 
         const category = await Category.find({});
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
+        const cartSum = user.cart.reduce((total, cartItem) => total + (cartItem.price * cartItem.quantity), 0);
+        const totalProductsCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
 
         const response = {
             category: category,
@@ -77,7 +79,9 @@ const shop = async (req, res) => {
             selectedCategories: selectedCategories,
             categoryProductCount: categoryProductCountMap,
             selectedKilograms: selectedKilograms,
-            currentPath:'/shop'
+            currentPath: '/shop',
+            cartSum,
+            totalProductsCart
         };
 
         if (req.xhr || req.headers.accept.indexOf('json') > -1) {
@@ -100,7 +104,9 @@ const productDetails = async (req, res) => {
         const productId = req.params.productId
         const product = await Products.findOne({ _id: productId }).populate('offer').populate('category')
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('productDetails', { product: product, user: userDetails })
+        const cartSum = user.cart.reduce((total, cartItem) => total + (cartItem.price * cartItem.quantity), 0);
+        const totalProductsCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
+        res.render('productDetails', { product: product, user: userDetails,cartSum,totalProductsCart})
     } catch (error) {
         console.log(error.message);
     }

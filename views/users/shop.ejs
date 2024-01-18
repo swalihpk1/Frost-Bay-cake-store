@@ -419,8 +419,9 @@
 							data: data,
 							dataType: 'json',
 							success: function (data) {
+								console.log("sdfasfd");
+								console.log("Success:", data);
 								const products = data.products;
-
 								const productsContainer = $('.products');
 								productsContainer.empty();
 								const rowContainer = $('<div class="row justify-content-center"></div>');
@@ -470,10 +471,13 @@
 								});
 
 								productsContainer.append(rowContainer);
+								$('.cartCount').text(data.totalProductsCart);
+   								 $('.cartTxt').text(`₹${data.cartSum}`);
 
 							},
 							error: function (error) {
 								console.error('Error fetching products:', error);
+								
 							}
 						});
 					}

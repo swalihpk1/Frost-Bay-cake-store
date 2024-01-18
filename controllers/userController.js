@@ -205,15 +205,24 @@ const sendOtp = async (req, res) => {
 // -----Render-Home------
 const home = async (req, res) => {
     try {
-
         const message = req.query.message;
-        const id = req.session.user_id
-        const user = await User.findOne({ _id: id }).populate({path: 'cart.productId',model: 'products',});
-        res.render('home', { user: user, message: message, currentPath:"/home" });
+        const userId = req.session.user_id;
+        const user = await User.findOne({ _id: userId }).populate({ path: 'cart.productId', model: 'products' });
+        const cartSum = user.cart.reduce((total, cartItem) => total + (cartItem.price * cartItem.quantity), 0);
+        const totalProductsInCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
+
+        res.render('home', {
+            user: user,
+            message: message,
+            currentPath: "/home",
+            cartSum: cartSum.toFixed(2),
+            totalProductsCart: totalProductsInCart
+        });
     } catch (error) {
         console.log(error.message);
     }
-}
+};
+
 
 
 //  ----------Render-User-Account-----
@@ -225,7 +234,9 @@ const userAccount = async (req, res) => {
         const user = await User.findOne({ _id: userId })
         const address = await Address.find({ user: userId })
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('userAccount', { user: userDetails,address,orders,coupons});
+        const cartSum = user.cart.reduce((total, cartItem) => total + (cartItem.price * cartItem.quantity), 0);
+        const totalProductsCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
+        res.render('userAccount', { user: userDetails,address,orders,coupons,cartSum,totalProductsCart});
     } catch (error) {
         console.log(error.message);
     }
@@ -370,7 +381,9 @@ const checkout = async (req, res) => {
         const address = await Address.find({ user: userId })
         const populatedCart = await User.populate(user, { path: 'cart.productId', model: 'products' });
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('checkout', { user: userDetails, address: address, products: populatedCart })
+        const cartSum = user.cart.reduce((total, cartItem) => total + (cartItem.price * cartItem.quantity), 0);
+        const totalProductsCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
+        res.render('checkout', { user: userDetails, address: address, products: populatedCart,cartSum,totalProductsCart})
     } catch (error) {
         console.log(error.message);
     }

@@ -9,16 +9,17 @@
       <!-- End .header-left -->
 
       <div class="header-right">
-        <div class="dropdown cart-dropdown">
+        <div class="dropdown cart-dropdown" id="cartDropdown" >
           <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false" data-display="static">
             <img src="/assets/images/icons/cart.png" style="max-width: 30px;" alt="">
-            <span class="cart-count">2</span>
-            <span class="cart-txt">₹ 164,00</span>
+              <span class="cart-count"><%=totalProductsCart%></span>
+           <span class="cart-txt">₹<%=cartSum%>.00</span>
           </a>
+           
 
-          <div class="dropdown-menu dropdown-menu-right">
-            <div class="dropdown-cart-products" id="cartDropdown">
+          <div class="dropdown-menu dropdown-menu-right border shadow">
+            <div class="dropdown-cart-products" >
               <% if (user && user.cart && user.cart.length> 0) { %>
                 <% user.cart.forEach(cartItem=> { %>
                   <div class="product" >
@@ -33,7 +34,7 @@
                         <span class="cart-product-qty">
                           <%= cartItem.quantity %>
                         </span>
-                        x ₹<%= cartItem.productId && cartItem.productId.price ? cartItem.productId.price
+                        x ₹<%= cartItem.productId && cartItem.productId.price ? cartItem.price
                           : 'Price Not Available' %>
                       </span>
                     </div>
@@ -68,7 +69,7 @@
                         <% if (user && user.cart && user.cart.length> 0) { %>
                           <div class="dropdown-cart-total">
                             <span>Total</span>
-                            <span class="cart-total-price">₹160.00</span>
+                            <span class="cart-total-price">₹<%=cartSum%></span>
                           </div>
                           <!-- End .dropdown-cart-total -->
 

@@ -95,7 +95,6 @@
                                                             id="orderNotes" name="orderNotes"></textarea>
                                                     </div>
 
-
                                         </div><!-- ------Row- end----- -->
                                         <button class="btn btn-primary" id="addBtn"> Ship to another address</button>
 
@@ -187,7 +186,7 @@
                                                                     <%= cartItem.productId.productName %> <span>X</span>
                                                                         <%= cartItem.quantity %>
                                                                 </a></td>
-                                                            <td id="productTotal">₹ <%= cartItem.productId.price *
+                                                            <td id="productTotal">₹ <%= cartItem.price *
                                                                     cartItem.quantity %>
                                                             </td>
                                                         </tr>
@@ -202,17 +201,16 @@
                                                                 <td>Free shipping</td>
                                                             </tr>
                                                             <tr class="summary-total">
-                                                                <td class="">Total:</td>
-                                                                <td id="total">₹</td>
-                                                            </tr><!-- End .summary-tofftal -->
-                                                            <tr>
-                                                                <td>
+                                                                <td class="">
+                                                                    <h6 class="text-primary mb-2">Total : </h6>
                                                                     <p id="couponApply" class=""></p>
                                                                 </td>
                                                                 <td>
+                                                                    <h6 class="text-primary m-0" id="total">₹ </h6>
+                                                                    <p  class="text-success " id="discountMoney"><strike></strike></p>
                                                                     <p id="offPercentage"></p>
                                                                 </td>
-                                                            </tr>
+                                                            </tr><!-- End .summary-tofftal -->
 
 
                                                 </tbody>
@@ -764,7 +762,6 @@
         <div id="notification-container"></div>
 
         <!-- ----------Select address and send datas to backend when click placeOder---------- -->
-
         <script>
             document.getElementById('placeOrderBtn').addEventListener('click', function () {
                 event.preventDefault();
@@ -1102,10 +1099,7 @@
                 } else {
                     postError.textContent = '';
                 }
-
-
                 return true;
-
             }
         </script>
 
@@ -1169,14 +1163,14 @@
             });
         </script>
 
-
+ <!-- ----------Page load stuffs---------------- -->
 <script>
     window.onload = function () {
         var totalElement = document.getElementById("total");
         var walletAmountElement = document.getElementById("walletAmount");
         var walletError = document.getElementById("walletError");
 
-        var totalAmount = parseFloat(totalElement.innerHTML.replace("₹", ""));
+        var totalAmount = parseFloat(totalElement.innerHTML.replace("₹", "",));
         var walletAmount = parseFloat(walletAmountElement.innerHTML.replace("Wallet amount: ₹", ""));
 
         if (totalAmount > walletAmount) {
@@ -1240,6 +1234,8 @@
                             couponMessageElement.className = 'text-success';
                             couponMessageOnTotal.innerHTML = `Coupon is applied <i class="fa-solid fa-circle-check text-primary"></i>`;
                             couponOff.innerHTML = `${data.coupon.discountPercentage}% off`;
+                            discountMoney.innerHTML = `<strike>₹${subTotal.toFixed(2)}</strike>`;
+
 
                             total -= total * (data.coupon.discountPercentage / 100);
                             totalAmount.innerHTML = `₹${total.toFixed(2)}`;
