@@ -18,27 +18,35 @@
           </a>
 
           <div class="dropdown-menu dropdown-menu-right">
-            <div class="dropdown-cart-products">
-              <% if (user && user.cart.length> 0) { %> <% user.cart.forEach(cartItem=> { %>
-                  <div class="product">
+            <div class="dropdown-cart-products" id="cartDropdown">
+              <% if (user && user.cart && user.cart.length> 0) { %>
+                <% user.cart.forEach(cartItem=> { %>
+                  <div class="product" >
                     <div class="product-cart-details">
                       <h4 class="product-title">
                         <a href="product.html">
-                          <%= cartItem.productId.productName %>
+                          <%= cartItem.productId && cartItem.productId.productName ? cartItem.productId.productName
+                            : 'Product Name Not Available' %>
                         </a>
                       </h4>
                       <span class="cart-product-info">
                         <span class="cart-product-qty">
                           <%= cartItem.quantity %>
                         </span>
-                        x ₹<%= cartItem.productId.price %>
+                        x ₹<%= cartItem.productId && cartItem.productId.price ? cartItem.productId.price
+                          : 'Price Not Available' %>
                       </span>
                     </div>
                     <!-- End .product-cart-details -->
                     <figure class="product-image-container">
                       <a href="product.html" class="product-image">
-                        <img src="/assets/productImages/uploadImages/<%= cartItem.productId.productImages[0] %>"
-                          alt="product" />
+                        <% if (cartItem.productId && cartItem.productId.productImages &&
+                          cartItem.productId.productImages.length> 0) { %>
+                          <img src="/assets/productImages/uploadImages/<%= cartItem.productId.productImages[0] %>"
+                            alt="product" />
+                          <% } else { %>
+                            <img src="/path/to/default/image.jpg" alt="Default Product Image" />
+                            <% } %>
                       </a>
                     </figure>
                     <a href="#" class="btn-remove" title="Remove Product">
@@ -56,10 +64,10 @@
                       </div>
                       <!-- .End .tab-pane -->
                       <% } %>
-                        <% if (user && user.cart.length> 0 ) { %>
+
+                        <% if (user && user.cart && user.cart.length> 0) { %>
                           <div class="dropdown-cart-total">
                             <span>Total</span>
-
                             <span class="cart-total-price">₹160.00</span>
                           </div>
                           <!-- End .dropdown-cart-total -->
@@ -111,52 +119,52 @@
   <div class="header-bottom sticky-header">
     <div class="container">
       <div class="header-left">
-      <% if (typeof currentPath !=='undefined' ) { %>
-        <!-- Render navigation bar with active class logic -->
-        <nav class="main-nav">
-          <ul class="menu sf-arrows">
-            <li class="megamenu-container <%= currentPath === '/home' ? 'active' : '' %>">
-              <a href="/home" class="">Home</a>
-            </li>
-            <li class="<%= currentPath === '/shop' ? 'active' : '' %>">
-              <a href="/shop" class="">Shop</a>
-            </li>
-            <li class="<%= currentPath === '/contact' ? 'active' : '' %>">
-              <a href="index.html" class="">Contact us</a>
-            </li>
-            <li class="<%= currentPath === '/about' ? 'active' : '' %>">
-              <a href="index.html" class="">About us</a>
-            </li>
-          </ul>
-          <!-- End .menu -->
-        </nav>
-        <% } else { %>
-          <!-- Render default navigation bar -->
+        <% if (typeof currentPath !=='undefined' ) { %>
+          <!-- Render navigation bar with active class logic -->
           <nav class="main-nav">
             <ul class="menu sf-arrows">
-              <li class="">
+              <li class="megamenu-container <%= currentPath === '/home' ? 'active' : '' %>">
                 <a href="/home" class="">Home</a>
               </li>
-              <li class="">
+              <li class="<%= currentPath === '/shop' ? 'active' : '' %>">
                 <a href="/shop" class="">Shop</a>
               </li>
-              <li class="">
+              <li class="<%= currentPath === '/contact' ? 'active' : '' %>">
                 <a href="index.html" class="">Contact us</a>
               </li>
-              <li class="">
+              <li class="<%= currentPath === '/about' ? 'active' : '' %>">
                 <a href="index.html" class="">About us</a>
               </li>
             </ul>
             <!-- End .menu -->
           </nav>
-          <% } %>
+          <% } else { %>
+            <!-- Render default navigation bar -->
+            <nav class="main-nav">
+              <ul class="menu sf-arrows">
+                <li class="">
+                  <a href="/home" class="">Home</a>
+                </li>
+                <li class="">
+                  <a href="/shop" class="">Shop</a>
+                </li>
+                <li class="">
+                  <a href="index.html" class="">Contact us</a>
+                </li>
+                <li class="">
+                  <a href="index.html" class="">About us</a>
+                </li>
+              </ul>
+              <!-- End .menu -->
+            </nav>
+            <% } %>
 
-        <!-- End .main-nav -->
+              <!-- End .main-nav -->
 
-        <button class="mobile-menu-toggler">
-          <span class="sr-only">Toggle mobile menu</span>
-          <i class="icon-bars"></i>
-        </button>
+              <button class="mobile-menu-toggler">
+                <span class="sr-only">Toggle mobile menu</span>
+                <i class="icon-bars"></i>
+              </button>
       </div>
       <!-- End .header-left -->
       <h6 class="text-danger">

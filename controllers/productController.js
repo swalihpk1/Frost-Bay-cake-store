@@ -13,7 +13,7 @@ const shop = async (req, res) => {
         const currentPage = parseInt(req.query.page) || 1;
         const searchTerm = req.query.q;
         const selectedCategories = req.query.category || [];
-        const sortOption = req.query.sort || 'popularity'; // Default sorting option
+        const sortOption = req.query.sort || 'popularity'; 
         const selectedKilograms = req.query.kilogram || [];
 
 
@@ -98,7 +98,7 @@ const productDetails = async (req, res) => {
         const userId = req.userId;
         const user = await User.findOne({ _id: userId })
         const productId = req.params.productId
-        const product = await Products.findOne({ _id: productId }).populate('offer')
+        const product = await Products.findOne({ _id: productId }).populate('offer').populate('category')
         const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
         res.render('productDetails', { product: product, user: userDetails })
     } catch (error) {

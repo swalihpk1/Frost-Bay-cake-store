@@ -1,4 +1,4 @@
-<%-include('.. /layouts/user/header')-%>
+<%-include('../layouts/user/header')-%>
 	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 	</head>
@@ -6,7 +6,7 @@
 	<body>
 		<div class="page-wrapper">
 
-			<%-include('.. /layouts/user/navbar')-%>
+			<%-include('../layouts/user/navbar')-%>
 
 				<main class="main">
 					<div class="page-header text-center"
@@ -92,9 +92,9 @@
 																		<!-- ... (unchanged) ... -->
 																	</div><!-- End .product-action-vertical -->
 																	<div class="product-action">
-																		<a class="btn-product btn-cart"
+																		<a class="btn-product" id="addTocart"
 																			onclick="addTocart('<%= i._id %>')"><span>add
-																				to cart</span></a>
+																				to cart </span> <i id="cartIcon" class="fa-solid fa-cart-plus"></i></a>
 																	</div><!-- End .product-action -->
 																</figure><!-- End .product-media -->
 
@@ -284,6 +284,8 @@
 		</div><!-- End .page-wrapper -->
 		<button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
 
+		<div id="notification-container"></div>
+
 
 
 		<!-- Sign in / Register Modal -->
@@ -313,113 +315,119 @@
 					headers: {
 						"Content-type": "application/json"
 					},
-					body: JSON.stringify({ productId })
-
+					body:  JSON.stringify({ productId })
 				})
-					.then(response => response.json())
-					.then(data => {
-
-						if (result.success) {
-							showNotification(result.message, true);
+				.then(response => response.json())
+                    .then(data => {
+						console.log(data);
+						if (data.success) {
+							$('#cartDropdown').load('/home #cartDropdown', function () {
+							showNotification("Added to cart",true);
+                        });
 						} else {
-							showNotification(result.message, false);
+							$('#cartDropdown').load('/home #cartDropdown', function () {
+								showNotification("Failed adding to cart ",false);
+                        });
 						}
 					})
-
-			}
-
-			function showNotification(message, success = true) {
-				const notificationContainer = document.getElementById('notification-container');
-				notificationContainer.innerHTML = message;
-
-				if (success) {
-					notificationContainer.style.color = 'green';
-				} else {
-					notificationContainer.style.color = 'red';
+					.catch(error => {
+						console.error('Fetch error:', error);
+					});
 				}
 
-				notificationContainer.style.display = 'block';
+				function showNotification(message, success = true) {
+					const notificationContainer = document.getElementById('notification-container');
+					notificationContainer.innerHTML = message;
 
-				setTimeout(() => {
-					notificationContainer.style.display = 'none';
-				}, 3000);
-			}
+					if (success) {
+						notificationContainer.style.color = '#fff';
+						notificationContainer.style.background = '#c96';
+					} else {
+						notificationContainer.style.color = 'red';
+					}
+
+					notificationContainer.style.display = 'block';
+
+					setTimeout(() => {
+						notificationContainer.style.display = 'none';
+					}, 3000);
+				}
 		</script>
 
 		<!-- ------------ filtering------------- -->
 		<script>
-			$(document).ready(function () {
-				var currentPage;
-				var selectedCategory;
-				var selectedKilogram;
-				var selectedSort = 'popularity';
+				$(document).ready(function () {
+					var currentPage;
+					var selectedCategory;
+					var selectedKilogram;
+					var selectedSort = 'popularity';
 
 
-				// --------searchTerm-----
-				$('#searchInput').on('keyup', function () {
-					setTimeout(sendRequests, 300);
-				});
+					// --------searchTerm-----
+					$('#searchInput').on('keyup', function () {
+						setTimeout(sendRequests, 300);
+					});
 
-				// ------categoryFiltering------
-				$('.category-filter').on('change', function () {
-					selectedCategory = updateProductList();
-					sendRequests();
-				});
+					// ------categoryFiltering------
+					$('.category-filter').on('change', function () {
+						selectedCategory = updateProductList();
+						sendRequests();
+					});
 
-				// ---------sorting-----
-				$('#sortby').on('change', function () {
-					selectedSort = $(this).val();
-					sendRequests();
-				});
+					// ---------sorting-----
+					$('#sortby').on('change', function () {
+						selectedSort = $(this).val();
+						sendRequests();
+					});
 
-				// -------kilogram-filtering-----
-				$('.Kilogram-filter').on('change', function () {
-					selectedKilogram = $(this).val()
-					sendRequests();
-				});
+					// -------kilogram-filtering-----
+					$('.Kilogram-filter').on('change', function () {
+						selectedKilogram = $(this).val()
+						sendRequests();
+					});
 
-				//   ---pagination----
-				$(document).on('click', '.pagination a.page-link', function (e) {
-					e.preventDefault();
-					currentPage = $(this).data('page');
-					selectedCategory = updateProductList();
-					sendRequests();
+					//   ---pagination----
+					$(document).on('click', '.pagination a.page-link', function (e) {
+						e.preventDefault();
+						currentPage = $(this).data('page');
+						selectedCategory = updateProductList();
+						sendRequests();
 
-					$('html, body').animate({ scrollTop: 0 }, 'slow');
-				});
+						$('html, body').animate({ scrollTop: 0 }, 'slow');
+					});
 
-				function updateProductList() {
-					const selectedCategories = $('.category-filter:checked').map(function () {
-						return $(this).val();
-					}).get();
-					return selectedCategories;
-				}
+					function updateProductList() {
+						const selectedCategories = $('.category-filter:checked').map(function () {
+							return $(this).val();
+						}).get();
+						return selectedCategories;
+					}
 
-				// -------Request Sending ajax for all--------
-				function sendRequests() {
-					var searchTerm = $('#searchInput').val();
-					var data = {
-						category: selectedCategory,
-						sort: selectedSort,
-						page: currentPage,
-						kilogram: selectedKilogram,
-						q: searchTerm
-					};
-					$.ajax({
-						url: '/shop',
-						method: 'GET',
-						data: data,
-						dataType: 'json',
-						success: function (data) {
-							const products = data.products;
+					// -------Request Sending ajax for all--------
+					function sendRequests() {
+						var searchTerm = $('#searchInput').val();
+						var data = {
+							category: selectedCategory,
+							sort: selectedSort,
+							page: currentPage,
+							kilogram: selectedKilogram,
+							q: searchTerm
+						};
+						$.ajax({
+							url: '/shop',
+							method: 'GET',
+							data: data,
+							dataType: 'json',
+							success: function (data) {
+								const products = data.products;
 
-							const productsContainer = $('.products');
-							productsContainer.empty();
-							const rowContainer = $('<div class="row justify-content-center"></div>');
-							products.forEach(product => {
-								const productElement = $(
+								const productsContainer = $('.products');
+								productsContainer.empty();
+								const rowContainer = $('<div class="row justify-content-center"></div>');
+								products.forEach(product => {
+									const productElement = $(
 
-									`<div class="col-6">
+										`<div class="col-6">
             ${product.offer ? `
                 <div class="ribbons-wrapper">
                     <div class="ribbon">
@@ -449,29 +457,29 @@
                     </h3><!-- End .product-title -->
                     <div class="product-price">
 						${product.offer ? `
-                       <strike> $ ${product.price}</strike>
-					   &nbsp $${product.price - (product.price * product.offer.offPercentage / 100)}`
-										: `${product.price}`}
+                       <strike> ₹ ${product.price}</strike>
+					   &nbsp ₹${product.price - (product.price * product.offer.offPercentage / 100)}`
+											: `₹${product.price}`}
                     </div><!-- End .product-price -->
                 </div><!-- End .product-body -->
             </div><!-- End .product -->
         </div><!-- End .col-6 -->`
 
-								);
-								rowContainer.append(productElement);
-							});
+									);
+									rowContainer.append(productElement);
+								});
 
-							productsContainer.append(rowContainer);
+								productsContainer.append(rowContainer);
 
-						},
-						error: function (error) {
-							console.error('Error fetching products:', error);
-						}
-					});
-				}
-			});
+							},
+							error: function (error) {
+								console.error('Error fetching products:', error);
+							}
+						});
+					}
+				});
 
 		</script>
 
 
-		<%-include('.. /layouts/user/footer')-%>
+		<%-include('../layouts/user/footer')-%>

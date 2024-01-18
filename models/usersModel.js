@@ -35,6 +35,14 @@ const userSchema = new mongoose.Schema({
             quantity: {
                 type: Number,
                 default: 1 
+            },
+            selectedWeight: {
+                type: Number,
+                required:true
+            },
+            price: {
+                type: Number,
+                required:true
             }
         }
     ],

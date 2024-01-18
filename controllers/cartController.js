@@ -1,9 +1,9 @@
 const User = require("../models/usersModel");
-const Products = require("../models/productModel");
 
 const addProductCart = async (req, res) => {
     try {
-        const productId = req.params.productId;
+
+        const productId = req.body.productId;
         const userId = req.userId;
         const user = await User.findOne({ _id: userId });
         const existingProductIndex = user.cart.findIndex(item => item.productId.equals(productId));
@@ -13,15 +13,21 @@ const addProductCart = async (req, res) => {
         } else {
             user.cart.push({
                 productId: productId,
-                quantity: 1
+                quantity: 1,
+                price: req.body.price,
+                selectedWeight:req.body.selectedWeight
             });
+
         }
 
-        await user.save();
-
-        const populatedCart = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('cart', { user: populatedCart });
-
+        const productAddedCart = await user.save();
+        
+        if (productAddedCart) {
+            res.json({success:true})
+        } else {
+            res.json({success:false})
+        }
+ 
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
@@ -33,7 +39,7 @@ const viewCart = async (req, res) => {
 
         const userId = req.userId;
         const user = await User.findOne({ _id: userId });
-        const populatedCart = await User.populate(user, { path: 'cart.productId', model: 'products' });
+        const populatedCart = await User.findOne({ _id:userId}).populate({path: 'cart.productId',model: 'products',});
         res.render('cart', { user: populatedCart });
 
     } catch (error) {

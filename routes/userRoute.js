@@ -15,73 +15,72 @@ const couponController = require("../controllers/couponController");
 
 // Static path set
 app.use(
-    express.static(path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages'))
+  express.static(path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages'))
 )
 
 // Multer Configuration for user image 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        return cb(null, path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages'));
-    },
-    filename: function (req, file, cb) {
-        return cb(null, `${Date.now()}-${file.originalname}`)
-    }
+  destination: function (req, file, cb) {
+    return cb(null, path.join(__dirname, '..', 'public', 'assets', 'userImages', 'uploadImages'));
+  },
+  filename: function (req, file, cb) {
+    return cb(null, `${Date.now()}-${file.originalname}`)
+  }
 });
 const upload = multer({ storage: storage, });
 
 
 // Multer Configuration for Redund Request Images
 const refundImageStorage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, path.join(__dirname, '..', 'public', 'assets', 'returnReasonImages')); 
-    },
-    filename: function (req, file, cb) {
-      cb(null, `${Date.now()}-${file.originalname}`)
-    }
-  });
-  
+  destination: function (req, file, cb) {
+    cb(null, path.join(__dirname, '..', 'public', 'assets', 'returnReasonImages'));
+  },
+  filename: function (req, file, cb) {
+    cb(null, `${Date.now()}-${file.originalname}`)
+  }
+});
+
 const refundImageUpload = multer({ storage: refundImageStorage });
 
 // Require custom middlewares
 const authUser = require("../middlewares/AuthUser");
 
 // Set view engine
-app.set('view engine','ejs');
-app.set('views','./views/users');
+app.set('view engine', 'ejs');
+app.set('views', './views/users');
 app.use(express.static('public'));
 
 // ---------------------Home-----------------------
-app.get('/',authUser.isLogout,userController.home);
-app.get('/home',authUser.isLogin, userController.home);
+app.get('/', authUser.isLogout, userController.home);
+app.get('/home', authUser.isLogin, userController.home);
 
 // --------------------------------Signup--------------------------------
-app.get('/authentication',authUser.isLogout,userController.authentication);
-app.post('/authentication',userController.insertUser);
+app.get('/authentication', authUser.isLogout, userController.authentication);
+app.post('/authentication', userController.insertUser);
 
 // --------------------------OTP-verification-------------------
-app.get('/otpVerify',authUser.isLogout,userController.renderOtp);
-app.post('/otpVerify',userController.verifyOtp);
+app.get('/otpVerify', authUser.isLogout, userController.renderOtp);
+app.post('/otpVerify', userController.verifyOtp);
 
 // --------------------Login----------------
-app.post('/login',userController.verifyLogin);
+app.post('/login', userController.verifyLogin);
 
 // ---------------------Login with OTP--------------------
-app.get('/logOtp',authUser.isLogout,userController.logOtp);
-app.post('/logOtp',userController.sendOtp);
+app.get('/logOtp', authUser.isLogout, userController.logOtp);
+app.post('/logOtp', userController.sendOtp);
 
 // --------------------User-Logout---------------------
-app.get('/logout',authUser.isLogin,userController.logout);
+app.get('/logout', authUser.isLogin, userController.logout);
 
 // --------------------Product-listing------------------
-app.get('/shop',authUser.noAuth,productController.shop);
-app.get('/shop/productDetails/:productId',authUser.noAuth,productController.productDetails);
-app.get('/shop/addProductCart/:productId',authUser.isLogin,cartControllers.addProductCart);
-app.get('/shop/addProductCart',authUser.isLogin,cartControllers.addProductCart);
+app.get('/shop', authUser.noAuth, productController.shop);
+app.get('/shop/productDetails/:productId', authUser.noAuth, productController.productDetails);
 
 // -------------------CART-MANAGEMENT---------------------
-app.get('/cart',authUser.isLogin,cartControllers.viewCart);
-app.delete('/cart/removeProduct',authUser.isLogin,cartControllers.removeProduct);
-app.patch('/cart/updateQuantity',authUser.isLogin,cartControllers.updateQuantity);
+app.get('/cart', authUser.isLogin, cartControllers.viewCart);
+app.post('/shop/addProductCart', authUser.isLogin, cartControllers.addProductCart);
+app.delete('/cart/removeProduct', authUser.isLogin, cartControllers.removeProduct);
+app.patch('/cart/updateQuantity', authUser.isLogin, cartControllers.updateQuantity);
 
 // -----------------------CHECKOUT-----------------------------
 app.get('/cart/checkout', authUser.isLogin, userController.checkout);
@@ -90,17 +89,17 @@ app.post('/cart/verifyPayment', authUser.isLogin, orderController.verifyPayment)
 
 
 // ---------------------USER-ACCOUNT--------------------------
-app.get('/account',authUser.isLogin,userController.userAccount);
-app.post('/account/editUser',upload.single('userImage'),authUser.isLogin,userController.editUserData);
-app.post('/account/addAddress',authUser.isLogin,userController.addAddress);
-app.delete('/account/deleteAddress',authUser.isLogin,userController.deleteAddress);
+app.get('/account', authUser.isLogin, userController.userAccount);
+app.post('/account/editUser', upload.single('userImage'), authUser.isLogin, userController.editUserData);
+app.post('/account/addAddress', authUser.isLogin, userController.addAddress);
+app.delete('/account/deleteAddress', authUser.isLogin, userController.deleteAddress);
 app.patch('/account/editAddress', authUser.isLogin, userController.editAddress);
 
 // ----------------------------------COUPONS-----------------------------------
-app.post('/checkout/verifyCoupon',authUser.isLogin,couponController.verifyCoupon)
+app.post('/checkout/verifyCoupon', authUser.isLogin, couponController.verifyCoupon)
 
 // -----------------------------------Orders-----------------------------------------
 app.delete('/account/cancelOrderItem', authUser.isLogin, orderController.cancelOrder);
-app.post('/account/refundRequest',refundImageUpload.single('damageCakeImage'),authUser.isLogin, orderController.refundRequest);
+app.post('/account/refundRequest', refundImageUpload.single('damageCakeImage'), authUser.isLogin, orderController.refundRequest);
 
 module.exports = app;

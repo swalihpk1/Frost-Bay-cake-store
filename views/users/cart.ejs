@@ -50,86 +50,94 @@
                                             </thead>
 
                                             <tbody>
-                                                <% if (user.cart.length> 0) { %>
+                                                <% if (user.cart && user.cart.length> 0) { %>
                                                     <% user.cart.forEach(cartItem=> { %>
                                                         <tr>
                                                             <td class="product-col">
                                                                 <div class="product">
                                                                     <figure class="product-media">
-                                                                        <img src="/assets/productImages/uploadImages/<%= cartItem.productId.productImages[0] %>"
-                                                                            alt="<%= cartItem.productId.productName %>">
+                                                                        <% if (cartItem.productId &&
+                                                                            cartItem.productId.productImages &&
+                                                                            cartItem.productId.productImages.length> 0)
+                                                                            { %>
+                                                                            <img src="/assets/productImages/uploadImages/<%= cartItem.productId.productImages[0] %>"
+                                                                                alt="<%= cartItem.productId && cartItem.productId.productName %>">
+                                                                            <% } else { %>
+                                                                                <img src="/path/to/default/image.jpg"
+                                                                                    alt="Default Product Image">
+                                                                                <% } %>
                                                                     </figure>
                                                                     <h3 class="product-title">
                                                                         <a href="#">
-                                                                            <%= cartItem.productId.productName %>
+                                                                            <% if (cartItem.productId &&
+                                                                                cartItem.productId.productName) { %>
+                                                                                <%= cartItem.productId.productName %>
+                                                                                    <% } else { %>
+                                                                                        Product Name Not Available
+                                                                                        <% } %>
                                                                         </a>
                                                                     </h3><!-- End .product-title -->
                                                                 </div><!-- End .product -->
                                                             </td>
-                                                            <td class="price-col">₹<%= cartItem.productId.price %>
+
+                                                            <td class="price-col">
+                                                                <% if (cartItem.productId && cartItem.price) { %>
+                                                                    ₹<%= cartItem.price %> 
+                                                                        <% } else { %>
+                                                                            Price Not Available
+                                                                            <% } %>
                                                             </td>
                                                             <td class="quantity-col">
                                                                 <div class="cart-product-quantity py-2">
                                                                     <i class="fa-solid fa-minus p-1"
-                                                                        onclick="decreaseQuantity('<%= cartItem.productId._id %>','<%= cartItem.productId.price %>')"></i>
+                                                                        onclick="decreaseQuantity('<%= cartItem.productId && cartItem.productId._id %>','<%= cartItem.productId && cartItem.price %>')"></i>
                                                                     <span class="custom-quantity px-4"
-                                                                        id="quantityDisplay<%= cartItem.productId._id %>">
+                                                                        id="quantityDisplay<%= cartItem.productId && cartItem.productId._id %>">
                                                                         <%= cartItem.quantity %>
                                                                     </span>
                                                                     <i class="fa-regular fa-plus p-2"
-                                                                        onclick="increaseQuantity('<%= cartItem.productId._id %>','<%= cartItem.productId.price %>')"></i>
+                                                                        onclick="increaseQuantity('<%= cartItem.productId && cartItem.productId._id %>','<%= cartItem.productId && cartItem.price %>')"></i>
                                                                 </div><!-- End cart-product-quantity -->
                                                             </td>
                                                             <td class="total-col cart-total"
-                                                                id="total<%= cartItem.productId._id %>">₹<%=
-                                                                    cartItem.productId.price * cartItem.quantity %>
+                                                                id="total<%= cartItem.productId && cartItem.productId._id %>">
+                                                                <% if (cartItem.productId && cartItem.price) { %>
+                                                                    ₹<span class="product-total"
+                                                                        data-product-id="<%= cartItem.productId._id %>"
+                                                                        data-price="<%= cartItem.price %>">
+                                                                        <%= cartItem.price * cartItem.quantity %>
+                                                                    </span>
+                                                                    <% } else { %>
+                                                                        Total Not Available
+                                                                        <% } %>
                                                             </td>
                                                             <td class="remove-col">
                                                                 <button class="btn-remove"
-                                                                    onclick="showConfirmationModal('<%= cartItem.productId._id %>')">
+                                                                    onclick="showConfirmationModal('<%= cartItem.productId && cartItem.productId._id %>')">
                                                                     <i class="fa-light fa-x fa-xs xbtn"></i>
                                                                 </button>
                                                             </td>
-
-
                                                         </tr>
                                                         <% }); %>
-                                                            <% } %>
-
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="5" class="text-center">
+                                                                        <p>No items in the cart.</p>
+                                                                        <a href="/shop"
+                                                                            class="btn btn-outline-primary-2">
+                                                                            <span>GO SHOP</span><i
+                                                                                class="icon-long-arrow-right"></i>
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                                <% } %>
                                             </tbody>
 
 
 
+
                                         </table><!-- End .table table-wishlist -->
-                                        <% if (user.cart.length> 0) { %>
-                                            <div class="cart-bottom">
-                                                <div class="cart-discount">
-                                                    <form action="#">
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control" required
-                                                                placeholder="coupon code">
-                                                            <div class="input-group-append">
-                                                                <button class="btn btn-outline-primary-2"
-                                                                    type="submit"><i
-                                                                        class="icon-long-arrow-right"></i></button>
-                                                            </div><!-- .End .input-group-append -->
-                                                        </div><!-- End .input-group -->
-                                                    </form>
-                                                </div><!-- End .cart-discount -->
-                                            </div><!-- End .cart-bottom -->
-                                            <% }else{ %>
-                                                <div class="d-flex flex-column  align-items-center">
-                                                    <div>
-                                                        <h5 style="color: gray;">OOPS!..Nothing is here</h5>
-                                                    </div>
-                                                    <div>
-                                                        <a href="/shop"
-                                                            class=" btn btn-secondary position-relative">Shop</a>
-                                                    </div>
 
-
-                                                </div>
-                                                <% } %>
                                     </div><!-- End .col-lg-9 -->
                                     <aside class="col-lg-3">
                                         <div class="summary summary-cart">
@@ -177,99 +185,8 @@
                         </div><!-- End .cart -->
                     </div><!-- End .page-content -->
                 </main><!-- End .main -->
-
-                <footer class="footer">
-                    <div class="footer-middle">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget widget-about">
-                                        <img src="assets/images/logo.png" class="footer-logo" alt="Footer Logo"
-                                            width="105" height="25">
-                                        <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu
-                                            vulputate magna eros eu erat. </p>
-
-                                        <div class="social-icons">
-                                            <a href="#" class="social-icon" target="_blank" title="Facebook"><i
-                                                    class="icon-facebook-f"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Twitter"><i
-                                                    class="icon-twitter"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Instagram"><i
-                                                    class="icon-instagram"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Youtube"><i
-                                                    class="icon-youtube"></i></a>
-                                            <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
-                                                    class="icon-pinterest"></i></a>
-                                        </div><!-- End .soial-icons -->
-                                    </div><!-- End .widget about-widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget">
-                                        <h4 class="widget-title">Useful Links</h4><!-- End .widget-title -->
-
-                                        <ul class="widget-list">
-                                            <li><a href="about.html">About Molla</a></li>
-                                            <li><a href="#">How to shop on Molla</a></li>
-                                            <li><a href="#">FAQ</a></li>
-                                            <li><a href="contact.html">Contact us</a></li>
-                                            <li><a href="login.html">Log in</a></li>
-                                        </ul><!-- End .widget-list -->
-                                    </div><!-- End .widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget">
-                                        <h4 class="widget-title">Customer Service</h4><!-- End .widget-title -->
-
-                                        <ul class="widget-list">
-                                            <li><a href="#">Payment Methods</a></li>
-                                            <li><a href="#">Money-back guarantee!</a></li>
-                                            <li><a href="#">Returns</a></li>
-                                            <li><a href="#">Shipping</a></li>
-                                            <li><a href="#">Terms and conditions</a></li>
-                                            <li><a href="#">Privacy Policy</a></li>
-                                        </ul><!-- End .widget-list -->
-                                    </div><!-- End .widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-
-                                <div class="col-sm-6 col-lg-3">
-                                    <div class="widget">
-                                        <h4 class="widget-title">My Account</h4><!-- End .widget-title -->
-
-                                        <ul class="widget-list">
-                                            <li><a href="#">Sign In</a></li>
-                                            <li><a href="cart.html">View Cart</a></li>
-                                            <li><a href="#">My Wishlist</a></li>
-                                            <li><a href="#">Track My Order</a></li>
-                                            <li><a href="#">Help</a></li>
-                                        </ul><!-- End .widget-list -->
-                                    </div><!-- End .widget -->
-                                </div><!-- End .col-sm-6 col-lg-3 -->
-                            </div><!-- End .row -->
-                        </div><!-- End .container -->
-                    </div><!-- End .footer-middle -->
-
-                    <div class="footer-bottom">
-                        <div class="container">
-                            <p class="footer-copyright">Copyright © 2019 Molla Store. All Rights Reserved.</p>
-                            <!-- End .footer-copyright -->
-                            <figure class="footer-payments">
-                                <img src="assets/images/payments.png" alt="Payment methods" width="272" height="20">
-                            </figure><!-- End .footer-payments -->
-                        </div><!-- End .container -->
-                    </div><!-- End .footer-bottom -->
-                </footer><!-- End .footer -->
         </div><!-- End .page-wrapper -->
         <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
-
-        <!-- Mobile Menu -->
-        <div class="mobile-menu-overlay"></div><!-- End .mobil-menu-overlay -->
-
-
-
-        <!-- Sign in / Register Modal -->
-       
 
 
         <!-- Modal -->
@@ -348,13 +265,12 @@
             });
 
             function updateSubtotal() {
-                const totalColumns = document.querySelectorAll('.total-col.cart-total');
+                const productTotalElements = document.querySelectorAll('.product-total');
                 const subtotalElement = document.getElementById('subtotal');
 
-
                 let sum = 0;
-                totalColumns.forEach(column => {
-                    sum += parseFloat(column.textContent.replace('₹', ''));
+                productTotalElements.forEach(element => {
+                    sum += parseFloat(element.textContent.replace('₹', ''));
                 });
 
                 subtotalElement.textContent = '₹' + sum.toFixed(2);
@@ -362,14 +278,12 @@
             }
 
             function updateTotal(productId, newQuantity, productPrice) {
-                const price = productPrice;
-                const totalElement = document.getElementById('total' + productId);
-                const newTotal = price * newQuantity;
+                const totalElement = document.querySelector(`.product-total[data-product-id="${productId}"]`);
+                const newTotal = productPrice * newQuantity;
 
-                totalElement.innerText = '₹' + newTotal.toFixed(2);
+                totalElement.innerText = '' + newTotal.toFixed(2);
 
                 updateSubtotal(); // Call the function to update the subtotal
-
             }
 
             function decreaseQuantity(productId, productPrice) {

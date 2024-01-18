@@ -13,7 +13,7 @@ const Sharp = require("sharp");
 const Address = require("../models/addressModel")
 const Orders = require("../models/ordersModel")
 const Coupons = require("../models/couponModel")
-const { findByIdAndUpdate } = require("../models/productModel");
+const Products = require("../models/productModel");
 
 
 
@@ -208,9 +208,8 @@ const home = async (req, res) => {
 
         const message = req.query.message;
         const id = req.session.user_id
-        const user = await User.findOne({ _id: id });
-        const userCart = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        res.render('home', { user: userCart, message: message, currentPath:"/home" });
+        const user = await User.findOne({ _id: id }).populate({path: 'cart.productId',model: 'products',});
+        res.render('home', { user: user, message: message, currentPath:"/home" });
     } catch (error) {
         console.log(error.message);
     }

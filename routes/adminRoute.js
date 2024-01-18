@@ -49,10 +49,9 @@ app.set('view engine', 'ejs');
 app.set('views', './views/admin');
 
 
-
 // -------------------------login----------------------
-app.get('/', authAdmin.isLogout, adminController.login)
-app.post('/', adminController.verifyLogin)
+app.get('/', authAdmin.isLogout, adminController.login);
+app.post('/', adminController.verifyLogin);
 
 // ---------------------------Dashboard----------------------------
 app.get('/dashboard', authAdmin.isLogin,dashboardController.dashboard);
