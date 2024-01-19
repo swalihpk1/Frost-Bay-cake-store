@@ -157,8 +157,6 @@ const verifyLogin = async (req, res) => {
         const email = req.body.loginEmail;
         const password = req.body.loginPassword;
         const userData = await User.findOne({ email });
-        // console.log(userData);                  /*-------------------*/
-
 
         if (userData) {
             const passwordMatch = await bcrypt.compare(password, userData.password);
@@ -215,7 +213,7 @@ const home = async (req, res) => {
             user: user,
             message: message,
             currentPath: "/home",
-            cartSum: cartSum.toFixed(2),
+            cartSum: cartSum,
             totalProductsCart: totalProductsInCart
         });
     } catch (error) {

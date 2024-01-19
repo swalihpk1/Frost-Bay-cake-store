@@ -96,7 +96,8 @@ app.delete('/account/deleteAddress', authUser.isLogin, userController.deleteAddr
 app.patch('/account/editAddress', authUser.isLogin, userController.editAddress);
 
 // ----------------------------------COUPONS-----------------------------------
-app.post('/checkout/verifyCoupon', authUser.isLogin, couponController.verifyCoupon)
+app.post('/checkout/applyCoupon', authUser.isLogin, couponController.applyCoupon);
+app.post('/checkout/cancelCoupon', authUser.isLogin, couponController.cancelCoupon);
 
 // -----------------------------------Orders-----------------------------------------
 app.delete('/account/cancelOrderItem', authUser.isLogin, orderController.cancelOrder);

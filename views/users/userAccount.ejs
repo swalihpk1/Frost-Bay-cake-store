@@ -905,9 +905,13 @@
 
                                 if (data.success) {
                                     $('#tab-orders').load('/account #tab-orders');
+                                    Swal.fire('Cancelled!', 'Your order has been cancelled.', 'success');
                                 }
                             })
-                        Swal.fire('Cancelled!', 'Your order has been cancelled.', 'success');
+                       
+                    }else{
+                        Swal.fire('Cancel failed!', 'Something went wrong.', 'failed');
+                                
                     }
                 });
             }

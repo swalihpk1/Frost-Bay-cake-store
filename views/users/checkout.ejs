@@ -39,13 +39,21 @@
                         <div class="checkout">
                             <div class="container">
                                 <p id="couponMessage" class=""></p>
+                                <p id="removeText" class="p-1 rounded position-absolute shadow" style="left: 34%;">
+                                    remove</p>
                                 <div class="checkout-discount">
                                     <form action="#">
                                         <input type="text" class="form-control" required id="checkout-discount-input"
                                             maxlength="10">
                                         <label for="checkout-discount-input" class="text-truncate">Have a coupon?
-                                            <span>Click here to enter your code</span></label>
-                                        <button type="button" id="verifyButton" class="verify-button">Apply</button>
+                                            <span>Click here to enter your code</span>
+                                        </label>
+                                        <button type="button" id="applyButton" class="coupon-button">Apply</button>
+
+                                        <a id="cancelButton" class="coupon-button" style="display: none;">
+                                            <i class="fa-sharp fa-solid fa-x"></i>
+                                        </a>
+
                                     </form>
                                 </div><!-- End .checkout-discount -->
                                 <div class="row">
@@ -58,32 +66,38 @@
                                                     <div class="card card-dashboard" onclick="selectAddress(this)">
                                                         <div class="card-body p-0 m-1">
                                                             <input type="radio" class="pl-4 ml-3 mr-1"
-                                                                name="addressRadioButton" id="<%= address[i]._id %>"
-                                                                <% if(address[i].default == true) { %> checked <% } %>>
-                                                            <h6 class="m-0 d-inline">
-                                                                <%= address[i].name %>
-                                                            </h6>
-                                                            <% if(address[i].default == true) { %>
-                                                                <span class="text-info" style="font-size: small;">(default)</span>
-                                                            <% } %>
-                                                            <br>
-                                                            <div class="pl-5">
-                                                                <%= address[i].houseName %>,
-                                                                <%= address[i].appartmentNumber %>,
-                                                                <%= address[i].city %>
-                                                                <%= address[i].zipcode %>,
-                                                                <%= address[i].state %>,
-                                                                <%= address[i].country %>
-                                                                <br>
-                                                                <%= address[i].email %>
-                                                                ,
-                                                                <%= address[i].phone %>
-                                                                <br>
-                                                                <%= address[i].company %><br>
-                                                                <a href="#"
-                                                                    onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
-                                                                    <i class="fa-sharp fa-solid fa-pen" style="color: #cc9966;"></i></a>
-                                                            </div>
+                                                                name="addressRadioButton" id="<%= address[i]._id %>" <%
+                                                                if(address[i].default==true) { %> checked <% } %>>
+                                                                <h6 class="m-0 d-inline">
+                                                                    <%= address[i].name %>
+                                                                </h6>
+                                                                <% if(address[i].default==true) { %>
+                                                                    <span class="text-info"
+                                                                        style="font-size: small;">(default)</span>
+                                                                    <% } %>
+                                                                        <br>
+                                                                        <div class="pl-5">
+                                                                            <%= address[i].houseName %>,
+                                                                                <%= address[i].appartmentNumber %>,
+                                                                                    <%= address[i].city %>
+                                                                                        <%= address[i].zipcode %>,
+                                                                                            <%= address[i].state %>,
+                                                                                                <%= address[i].country
+                                                                                                    %>
+                                                                                                    <br>
+                                                                                                    <%= address[i].email
+                                                                                                        %>
+                                                                                                        ,
+                                                                                                        <%= address[i].phone
+                                                                                                            %>
+                                                                                                            <br>
+                                                                                                            <%= address[i].company
+                                                                                                                %><br>
+                                                                                                                <a href="#"
+                                                                                                                    onclick="showEditAddressModal('<%= address[i].name %>','<%= address[i].company %>','<%= address[i].country %>', '<%= address[i].houseName %>', '<%= address[i].appartmentNumber %>', '<%= address[i].city %>', '<%= address[i].state %>', '<%= address[i].zipcode %>', '<%= address[i].phone %>', '<%= address[i].email %>','<%= address[i]._id %>','<%= address[i].default %>')">Edit
+                                                                                                                    <i class="fa-sharp fa-solid fa-pen"
+                                                                                                                        style="color: #cc9966;"></i></a>
+                                                                        </div>
                                                         </div><!-- End .card-body -->
                                                     </div><!-- End .card-dashboard -->
                                                 </div><!-- End .col-lg-6 -->
@@ -203,11 +217,12 @@
                                                             <tr class="summary-total">
                                                                 <td class="">
                                                                     <h6 class="text-primary mb-2">Total : </h6>
+                                                                    <p class="text-success" id="save"></p>
                                                                     <p id="couponApply" class=""></p>
                                                                 </td>
                                                                 <td>
                                                                     <h6 class="text-primary m-0" id="total">₹ </h6>
-                                                                    <p  class="text-success " id="discountMoney"><strike></strike></p>
+                                                                    <p class="text-success mt-1" id="discountMoney"></p>
                                                                     <p id="offPercentage"></p>
                                                                 </td>
                                                             </tr><!-- End .summary-tofftal -->
@@ -246,10 +261,11 @@
                                                                         <i class="fa-solid fa-wallet fa-lg mr-2"
                                                                             style="color: #121b2b;"></i>
                                                                         <label for="wallet">Wallet </label>
-                                                                        <p class="mx-5">Wallet amount:<span
-                                                                                id="walletAmount">
-                                                                                ₹ <%= user.wallet.balance %>
-                                                                            </span></p>
+                                                                        <p class="mx-5">Wallet amount:₹
+                                                                            <span id="walletAmount">
+                                                                                <%= user.wallet.balance %>
+                                                                            </span>
+                                                                        </p>
                                                                     </li>
                                                                 </ul>
                                                             </li>
@@ -785,7 +801,7 @@
                     formData.append('total', totalValue);
 
                     if (couponAppled === 'Coupon is applied ') {
-                            formData.append('couponCode', couponCode);
+                        formData.append('couponCode', couponCode);
                     }
 
                     $.ajax({
@@ -1112,77 +1128,77 @@
                 const radioBtn = card.querySelector('input[type="radio"]');
                 const allCards = document.querySelectorAll('.card-dashboard');
                 const addAddressForm = document.getElementById('addAddressForm');
-        
+
                 // Hide the addAddressForm
                 addAddressForm.style.display = 'none';
-        
+
                 // Uncheck all radio buttons and remove 'selected' class
                 allCards.forEach((c) => {
                     const otherRadioBtn = c.querySelector('input[type="radio"]');
                     otherRadioBtn.checked = false;
                     c.classList.remove('selected');
                 });
-        
+
                 // Check the selected radio button and add 'selected' class
                 radioBtn.checked = true;
                 card.classList.add('selected');
             }
-        
+
             // Function to select the default address when the page loads
             function selectDefaultAddress() {
                 const defaultAddressCard = document.querySelector('.card-dashboard [data-default="true"]');
-                
+
                 if (defaultAddressCard) {
                     // If there is a default address card, select it
                     selectAddress(defaultAddressCard);
                 }
             }
-        
+
             // Call the function to select the default address when the page loads
             window.addEventListener('load', selectDefaultAddress);
-        
+
             document.getElementById('addBtn').addEventListener('click', (event) => {
                 event.preventDefault();
-        
+
                 const allRadioButtons = document.querySelectorAll('input[name="addressRadioButton"]');
                 const allCards = document.querySelectorAll('.card-dashboard');
                 const addAddressForm = document.getElementById('addAddressForm');
-        
+
                 // Uncheck all radio buttons and remove 'selected' class
                 allRadioButtons.forEach((radioBtn) => {
                     radioBtn.checked = false;
                 });
-        
+
                 allCards.forEach((card) => {
                     card.classList.remove('selected');
                 });
-        
+
                 addAddressForm.style.display = 'block';
-        
+
                 selectDefaultAddress();
             });
         </script>
 
- <!-- ----------Page load stuffs---------------- -->
-<script>
-    window.onload = function () {
-        var totalElement = document.getElementById("total");
-        var walletAmountElement = document.getElementById("walletAmount");
-        var walletError = document.getElementById("walletError");
+        <!-- ----------Page load stuffs---------------- -->
+        <script>
+            window.onload = function () {
+                var totalElement = document.getElementById("total");
+                var walletAmountElement = document.getElementById("walletAmount");
+                var walletError = document.getElementById("walletError");
 
-        var totalAmount = parseFloat(totalElement.innerHTML.replace("₹", "",));
-        var walletAmount = parseFloat(walletAmountElement.innerHTML.replace("Wallet amount: ₹", ""));
+                var totalAmount = parseFloat(totalElement.innerHTML.replace("₹", ""));
+                var walletAmount = parseFloat(walletAmountElement.innerHTML.trim().replace("Wallet amount: ₹", ""));
 
-        if (totalAmount > walletAmount) {
-            walletError.innerHTML = "Insufficient funds in the wallet.";
+                if (totalAmount > walletAmount) {
+                    walletError.innerHTML = "Insufficient funds in the wallet.";
 
-            var walletRadioButton = document.getElementById("wallet");
-            if (walletRadioButton) {
-                walletRadioButton.disabled = true;
-            }
-        }
-    };
-</script>
+                    var walletRadioButton = document.getElementById("wallet");
+                    if (walletRadioButton) {
+                        walletRadioButton.disabled = true;
+                    }
+                }
+            };
+        </script>
 
         <script>
             var total = 0;
@@ -1204,11 +1220,91 @@
                 totalElement.innerText = '₹' + total.toFixed(2);
             });
 
-            document.getElementById('verifyButton').addEventListener('click', function () {
+
+
+            document.getElementById('applyButton').addEventListener('click', function () {
+                const inputElement = document.getElementById('checkout-discount-input');
+                const inputValue = inputElement.value.trim();
+                const applyButton = document.getElementById('applyButton');
+                const cancelButton = document.getElementById('cancelButton');
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    html: 'Only once you can apply a coupon',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#49bd31',
+                    cancelButtonColor: '#ff2e2e',
+                    confirmButtonText: 'Apply'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        fetch('/checkout/applyCoupon', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ couponCode: inputValue }),
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                const couponMessageElement = document.getElementById('couponMessage');
+                                const couponMessageOnTotal = document.getElementById('couponApply');
+                                const couponOff = document.getElementById('offPercentage');
+                                const totalAmount = document.getElementById('total');
+
+                                if (data.coupon) {
+                                    if (total < data.coupon.minPurcahaseAmount) {
+                                        couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> min purchase upto ₹${data.coupon.minPurcahaseAmount}`;
+                                        couponMessageElement.className = 'text-danger';
+                                        return
+                                    } else if (data.message) {
+
+                                    }
+
+                                    couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-check text-success"></i> Coupon is applied`;
+                                    couponMessageElement.className = 'text-success';
+                                    couponMessageOnTotal.innerHTML = `Coupon is applied <i class="fa-solid fa-circle-check text-primary"></i>`;
+
+                                    couponOff.innerHTML = `${data.coupon.discountPercentage}% off`;
+                                    discountMoney.innerHTML = `₹${(subTotal * data.coupon.discountPercentage / 100).toFixed(2)}`;
+                                    save.innerHTML = "Save"
+
+                                    applyButton.style.display = 'none';
+                                    cancelButton.style.display = 'inline-block';
+                                    inputElement.disabled = true;
+
+                                    total -= total * (data.coupon.discountPercentage / 100);
+                                    totalAmount.innerHTML = `₹${total.toFixed(2)}`;
+
+                                } else {
+                                    couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> ${data.message}`;
+                                    couponMessageElement.className = 'text-danger';
+
+                                    applyButton.style.display = 'inline-block';
+                                    cancelButton.style.display = 'none';
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error during coupon verification:', error);
+                                applyButton.style.display = 'inline-block';
+                                cancelButton.style.display = 'none';
+                            });
+
+
+                        document.getElementById('applyButton').style.display = 'none';
+
+                    } else {
+
+                    }
+                });
+            });
+
+            document.getElementById('cancelButton').addEventListener('click', function () {
                 const inputElement = document.getElementById('checkout-discount-input');
                 const inputValue = inputElement.value.trim();
 
-                fetch('/checkout/verifyCoupon', {
+                fetch('/checkout/cancelCoupon', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -1217,63 +1313,51 @@
                 })
                     .then(response => response.json())
                     .then(data => {
-                        const couponMessageElement = document.getElementById('couponMessage');
-                        const couponMessageOnTotal = document.getElementById('couponApply');
-                        const couponOff = document.getElementById('offPercentage');
-                        const totalAmount = document.getElementById('total');
+                        if (data.success) {
 
-                        if (data.coupon) {
-
-                            if (total < data.coupon.minPurcahaseAmount) {
-                                couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> min purchase upto ₹${data.coupon.minPurcahaseAmount}`;
-                                couponMessageElement.className = 'text-danger';
-                                return
-                            }
-
-                            couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-check text-success"></i> Coupon is applied`;
-                            couponMessageElement.className = 'text-success';
-                            couponMessageOnTotal.innerHTML = `Coupon is applied <i class="fa-solid fa-circle-check text-primary"></i>`;
-                            couponOff.innerHTML = `${data.coupon.discountPercentage}% off`;
-                            discountMoney.innerHTML = `<strike>₹${subTotal.toFixed(2)}</strike>`;
-
-
-                            total -= total * (data.coupon.discountPercentage / 100);
-                            totalAmount.innerHTML = `₹${total.toFixed(2)}`;
-
-                            // Check if the updated total is less than 1000
+                            showNotification("Coupon removed", true);
+                            setTimeout(() => {
+                                location.reload()
+                            }, 1000);
+                               
 
                         } else {
-                            couponMessageElement.innerHTML = `<i class="fa-solid fa-circle-xmark text-danger"></i> Coupon is not valid`;
-                            couponMessageElement.className = 'text-danger';
+                           
+                            showNotification("Something went wrong", false);
+                            setTimeout(() => {
+                                location.reload()
+                            }, 2000);
+                               
+                            
+
                         }
+
                     })
                     .catch(error => {
-                        console.error('Error during coupon verification:', error);
+                        console.error('Error during coupon cancellation:', error);
                     });
-
-                // Hide the "Verify" button
-                document.getElementById('verifyButton').style.display = 'none';
             });
 
             document.getElementById('checkout-discount-input').addEventListener('focus', function () {
-                document.getElementById('verifyButton').style.display = 'block';
+                const applyButton = document.getElementById('applyButton');
+                const cancelButton = document.getElementById('cancelButton');
+
+                applyButton.style.display = 'block';
+                cancelButton.style.display = 'none';
             });
 
-            document.addEventListener('click', function (event) {
-                const inputElement = document.getElementById('checkout-discount-input');
-                const verifyButton = document.getElementById('verifyButton');
-
-                if (event.target !== inputElement && !inputElement.contains(event.target)) {
-                    verifyButton.style.display = 'none';
-                }
+            // ---------for remove hover on coupon--------
+            document.getElementById('cancelButton').addEventListener('mouseover', function () {
+                document.getElementById('removeText').style.display = 'block';
             });
+
+            document.getElementById('cancelButton').addEventListener('mouseout', function () {
+                document.getElementById('removeText').style.display = 'none';
+            });
+
+
 
         </script>
-
-
-
-
-
 
         <!-- Plugins JS File -->
         <script src="/assets/js/jquery.min.js"></script>

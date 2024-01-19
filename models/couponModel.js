@@ -27,8 +27,7 @@ const  couponSchema = new mongoose.Schema({
     },
     usedUsers:[
         {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Users',
+            type:String
         }
     ],
     isActive: {

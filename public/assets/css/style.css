@@ -20061,7 +20061,7 @@ button:focus {
     padding: 2rem;
 }
 
-.verify-button {
+.coupon-button {
     position: absolute;
     top: 50%;
     right: 0.5rem;
@@ -20115,8 +20115,13 @@ button:focus {
     color: #c96;
     background-color: #fff;
 }
+
 .active-btn {
     background-color: #c96;
     border: 4px double white;
     color: #fff;
 }
+#removeText {
+    display: none;
+}
+
