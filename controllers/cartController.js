@@ -58,9 +58,9 @@ const removeProduct = async (req, res) => {
         );
 
         if (!updatedUser) {
-            return res.status(404).json({ message: "User not found" });
+            return res.json({success:false})
         }
-        res.json({ status: "success" });
+        res.json({ success:true});
 
     } catch (error) {
         console.log(error.message);

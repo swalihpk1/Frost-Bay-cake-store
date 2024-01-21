@@ -9,106 +9,110 @@
       <!-- End .header-left -->
 
       <div class="header-right">
-        <div class="dropdown cart-dropdown" id="cartDropdown" >
+        <div class="dropdown cart-dropdown" id="cartDropdown">
           <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true"
             aria-expanded="false" data-display="static">
             <img src="/assets/images/icons/cart.png" style="max-width: 30px;" alt="">
-              <span class="cart-count"><%=totalProductsCart%></span>
-           <span class="cart-txt">₹<%=cartSum%>.00</span>
+            <span class="cart-count">
+              <%=totalProductsCart%>
+            </span>
+            <span class="cart-txt">₹<%=cartSum%>.00</span>
           </a>
-           
 
-          <div class="dropdown-menu dropdown-menu-right border shadow">
-            <div class="dropdown-cart-products" >
-              <% if (user && user.cart && user.cart.length> 0) { %>
-                <% user.cart.forEach(cartItem=> { %>
-                  <div class="product" >
-                    <div class="product-cart-details">
-                      <h4 class="product-title">
-                        <a href="product.html">
-                          <%= cartItem.productId && cartItem.productId.productName ? cartItem.productId.productName
-                            : 'Product Name Not Available' %>
-                        </a>
-                      </h4>
-                      <span class="cart-product-info">
-                        <span class="cart-product-qty">
-                          <%= cartItem.quantity %>
-                        </span>
-                        x ₹<%= cartItem.productId && cartItem.productId.price ? cartItem.price
-                          : 'Price Not Available' %>
-                      </span>
-                    </div>
-                    <!-- End .product-cart-details -->
-                    <figure class="product-image-container">
-                      <a href="product.html" class="product-image">
-                        <% if (cartItem.productId && cartItem.productId.productImages &&
-                          cartItem.productId.productImages.length> 0) { %>
-                          <img src="/assets/productImages/uploadImages/<%= cartItem.productId.productImages[0] %>"
-                            alt="product" />
-                          <% } else { %>
-                            <img src="/path/to/default/image.jpg" alt="Default Product Image" />
-                            <% } %>
-                      </a>
-                    </figure>
-                    <a href="#" class="btn-remove" title="Remove Product">
-                      <i class="fa-light fa-x fa-xs" style="color: #000000"></i>
-                    </a>
-                  </div>
-                  <!-- End .product -->
-                  <% }); %>
-                    <% } else { %>
-                      <div class="text-center border-1">
-                        <p style="color: #949494">No cakes have been added yet.</p>
-                        <a href="/shop" class="btn btn-outline-primary-2">
-                          <span>GO SHOP</span><i class="icon-long-arrow-right"></i>
+              <div class="dropdown-menu dropdown-menu-right border shadow">
+                <div class="dropdown-cart-products">
+                  <% if (user && user.cart && user.cart.length> 0) { %>
+                    <% user.cart.forEach(cartItem=> { %>
+                      <div class="product">
+                        <div class="product-cart-details" id="product-id" data-product-id="<%=cartItem.productId._id%>">
+                          <h4 class="product-title">
+                            <a href="product.html">
+                              <%= cartItem.productId && cartItem.productId.productName ? cartItem.productId.productName
+                                : 'Product Name Not Available' %>
+                            </a>
+                          </h4>
+                          <span class="cart-product-info">
+                            <span class="cart-product-qty">
+                              <%= cartItem.quantity %>
+                            </span>
+                            x ₹<%= cartItem.productId && cartItem.productId.price ? cartItem.price
+                              : 'Price Not Available' %>
+                          </span>
+                        </div>
+                        <!-- End .product-cart-details -->
+                        <figure class="product-image-container">
+                          <a href="product.html" class="product-image">
+                            <% if (cartItem.productId && cartItem.productId.productImages &&
+                              cartItem.productId.productImages.length> 0) { %>
+                              <img src="/assets/productImages/uploadImages/<%= cartItem.productId.productImages[0] %>"
+                                alt="product" />
+                              <% } else { %>
+                                <img src="/path/to/default/image.jpg" alt="Default Product Image" />
+                                <% } %>
+                          </a>
+                        </figure>
+                        <a class="btn-remove" id="removeCartProduct" title="Remove Product">
+                          <i class="fa-light fa-x fa-xs" style="color: #000000"></i>
                         </a>
                       </div>
-                      <!-- .End .tab-pane -->
-                      <% } %>
-
-                        <% if (user && user.cart && user.cart.length> 0) { %>
-                          <div class="dropdown-cart-total">
-                            <span>Total</span>
-                            <span class="cart-total-price">₹<%=cartSum%></span>
+                      <!-- End .product -->
+                      <% }); %>
+                        <% } else { %>
+                          <div class="text-center border-1">
+                            <p style="color: #949494">No cakes have been added yet.</p>
+                            <a href="/shop" class="btn btn-outline-primary-2">
+                              <span>GO SHOP</span><i class="icon-long-arrow-right"></i>
+                            </a>
                           </div>
-                          <!-- End .dropdown-cart-total -->
-
-                          <div class="dropdown-cart-action ">
-                            <a href="/cart" class="btn btn-secondary text-white">View Cart</a>
-                            <a href="/cart/checkout" class="btn btn-outline-primary-2"><span>Checkout</span><i
-                                class="icon-long-arrow-right"></i></a>
-                          </div>
-                          <!-- End .dropdown-cart-total -->
+                          <!-- .End .tab-pane -->
                           <% } %>
-            </div>
-          </div>
-        </div>
-        <!-- End .cartDropdown -->
 
-        <% if (user) { %>
-          <% if (user.userImage) { %>
-            <a href="/account" class="bg-white border-0" dropdown-toggle type="button" id="" data-toggle="dropdown">
-              <div style="width: 50px;height: 50px;" class="ml-3">
-                <img class="rounded-circle" src="/assets/userImages/croppedImages/<%=user.userImage%>" alt="" />
+                            <% if (user && user.cart && user.cart.length> 0) { %>
+                              <div class="dropdown-cart-total">
+                                <span>Total</span>
+                                <span class="cart-total-price">₹<%=cartSum%></span>
+                              </div>
+                              <!-- End .dropdown-cart-total -->
+
+                              <div class="dropdown-cart-action ">
+                                <a href="/cart" class="btn btn-secondary text-white">View Cart</a>
+                                <a href="/cart/checkout" class="btn btn-outline-primary-2"><span>Checkout</span><i
+                                    class="icon-long-arrow-right"></i></a>
+                              </div>
+                              <!-- End .dropdown-cart-total -->
+                              <% } %>
+                </div>
               </div>
-            </a>
-            <% } else { %>
-              <a href="/account" class="bg-white border-0" dropdown-toggle type="button" id="" data-toggle="dropdown">
+        </div>
 
-                <img class="" src="/assets/images/icons/Profile.svg" alt="" />
-              </a>
-              <% } %>
+
+            <!-- End .cartDropdown -->
+
+            <% if (user) { %>
+              <% if (user.userImage) { %>
+                <a href="/account" class="bg-white border-0" dropdown-toggle type="button" id="" data-toggle="dropdown">
+                  <div style="width: 50px;height: 50px;" class="ml-3">
+                    <img class="rounded-circle" src="/assets/userImages/croppedImages/<%=user.userImage%>" alt="" />
+                  </div>
+                </a>
                 <% } else { %>
-                  <a href="/authentication" class="text-white text-center m-3 p-2" style="
+                  <a href="/account" class="bg-white border-0" dropdown-toggle type="button" id=""
+                    data-toggle="dropdown">
+
+                    <img class="" src="/assets/images/icons/Profile.svg" alt="" />
+                  </a>
+                  <% } %>
+                    <% } else { %>
+                      <a href="/authentication" class="text-white text-center m-3 p-2" style="
     width: 6rem;
     height: 3rem;
     border: none;
     background-color: #cc9966;
     color: aliceblue;
   ">
-                    <span>LOGIN</span>
-                  </a>
-                  <% } %>
+                        <span>LOGIN</span>
+                      </a>
+                      <% } %>
 
       </div>
       <!-- End .header.right -->

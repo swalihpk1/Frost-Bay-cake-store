@@ -106,8 +106,6 @@ const applyCoupon = async (req, res) => {
         const userId = req.userId;
 
         const coupon = await Coupon.findOne({ couponId: couponCode });
-        console.log(coupon);
-        console.log(req.body);
 
         if (coupon) {
             if (coupon.usedUsers.includes(userId)) {
@@ -126,7 +124,6 @@ const applyCoupon = async (req, res) => {
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-
 
 
 const cancelCoupon = async (req, res) => {
