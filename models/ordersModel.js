@@ -101,9 +101,6 @@ const ordersSchema = new mongoose.Schema({
     deliveredDate: {
         type: Date,
     },
-    returnedDate: {
-        type: Date,
-    },
     totalAmount: {
         type: Number,
         required: true,
@@ -114,10 +111,6 @@ const ordersSchema = new mongoose.Schema({
     paymentMethod: {
         type: String,
         required: true
-    },
-    paymentStatus: {
-        type: String,
-        require: true
     },
     createdAt: {
         type: Date,

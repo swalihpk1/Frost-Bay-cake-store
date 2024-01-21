@@ -1,8 +1,64 @@
 <script src="https://kit.fontawesome.com/a6f4adbcd9.js" crossorigin="anonymous"></script>
 
-<script>
-  
 
+<script>
+
+    document.getElementById('removeCartProduct').addEventListener('click', function () {
+        const productId = document.getElementById('product-id').dataset.productId;
+
+        console.log(productId);
+
+        fetch(`/cart/removeProduct`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ productId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    $('#cartDropdown').load('/home #cartDropdown', function () {
+                        showNotificationfooter("Removed", true);
+                    });
+
+                } else {
+                    $('#cartDropdown').load('/home #cartDropdown', function () {
+                        showNotificationfooter("Something went wrong", false);
+                    });
+
+                }
+
+            })
+            .catch(error => console.error('Error blocking user:', error));
+    });
+
+    function showNotificationfooter(message, success = true) {
+        console.log("1st");
+        const notificationContainer = document.getElementById('notification-container');
+        console.log("2nd");
+        notificationContainer.innerHTML = message;
+        console.log("3rd");
+
+        if (success) {
+            console.log("4th");
+            notificationContainer.style.color = '#c96';
+        } else {
+            console.log("4.0");
+            notificationContainer.style.color = 'red';
+        }
+
+        notificationContainer.style.display = 'block';
+        console.log("end");
+        setTimeout(() => {
+            notificationContainer.style.display = 'none';
+        }, 3000); // Adjust the time as needed
+    }
+
+
+</script>
+<script>
     function confirmLogout() {
         const isConfirmed = confirm("Are you sure you want to logout?");
         if (isConfirmed) {
@@ -14,4 +70,5 @@
 </script>
 
 </body>
+
 </html>

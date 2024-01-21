@@ -209,6 +209,8 @@
             </div>
         </div>
 
+        <div id="notification-container"></div>
+
 
 
         <!-- ---------------------Remove cart Products------------------ -->
@@ -223,8 +225,6 @@
             function confirmRemoveProduct() {
 
                 const productId = $('#confirmationModal').data('productId');
-                // const removeButton = document.getElementById(`${productId}`);
-                console.log("haii");
                 fetch(`/cart/removeProduct`, {
                     method: 'DELETE',
                     headers: {
@@ -235,7 +235,9 @@
                     .then(response => response.json())
                     .then(data => {
 
-                        Swal.fire({
+                        console.log(data);
+                        if(data.success){
+                            Swal.fire({
                             icon: 'success',
                             title: 'Product Removed!',
                             text: 'The product has been successfully removed from your cart.',
@@ -250,6 +252,24 @@
                             window.location.href = '/cart';
                         }, 1000); // 2000 milliseconds (2 seconds)
 
+                        }else{
+                            Swal.fire({
+                            icon: 'failed',
+                            title: 'Something went wrong',
+                            confirmButtonText: 'OK',
+                            customClass: {
+                                confirmButton: 'btn btn-secondary',
+                            },
+                        });
+
+                        // Redirect to the cart page after a short delay
+                        setTimeout(() => {
+                            window.location.href = '/cart';
+                        }, 1000); // 2000 milliseconds (2 seconds)
+
+                        }
+
+                        
                     })
                     .catch(error => console.error('Error blocking user:', error));
 

@@ -4,6 +4,12 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Add this script tag to include jsPDF library -->
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
+
+
 
     </head>
 
@@ -197,8 +203,9 @@
                                                         </thead>
                                                         <tbody>
                                                             <% orders.forEach(function(order) {
-                                                                order.orderedProducts.forEach(function(product) { %>
-                                                                <tr class="text-center">
+                                                                order.orderedProducts.forEach(function(product) { 
+                                                                    order.shipAddress.forEach(address =>{ %>
+                                                                    <tr class="text-center" data-order-details="<%= JSON.stringify(order) %>">
                                                                     <td class="p-0">
                                                                         <div class="">
                                                                             <figure class="d-inline-block">
@@ -208,11 +215,12 @@
                                                                                         <img src="/assets/productImages/uploadImages/<%= product.productDetails.productImage%>"
                                                                                             alt="<%= product.productDetails.name %>">
                                                                                     </div>
-                                                                                </a>
+
                                                                             </figure>
                                                                         </div>
+                                                                        <h6></h6>
                                                                     </td>
-                                                                    <td class="product-name" style="cursor: pointer;"
+                                                                <td class="product-name" style="cursor: pointer;"
                                                                         data-toggle="modal"
                                                                         data-target="#orderDetailsModal"
                                                                         data-product-image="<%= product.productDetails.productImage%>"
@@ -221,39 +229,59 @@
                                                                         data-purchase-date="<%= order.purchaseDate %>"
                                                                         data-total-amount="<%= order.totalAmount %>"
                                                                         data-payment-method="<%= order.paymentMethod %>"
-                                                                        data-status="<%= order.status %>">
+                                                                        data-status="<%= product.status %>"
+                                                                        data-product-amount="<%= product.productDetails.price %>"
+                                                                        data-name="<%= address.name %>"
+                                                                        data-house-name="<%= address.houseName %>"
+                                                                        data-zipcode="<%= address.zipcode %>"
+                                                                        data-phone="<%= address.phone %>"
+                                                                        data-status-update-date="<%= product.stausUpdatedDate %>"
+                                                                        
+                                                                        ">
+                                                                        
                                                                         <h6>
                                                                             <%= product.productDetails.name %>
                                                                         </h6>
                                                                     </td>
+
+
                                                                     <td id="status">
                                                                         <% if(product.status=="Placed" ){ %>
-                                                                          <p class="rounded" id="placed">
-                                                                            <%= product.status %>
-                                                                          </p>
-                                                                        <% } else if(product.status=="On the way" ){ %>
-                                                                          <p class="rounded" id="onTheWay" >
-                                                                            <%= product.status %>
-                                                                          </p>
-                                                                        <% } else if(product.status=="Refunded"){ %>
-                                                                          <p class="rounded" id="refund">
-                                                                            <%= product.status %>
-                                                                          </p>
-                                                                        <% } else if(product.status=="Cancelled"){ %>
-                                                                          <p class="rounded" id="cancelled" >
-                                                                            <%= product.status %>
-                                                                          </p>
-                                                                        <% } else if(product.status=="Delivered"){ %>
-                                                                          <p class="rounded" id="delivered" >
-                                                                            <%= product.status %>
-                                                                          </p>
-                                                                        <% } else { %>
-                                                                          <p class="text-primary">
-                                                                            <%= product.status %>
-                                                                          </p>
-                                                                        <% } %>
-                                                                      </td>
-                                                                      
+                                                                            <p class="rounded" id="placed">
+                                                                                <%= product.status %>
+                                                                            </p>
+                                                                            <% } else if(product.status=="On the way" ){
+                                                                                %>
+                                                                                <p class="rounded" id="onTheWay">
+                                                                                    <%= product.status %>
+                                                                                </p>
+                                                                                <% } else if(product.status=="Refunded"
+                                                                                    ){ %>
+                                                                                    <p class="rounded" id="refund">
+                                                                                        <%= product.status %>
+                                                                                    </p>
+                                                                                    <% } else
+                                                                                        if(product.status=="Cancelled"
+                                                                                        ){ %>
+                                                                                        <p class="rounded"
+                                                                                            id="cancelled">
+                                                                                            <%= product.status %>
+                                                                                        </p>
+                                                                                        <% } else
+                                                                                            if(product.status=="Delivered"
+                                                                                            ){ %>
+                                                                                            <p class="rounded"
+                                                                                                id="delivered">
+                                                                                                <%= product.status %>
+                                                                                            </p>
+                                                                                            <% } else { %>
+                                                                                                <p class="text-primary">
+                                                                                                    <%= product.status
+                                                                                                        %>
+                                                                                                </p>
+                                                                                                <% } %>
+                                                                    </td>
+
                                                                     <td>
                                                                         <span class="text-info">
                                                                             On <%= product.stausUpdatedDate %>
@@ -283,6 +311,7 @@
                                                                                 <% } %>
                                                                 </tr>
                                                                 <% }); %>
+                                                                <% }); %>
 
                                                                     <% }); %>
                                                                         <!-- Add more rows as needed -->
@@ -299,52 +328,85 @@
                                                                     class=" btn btn-secondary position-relative">Shop</a>
                                                             </div>
 
-
                                                         </div>
                                                         <% } %>
                                                             <!-- End .table table-wishlist -->
                                             </div>
 
 
-
                                             <!-- -------------Modal for Order Details-------------- -->
-                                            <div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog"
-                                                aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+                                            <div class="modal fade" id="orderDetailsModal" tabindex="-1" role="dialog" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="orderDetailsModalLabel">Order
-                                                                Details</h5>
-                                                            <button type="button" class="close" data-dismiss="modal"
-                                                                aria-label="Close">
+                                                        <div class="text-center flex-column justify-content-center p-3 pb-0" style="background-color: #a47a51;">
+                                                            <h4 class="modal-title mx-auto text-white" id="orderDetailsModalLabel">Order Details</h4>
+                                                            <p class="text-center text-white"><span id="modal-purchase-date"></span></p>
+                                                            <span class="badge rounded-pill modal-status" style="background-color: #97ff975f; color: #08ff3f;"></span>
+                                                            <button type="button" class="close m-0 position-absolute text-white" style="right: 1rem; top: 1rem;" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
                                                         </div>
-                                                        <div class="modal-body m-3">
-                                                            <!-- Order details content using data attributes -->
-
-                                                            <p><strong>Product Image:</strong>
-                                                            <div class="product-image">
-                                                                <img id="modal-product-image" class="w-25 m-4" src=""
-                                                                    alt="Product Image">
+                                                        <div class="modal-body m-4">
+                                                            <div class="row justify-content-between mx-4">
+                                                                <h6>Product</h6>
+                                                                <h6>Sub total</h6>
                                                             </div>
-                                                            </p>
-                                                            <p><strong>Product Name:</strong> <span
-                                                                    id="modal-product-name"></span></p>
-                                                            <p><strong>Product Quantity:</strong> <span
-                                                                    id="modal-product-quantity"></span></p>
-                                                            <p><strong>Purchase Date:</strong> <span
-                                                                    id="modal-purchase-date"></span></p>
-                                                            <p><strong>Total Amount:</strong> ₹<span
-                                                                    id="modal-total-amount"></span></p>
-                                                            <p><strong>Payment Method:</strong> <span
-                                                                    id="modal-payment-method"></span></p>
-                                                            <p><strong>Status:</strong> <span id="modal-status"></span>
-                                                            </p>
+                                                            <div class="row mx-2">
+                                                                <div class="d-flex align-items-center w-100">
+                                                                    <div class="product-image" style="width: fit-content;">
+                                                                        <img id="modal-product-image" style="width: 8rem;" class="m-0" src="" alt="Product Image">
+                                                                    </div>
+                                                                    <p class="ml-5">
+                                                                        <span id="modal-product-quantity"></span> X
+                                                                        <span id="modal-product-name"></span>
+                                                                    </p>
+                                                                    <div class="flex-grow-1"></div>
+                                                                    <p class="mr-4 pr-3">₹<span id="modal-product-amount"></span></p>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <div class="row justify-content-between">
+                                                                <div class="col-md-6">
+                                                                    <p class="text-dark">Payment method</p>
+                                                                    <p class="text-dark">Coupon</p>
+                                                                    <p class="text-dark">Offer</p>
+                                                                </div>
+                                                                <div class="col-md-6" style="text-align: end;">
+                                                                    <p id="modal-payment-method"></p>
+                                                                    <p class="text-success pr-3" id="modal-coupon-info" ><strike>-₹345</strike></p>
+                                                                    <p class="text-primary pr-4" id="modal-offer-info"><b>10%</b></p>
+                                                                </div>
+                                                            </div>
+                                                            <hr class="m-2 mb-2">
+                                                            <div class="row justify-content-between">
+                                                                <div class="col-md-6">
+                                                                    <h6 class="text-dark"> Total order amount</h6>
+                                                                </div>
+                                                                <div class="col-md-6" style="text-align:end;">
+                                                                    <h6>₹<span id="modal-total-amount"></span></h6>
+                                                                </div>
+                                                            </div>
+                                                            <div class="d-flex justify-content-between card flex-row align-items-center">
+                                                                <div class="col-md-6 p-0">
+                                                                    <p><b><u>Shipping address</u></b></p>
+                                                                    <p class="text-dark"><span id="modal-name"></span><br>
+                                                                        <span id="modal-house-name"></span><br>
+                                                                        <span id="modal-zipcode"></span>,
+                                                                        <span id="modal-phone"></span></p>
+                                                                </div>
+                                                                <div class="col-md-6 p-0" style="text-align: end;">
+                                                                    <p class="text-primary" ><span class="modal-status"></span> on <span id="modal-status-update-date"> </span></p>
+
+                                                                </div>  
+                                                            </div>
+                                                            <div class="text-center"> 
+                                                                <button class="btn btn-outline-primary-2 rounded-pill p-2 btn-print">Print <i class="fa-solid fa-file-invoice"></i> </button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
+                                            
 
                                             <!-- -------------------------------Modal for refund request------------------------------ -->
                                             <div class="modal fade" id="refundRequestModal" tabindex="-1" role="dialog"
@@ -352,7 +414,8 @@
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="orderDetailsModalLabel">Refund
+                                                            <h5 class="modal-title" id="orderDetailsModalLabel">
+                                                                Refund
                                                                 request</h5>
                                                             <button type="button" class="close" data-dismiss="modal"
                                                                 aria-label="Close">
@@ -362,7 +425,8 @@
                                                         <div class="modal-body m-3">
                                                             <p style="color: #0a9538;font-style: italic;">Honesty
                                                                 Appreciated: We believe you! Get your full refund
-                                                                with no fuss. Just share a pic & reason, and your next
+                                                                with no fuss. Just share a pic & reason, and your
+                                                                next
                                                                 slice
                                                                 comes with a sweet discount. Cheers!</p>
                                                             <form action="" class="m-3">
@@ -432,8 +496,10 @@
                                                                                     <%= address[i].houseName %> <br>
                                                                                         <%= address[i].appartmentNumber
                                                                                             %>,
-                                                                                            <%=address[i].city %><br>
-                                                                                                <%= address[i].state%>,
+                                                                                            <%=address[i].city %>
+                                                                                                <br>
+                                                                                                <%= address[i].state%>
+                                                                                                    ,
                                                                                                     <%=address[i].country
                                                                                                         %>
                                                                                                         <br>
@@ -522,8 +588,8 @@
                                                                             <h6
                                                                                 class="<%= transaction.direction === 'paid' ? 'text-danger' : 'text-success' %>
                                                                             <%= transaction.direction === 'Paid' ? 'text-danger' : 'text-success' %>">
-                                                                                <%= transaction.direction==='Recieved' ? '+'
-                                                                                    : '-' %>
+                                                                                <%= transaction.direction==='Recieved'
+                                                                                    ? '+' : '-' %>
                                                                                     <%= transaction.amount %>
                                                                             </h6>
                                                                         </div>
@@ -540,24 +606,33 @@
 
                                             <div class="tab-pane fade" id="tab-coupons" role="tabpanel"
                                                 aria-labelledby="tab-coupons-link">
-                                                <p><u>How to use?</u> : <span class="text-primary">copy the <strong><i>Coupon id</i></strong> and paste in your cart apply coupon field.</span></p>
+                                                <p><u>How to use?</u> : <span class="text-primary">copy the
+                                                        <strong><i>Coupon id</i></strong> and paste in your cart
+                                                        apply coupon field.</span></p>
                                                 <div class="row pl-4">
                                                     <% coupons.forEach(coupon=>{ %>
-                                                    <div class="col-md-4 mt-3">
-                                                        <div class="card couponCard shadow text-center" style="background-image:url(/assets/couponBgImages/<%=coupon.bgImage%>);">
-                                                            <div class="card-body background p-0">
-                                                                <div class="white-body bg-light p-4"
-                                                                    style="opacity: 0.8; border: 5px double #c96; box-sizing: border-box; padding: 10px; max-height: 28rem;">
-                                                                    <h6>Discount upto</h6>
-                                                                    <h1><%=coupon.discountPercentage%>%</h1>
-                                                                    <h6>-off-</h6>
-                                                                    <p><%=coupon.description%></p>
-                                                                    <h5><%=coupon.couponId%></h5>
+                                                        <div class="col-md-4 mt-3">
+                                                            <div class="card couponCard shadow text-center"
+                                                                style="background-image:url(/assets/couponBgImages/<%=coupon.bgImage%>);">
+                                                                <div class="card-body background p-0">
+                                                                    <div class="white-body bg-light p-4"
+                                                                        style="opacity: 0.8; border: 5px double #c96; box-sizing: border-box; padding: 10px; max-height: 28rem;">
+                                                                        <h6>Discount upto</h6>
+                                                                        <h1>
+                                                                            <%=coupon.discountPercentage%>%
+                                                                        </h1>
+                                                                        <h6>-off-</h6>
+                                                                        <p>
+                                                                            <%=coupon.description%>
+                                                                        </p>
+                                                                        <h5>
+                                                                            <%=coupon.couponId%>
+                                                                        </h5>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <%  }); %>
+                                                        <% }); %>
 
                                                 </div>
                                             </div>
@@ -570,7 +645,7 @@
         </div><!-- .End .page-content -->
         </main><!-- End .main -->
 
-       
+
 
 
 
@@ -908,10 +983,10 @@
                                     Swal.fire('Cancelled!', 'Your order has been cancelled.', 'success');
                                 }
                             })
-                       
-                    }else{
+
+                    } else {
                         Swal.fire('Cancel failed!', 'Something went wrong.', 'failed');
-                                
+
                     }
                 });
             }
@@ -919,28 +994,43 @@
         </script>
 
 
-        <!--  set the modal with orders content dynamically -->
-        <script>
-            $(document).on('click', '.product-name', function () {
-                var productImage = $(this).data('product-image');
-                var productName = $(this).data('product-name');
-                var productQuantity = $(this).data('product-quantity');
-                var purchaseDate = $(this).data('purchase-date');
-                var totalAmount = $(this).data('total-amount');
-                var paymentMethod = $(this).data('payment-method');
-                var status = $(this).data('status');
+        
+    <!-- Add this script to your HTML -->
+    <script>
+        $(document).on('click', '.product-name', function () {
+            var productImage = $(this).data('product-image');
+            var productName = $(this).data('product-name');
+            var productQuantity = $(this).data('product-quantity');
+            var purchaseDate = $(this).data('purchase-date');
+            var totalAmount = $(this).data('total-amount');
+            var paymentMethod = $(this).data('payment-method');
+            var status = $(this).data('status');
+            var productAmount = $(this).data('product-amount');
+            var name = $(this).data('name');
+            var houseName = $(this).data('house-name');
+            var zipcode = $(this).data('zipcode');
+            var phone = $(this).data('phone');
+            var statusUpdateDate = $(this).data('status-update-date');
 
 
-                // Set the modal content dynamically
-                $('#modal-product-image').attr('src', "/assets/productImages/uploadImages/" + productImage);
-                $('#modal-product-quantity').text(productQuantity);
-                $('#modal-product-name').text(productName);
-                $('#modal-purchase-date').text(purchaseDate);
-                $('#modal-total-amount').text(totalAmount);
-                $('#modal-payment-method').text(paymentMethod);
-                $('#modal-status').text(status);
-            });
-        </script>
+
+            // Set the modal content dynamically
+            $('#modal-product-image').attr('src', "/assets/productImages/uploadImages/" + productImage);
+            $('#modal-product-quantity').text(productQuantity);
+            $('#modal-product-name').text(productName);
+            $('#modal-purchase-date').text(purchaseDate);
+            $('#modal-total-amount').text(totalAmount);
+            $('#modal-payment-method').text(paymentMethod);
+            $('.modal-status').text(status);
+            $('#modal-product-amount').text(productAmount);
+            $('#modal-house-name').text(houseName);
+            $('#modal-name').text(name);
+            $('#modal-zipcode').text(zipcode);
+            $('#modal-phone').text(phone);
+            $('#modal-status-update-date').text(statusUpdateDate);
+        });
+    </script>
+
 
         <!-- ----------------Edit Addres-------------------- -->
         <script>
@@ -1238,5 +1328,37 @@
                 return new Date(dateString).toLocaleDateString('en-US', options);
             }
         </script>
+
+<script>
+  document.querySelector(".btn-print").addEventListener("click", function() {
+  // Create a temporary invoice element
+  var invoiceContent = document.createElement("div");
+  invoiceContent.style.display = "none"; // Hide it initially
+  document.body.appendChild(invoiceContent);
+
+  // Populate the invoice element with specific modal data
+  var modal = document.getElementById("orderDetailsModal");
+
+  var invoiceItems = modal.querySelectorAll(".row.mx-4, .row.justify-content-between, .d-flex.justify-content-between");
+  invoiceItems.forEach(function(item) {
+    invoiceContent.appendChild(item.cloneNode(true));
+  });
+  invoiceContent.innerHTML = "<h4>Order Invoice</h4>" + invoiceContent.innerHTML; // Example header
+  invoiceContent.style.fontFamily = "sans-serif"; 
+  window.print();
+
+    var doc = new jsPDF();
+    console.log(doc);
+    console.log("hai");
+    doc.html(invoiceContent, {
+      callback: function(doc) {
+        doc.save("invoice.pdf");
+      }
+    });
+
+  // Remove the temporary invoice element
+  document.body.removeChild(invoiceContent);
+});
+</script>
 
         <%-include('../layouts/user/footer')-%>

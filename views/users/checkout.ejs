@@ -39,8 +39,6 @@
                         <div class="checkout">
                             <div class="container">
                                 <p id="couponMessage" class=""></p>
-                                <p id="removeText" class="p-1 rounded position-absolute shadow" style="left: 34%;">
-                                    remove</p>
                                 <div class="checkout-discount">
                                     <form action="#">
                                         <input type="text" class="form-control" required id="checkout-discount-input"
@@ -50,7 +48,7 @@
                                         </label>
                                         <button type="button" id="applyButton" class="coupon-button">Apply</button>
 
-                                        <a id="cancelButton" class="coupon-button" style="display: none;">
+                                        <a id="cancelButton" class="coupon-button" style="display: none;" title="remove coupon">
                                             <i class="fa-sharp fa-solid fa-x"></i>
                                         </a>
 
@@ -1345,18 +1343,6 @@
                 applyButton.style.display = 'block';
                 cancelButton.style.display = 'none';
             });
-
-            // ---------for remove hover on coupon--------
-            document.getElementById('cancelButton').addEventListener('mouseover', function () {
-                document.getElementById('removeText').style.display = 'block';
-            });
-
-            document.getElementById('cancelButton').addEventListener('mouseout', function () {
-                document.getElementById('removeText').style.display = 'none';
-            });
-
-
-
         </script>
 
         <!-- Plugins JS File -->

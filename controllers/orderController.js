@@ -74,7 +74,7 @@ const addOrder = async (req, res) => {
             stausUpdatedDate: formattedDate,
             productDetails: {
                 name: item.productId.productName,
-                price: item.productId.price,
+                price: item.price,
                 productImage: item.productId.productImages[0],
             }
         }));
