@@ -48,7 +48,8 @@
                                         </label>
                                         <button type="button" id="applyButton" class="coupon-button">Apply</button>
 
-                                        <a id="cancelButton" class="coupon-button" style="display: none;" title="remove coupon">
+                                        <a id="cancelButton" class="coupon-button" style="display: none;"
+                                            title="remove coupon">
                                             <i class="fa-sharp fa-solid fa-x"></i>
                                         </a>
 
@@ -809,7 +810,9 @@
                         data: JSON.stringify(Object.fromEntries(formData.entries())),
                         success: function (data) {
 
-                            if (data.success && data.paymentMethod !== 'razorpay') {
+                            console.log(data);
+
+                            if (data.success && data.paymentMethod !== 'wallet') {
                                 showSuccessAlert(data.success, data.message)
                                     .then((clickedButton) => {
                                         console.log('Clicked Button:', clickedButton);
@@ -882,10 +885,50 @@
                                     .then((clickedButton) => {
                                         console.log('Clicked Button:', clickedButton);
 
-                                        if (clickedButton == 'OK') {
-                                            window.location.href = '/home';
+                                        if (data.success && data.paymentMethod !== 'wallet') {
+                                            showSuccessAlert(data.success, data.message)
+                                                .then((clickedButton) => {
+                                                    console.log('Clicked Button:', clickedButton);
+
+                                                    if (clickedButton == 'OK') {
+                                                        window.location.href = '/home';
+                                                    } else {
+                                                        window.location.href = '/account';
+                                                    }
+                                                });
+
+                                        } else if (data.success && data.paymentMethod === 'razorpay') {
+                                            const options = {
+                                                key: 'rzp_test_9WWhpgu9IlsKe3',
+                                                amount: data.amount,
+                                                currency: 'INR',
+                                                order_id: data.orderId,
+                                                name: 'Frost-Bay',
+                                                description: 'Payment for your order',
+                                                theme: {
+                                                    color: '#cc9966',
+
+                                                },
+                                                prefill: {
+                                                    "email": "frostBay@gmail.com",
+                                                    "contact": "7306477519"
+                                                },
+                                                notes: {
+                                                    "address": "Frost-Bay"
+                                                },
+                                                handler: function (response) {
+                                                    verifyPayment(response, data);
+                                                },
+                                            };
+
+                                            const rzr = new Razorpay(options);
+                                            rzr.on('payment.failed', function (response) {
+                                                console.log(response);
+                                                console.error('Payment failed:', response.error.code, response.error.description);
+                                            });
+                                            rzr.open();
                                         } else {
-                                            window.location.href = '/account';
+                                            showNotification(data.message, false);
                                         }
                                     });
                             },
@@ -1317,16 +1360,14 @@
                             setTimeout(() => {
                                 location.reload()
                             }, 1000);
-                               
+
 
                         } else {
-                           
+
                             showNotification("Something went wrong", false);
                             setTimeout(() => {
                                 location.reload()
                             }, 2000);
-                               
-                            
 
                         }
 

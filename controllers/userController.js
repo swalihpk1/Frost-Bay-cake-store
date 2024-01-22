@@ -130,25 +130,31 @@ const renderOtp = async (req, res) => {
 // -------Verifying-otp--------
 const verifyOtp = async (req, res) => {
     try {
-
-        const userId = req.query.id
+        const userId = req.query.id;
         const otp = req.body.a + req.body.b + req.body.c + req.body.d + req.body.e + req.body.f;
-        console.log(otp);
+
+        console.log('Entered OTP:', otp);
+
         const user = await userOtpVerification.findOne({ userId });
         const otpHash = await bcrypt.compare(otp, user.otp);
-        console.log(otpHash);
-        if (otpHash == true) {
-            req.session.user_id = user._id;
+
+        console.log('OTP Hash:', otpHash);
+
+        if (otpHash === true) {
+            req.session.user_id = userId;
+
+            console.log('Session data after setting user_id:', req.session);
+
             res.redirect('/home');
         } else {
-            res.render('otp', { message: "Enter valid OTP" })
+            res.render('otp', { message: 'Enter valid OTP' });
         }
-
-
     } catch (error) {
+        console.log(error.message);
         res.render('404');
     }
-}
+};
+
 
 // ------Verify-Login------
 const verifyLogin = async (req, res) => {
@@ -205,19 +211,33 @@ const home = async (req, res) => {
     try {
         const message = req.query.message;
         const userId = req.session.user_id;
-        const user = await User.findOne({ _id: userId }).populate({ path: 'cart.productId', model: 'products' });
-        const cartSum = user.cart.reduce((total, cartItem) => total + (cartItem.price * cartItem.quantity), 0);
-        const totalProductsInCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
 
-        res.render('home', {
-            user: user,
-            message: message,
-            currentPath: "/home",
-            cartSum: cartSum,
-            totalProductsCart: totalProductsInCart
-        });
+        const user = await User.findOne({ _id: userId })
+        if (user) {
+            const userWithcart = await User.findOne({ _id: userId }).populate({ path: 'cart.productId', model: 'products' });
+            const cartSum = user.cart.reduce((total, cartItem) => total + (cartItem.price * cartItem.quantity), 0);
+            const totalProductsInCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
+
+            res.render('home', {
+                user: userWithcart,
+                message: message,
+                currentPath: "/home",
+                cartSum: cartSum,
+                totalProductsCart: totalProductsInCart
+            });
+        } else {
+
+            res.render('home', {
+                user: null,
+                message: message,
+                currentPath: "/home",
+                cartSum: 0,
+                totalProductsCart: 0
+            });
+        }
     } catch (error) {
         console.log(error.message);
+        res.render('404');
     }
 };
 
@@ -237,7 +257,8 @@ const userAccount = async (req, res) => {
         const totalProductsCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
         res.render('userAccount', { user: userDetails,address,orders,coupons,cartSum,totalProductsCart});
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -278,7 +299,8 @@ const editUserData = async (req, res) => {
         }
         res.json({ success: false, message: 'Update failed!' });
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
     }
 };
 
@@ -320,7 +342,9 @@ const addAddress = async (req, res) => {
         return;
 
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
+        
     }
 }
 
@@ -335,7 +359,9 @@ const deleteAddress = async (req, res) => {
         res.json({ success: false, message: 'Deletion failed!' });
 
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
+
     }
 }
 
@@ -367,7 +393,9 @@ const editAddress = async (req, res) => {
             res.json({ success: false, message: 'Editing failed!' });
         }
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
+
     }
 }
 
@@ -384,7 +412,8 @@ const checkout = async (req, res) => {
         const totalProductsCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
         res.render('checkout', { user: userDetails, address: address, products: populatedCart,cartSum,totalProductsCart})
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -392,12 +421,13 @@ const checkout = async (req, res) => {
 // -------Logout-----
 const logout = async (req, res) => {
     try {
-
+        console.log("ayi");
         req.session.destroy();
         res.redirect(`/`);
 
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
     }
 }
 

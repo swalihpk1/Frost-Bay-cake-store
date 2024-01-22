@@ -7,15 +7,15 @@ const Offers = require("../models/offerModel")
 
 const shop = async (req, res) => {
     try {
-
         const userId = req.userId;
         const user = await User.findOne({ _id: userId });
+
+        // Proceed with filter-related logic even if the user doesn't exist
         const currentPage = parseInt(req.query.page) || 1;
         const searchTerm = req.query.q;
         const selectedCategories = req.query.category || [];
-        const sortOption = req.query.sort || 'popularity'; 
+        const sortOption = req.query.sort || 'popularity';
         const selectedKilograms = req.query.kilogram || [];
-
 
         let query = {};
 
@@ -35,7 +35,6 @@ const shop = async (req, res) => {
         if (selectedCategories.length > 0) {
             query.category = { $in: selectedCategories };
         }
-
 
         let sortCriteria = {};
         if (sortOption === 'lowToHigh') {
@@ -65,14 +64,20 @@ const shop = async (req, res) => {
         });
 
         const category = await Category.find({});
-        const userDetails = await User.populate(user, { path: 'cart.productId', model: 'products' });
-        const cartSum = user.cart.reduce((total, cartItem) => total + (cartItem.price * cartItem.quantity), 0);
-        const totalProductsCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
+
+        // Only calculate cart-related values if the user object exists
+        let cartSum = 0;
+        let totalProductsCart = 0;
+
+        if (user && user.cart) {
+            cartSum = user.cart.reduce((total, cartItem) => total + (cartItem.price * cartItem.quantity), 0);
+            totalProductsCart = user.cart.reduce((total, cartItem) => total + cartItem.quantity, 0);
+        }
 
         const response = {
             category: category,
             products: products,
-            user: userDetails,
+            user: user,
             totalPages,
             currentPage,
             searchTerm: searchTerm,
@@ -91,9 +96,10 @@ const shop = async (req, res) => {
         res.render('shop', response);
     } catch (error) {
         console.log(error.message);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.render('404');
     }
 };
+
 
 
 
@@ -109,6 +115,7 @@ const productDetails = async (req, res) => {
         res.render('productDetails', { product: product, user: userDetails,cartSum,totalProductsCart})
     } catch (error) {
         console.log(error.message);
+        res.render('404');
     }
 }
 

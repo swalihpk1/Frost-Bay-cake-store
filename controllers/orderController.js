@@ -64,9 +64,6 @@ const addOrder = async (req, res) => {
             var coupon = await Coupon.findOne({ couponId: req.body.couponCode });  
         }
 
-        console.log(coupon);
-
-
         var products = cartUser.cart.map(item => ({
             productId: item.productId._id,
             quantity: item.quantity,
@@ -107,6 +104,8 @@ const addOrder = async (req, res) => {
 
         });
         const newOrders = await orders.save()
+
+        console.log(newOrders);
 
         if (req.body.paymentMethod == 'cashOnDelivery') {
 
@@ -158,6 +157,7 @@ const addOrder = async (req, res) => {
             res.json({ success: true, message: 'Order success' });
 
         } else if (req.body.paymentMethod == 'razorpay') {
+            console.log("razorpay");
             const options = {
                 amount: newOrders.totalAmount * 100,
                 currency: 'INR',
@@ -181,7 +181,8 @@ const addOrder = async (req, res) => {
             res.json({ success: false, message: 'Select address and payment method..!' });
         }
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -222,7 +223,8 @@ const verifyPayment = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -248,7 +250,8 @@ const cancelOrder = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
     }
 }
 
@@ -290,7 +293,8 @@ const refundRequest = async (req, res) => {
         }
         
     } catch (error) {
-        console.log(error.message);
+          console.log(error.message);
+        res.render('404');
     }
 
 }

@@ -69,9 +69,6 @@ app.post('/login', userController.verifyLogin);
 app.get('/logOtp', authUser.isLogout, userController.logOtp);
 app.post('/logOtp', userController.sendOtp);
 
-// --------------------User-Logout---------------------
-app.get('/logout', authUser.isLogin, userController.logout);
-
 // --------------------Product-listing------------------
 app.get('/shop', authUser.noAuth, productController.shop);
 app.get('/shop/productDetails/:productId', authUser.noAuth, productController.productDetails);
@@ -102,5 +99,8 @@ app.post('/checkout/cancelCoupon', authUser.isLogin, couponController.cancelCoup
 // -----------------------------------Orders-----------------------------------------
 app.delete('/account/cancelOrderItem', authUser.isLogin, orderController.cancelOrder);
 app.post('/account/refundRequest', refundImageUpload.single('damageCakeImage'), authUser.isLogin, orderController.refundRequest);
+
+// --------------------User-Logout---------------------
+app.get('/logout', authUser.isLogin, userController.logout);
 
 module.exports = app;

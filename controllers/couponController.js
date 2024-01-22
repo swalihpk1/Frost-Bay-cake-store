@@ -2,6 +2,7 @@
 const Coupon = require('../models/couponModel');
 const { findOne } = require('../models/usersModel');
 
+
 // ----------------Coupon(Admin side)---------------
 const renderCoupon = async (req, res) => {
     try {
@@ -117,7 +118,7 @@ const applyCoupon = async (req, res) => {
 
             return res.json({ coupon });
         } else {
-            return res.json({ message: 'Coupon not found' });
+            return res.json({ message: 'Coupon not found'});
         }
     } catch (error) {
         console.error(error.message);

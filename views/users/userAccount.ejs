@@ -67,7 +67,7 @@
                                             </li>
                                             <li class="nav-item">
 
-                                                <a class="nav-link" onclick="confirmLogout()" href="/logout">Sign
+                                                <a class="nav-link" onclick="confirmLogout()" href="/logout"><i class="fa-solid fa-arrow-right-from-bracket fa-xl"></i> Sign
                                                     Out</a>
                                             </li>
                                         </ul>
@@ -204,6 +204,7 @@
                                                                 order.orderedProducts.forEach(function(product) {
                                                                 order.shipAddress.forEach(address=>{ %>
                                                                 <tr class="text-center"
+                                                                    data-order-details="<%= JSON.stringify(order) %>">
                                                                     <td class="p-0">
                                                                         <div class="">
                                                                             <figure class="d-inline-block">
@@ -216,6 +217,7 @@
 
                                                                             </figure>
                                                                         </div>
+                                                                        <h6></h6>
                                                                     </td>
                                                                     <td class="product-name" style="cursor: pointer;"
                                                                         data-toggle="modal"
@@ -871,7 +873,7 @@
         <script src="/assets/js/superfish.min.js"></script>
         <script src="/assets/js/owl.carousel.min.js"></script>
         <!-- Main JS File -->
-        <script src="/assets/js/main.js"></script>
+        <!-- <script src="/assets/js/main.js"></script> -->
 
 
 
