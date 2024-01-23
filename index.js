@@ -4,7 +4,7 @@ dotenv.config();
 
 // Database connection
 const mongoose  = require("mongoose");
-mongoose.connect("mongodb://localhost:27017/Frost-Bay",console.log("DB connected"));
+mongoose.connect(process.env.DB_CONNECTION);
 // ----------------------------
 
 //expess
