@@ -12,7 +12,7 @@ const categorySchema = new mongoose.Schema({
     offer: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Offers',
-        required: true
+        required: false
     }
 });
 module.exports = mongoose.model("Categorys", categorySchema);

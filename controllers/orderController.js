@@ -4,7 +4,6 @@ const Order = require("../models/ordersModel")
 const Products = require("../models/productModel")
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
-const { products } = require("./adminController");
 const Refundrequests = require("../models/refundReqModel");
 const Coupon = require("../models/couponModel")
 
@@ -12,7 +11,7 @@ const Coupon = require("../models/couponModel")
 
 // ----Razorpay--------
 const razorpayInstance = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
+    key_id: process.env.RAZORPAY_SECRET_ID,
     key_secret: process.env.RAZORPAY_SECRET_ID,
 });
 
@@ -302,5 +301,6 @@ module.exports = {
     addOrder,
     cancelOrder,
     verifyPayment,
-    refundRequest
+    refundRequest,
+    
 }

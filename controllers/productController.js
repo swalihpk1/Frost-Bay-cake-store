@@ -1,8 +1,7 @@
 const User = require("../models/usersModel");
 const Products = require("../models/productModel");
 const Category = require("../models/categoryModel");
-const session = require("express-session");
-const Offers = require("../models/offerModel")
+
 
 
 const shop = async (req, res) => {

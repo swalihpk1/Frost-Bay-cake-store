@@ -1,6 +1,5 @@
 
 const Coupon = require('../models/couponModel');
-const { findOne } = require('../models/usersModel');
 
 
 // ----------------Coupon(Admin side)---------------

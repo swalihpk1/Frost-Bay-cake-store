@@ -1,19 +1,13 @@
-const { name } = require("ejs");
+
 const User = require("../models/usersModel");
 const bcrypt = require("bcrypt");
 const userOtpVerification = require("../models/userOtpModel")
 const nodemailer = require("nodemailer");
-const { verify, Verify } = require("crypto");
-const { REFUSED } = require("dns");
-const { ObjectId } = require("bson");
-const { emit } = require("process");
-const { statfsSync } = require("fs");
 const path = require("path");
 const Sharp = require("sharp");
 const Address = require("../models/addressModel")
 const Orders = require("../models/ordersModel")
 const Coupons = require("../models/couponModel")
-const Products = require("../models/productModel");
 
 
 

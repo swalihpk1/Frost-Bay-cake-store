@@ -1,5 +1,4 @@
 const User = require("../models/usersModel");
-const { use } = require("../routes/userRoute");
 const Products = require("../models/productModel");
 const Category = require("../models/categoryModel");
 const Sharp = require("sharp");
@@ -10,8 +9,7 @@ const moment = require("moment");
 const PDFDocument = require('pdfkit');
 const Excel = require('exceljs');
 const Offers = require("../models/offerModel");
-const { ObjectId } = require('mongodb');
-const { type } = require("os");
+
 
 
 // --------Admin-login-------
