@@ -4,7 +4,7 @@ dotenv.config();
 
 // Database connection
 const mongoose  = require("mongoose");
-mongoose.connect(process.env.DB_CONNECTION,console.log("db connected"));
+mongoose.connect(process.env.DB_CONNECTION,console.log("db connected")).then("mongo sussess").catch("somrthing wrong");
 // ----------------------------
 
 //expess

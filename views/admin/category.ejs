@@ -175,25 +175,18 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <div class="modal-body d-flex flex-wrap p-2 " style="background-color: #e0e0e0;"
-                                        id="modalBody">
-                                        <% for (let i=0; i < offers.length; i++) { %>
-                                            <div class="col-md-4 mb-3 "
-                                                style="width: calc(33.333% - 10px); margin-right: 10px;">
-                                                <div class="card p-3 h-100" id="offerCard"
-                                                    data-offer-id="<%= offers[i]._id %>">
-                                                    <h6>
-                                                        <%= offers[i].offerName %>
-                                                    </h6>
-                                                    <p>
-                                                        <%= offers[i].description %>
-                                                    </p>
-                                                    <h3>
-                                                        <%= offers[i].offPercentage %>%
-                                                    </h3>
+                                    <div class="modal-body d-flex flex-wrap p-2" style="background-color: #e0e0e0;" id="modalBody">
+                                        <% if (offers) { %>
+                                            <% for (let i = 0; i < offers.length; i++) { %>
+                                                <div class="col-md-4 mb-3" style="width: calc(33.333% - 10px); margin-right: 10px;">
+                                                    <div class="card p-3 h-100" id="offerCard" data-offer-id="<%= offers[i]._id %>">
+                                                        <h6><%= offers[i].offerName %></h6>
+                                                        <p><%= offers[i].description %></p>
+                                                        <h3><%= offers[i].offPercentage %>%</h3>
+                                                    </div>
                                                 </div>
-                                            </div>
                                             <% } %>
+                                        <% } %>
                                     </div>
                                     <div class="m-2 text-center">
                                         <button type="button" class="btn btn-info" id="applyOfferBtn">Apply

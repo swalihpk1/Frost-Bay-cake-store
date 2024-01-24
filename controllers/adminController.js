@@ -193,7 +193,7 @@ const insertCategory = async (req, res) => {
         })
         await category.save();
         const categorys = await Category.find({})
-        return res.render('category', { message: 'Category added', category: categorys });
+         return res.redirect('/admin/category')
 
     } catch (error) {
         console.log(error.message);

@@ -4,6 +4,7 @@ const Order = require("../models/ordersModel")
 const Products = require("../models/productModel")
 const Razorpay = require("razorpay");
 const crypto = require("crypto");
+const { products } = require("./adminController");
 const Refundrequests = require("../models/refundReqModel");
 const Coupon = require("../models/couponModel")
 
@@ -11,7 +12,7 @@ const Coupon = require("../models/couponModel")
 
 // ----Razorpay--------
 const razorpayInstance = new Razorpay({
-    key_id: process.env.RAZORPAY_SECRET_ID,
+    key_id: process.env.RAZORPAY_KEY_ID,
     key_secret: process.env.RAZORPAY_SECRET_ID,
 });
 
@@ -63,6 +64,9 @@ const addOrder = async (req, res) => {
             var coupon = await Coupon.findOne({ couponId: req.body.couponCode });  
         }
 
+        console.log(coupon);
+
+
         var products = cartUser.cart.map(item => ({
             productId: item.productId._id,
             quantity: item.quantity,
@@ -103,8 +107,6 @@ const addOrder = async (req, res) => {
 
         });
         const newOrders = await orders.save()
-
-        console.log(newOrders);
 
         if (req.body.paymentMethod == 'cashOnDelivery') {
 
@@ -156,7 +158,6 @@ const addOrder = async (req, res) => {
             res.json({ success: true, message: 'Order success' });
 
         } else if (req.body.paymentMethod == 'razorpay') {
-            console.log("razorpay");
             const options = {
                 amount: newOrders.totalAmount * 100,
                 currency: 'INR',
@@ -180,8 +181,7 @@ const addOrder = async (req, res) => {
             res.json({ success: false, message: 'Select address and payment method..!' });
         }
     } catch (error) {
-          console.log(error.message);
-        res.render('404');
+        console.log(error.message);
     }
 }
 
@@ -222,8 +222,7 @@ const verifyPayment = async (req, res) => {
         }
 
     } catch (error) {
-          console.log(error.message);
-        res.render('404');
+        console.log(error.message);
     }
 }
 
@@ -249,8 +248,7 @@ const cancelOrder = async (req, res) => {
         }
 
     } catch (error) {
-          console.log(error.message);
-        res.render('404');
+        console.log(error.message);
     }
 }
 
@@ -292,8 +290,7 @@ const refundRequest = async (req, res) => {
         }
         
     } catch (error) {
-          console.log(error.message);
-        res.render('404');
+        console.log(error.message);
     }
 
 }
@@ -301,6 +298,5 @@ module.exports = {
     addOrder,
     cancelOrder,
     verifyPayment,
-    refundRequest,
-    
+    refundRequest
 }
