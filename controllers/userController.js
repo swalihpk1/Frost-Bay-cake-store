@@ -29,6 +29,7 @@ const authentication = async (req, res) => {
         res.render('signup-&-login');
 
     } catch (error) {
+        console.log(error.message);
         res.render('404');
     }
 }
@@ -40,6 +41,7 @@ const securePassword = async (password) => {
         return passwordHash;
 
     } catch (error) {
+        console.log(error.message);
         res.render('404');
     }
 }
@@ -71,6 +73,7 @@ const insertUser = async (req, res) => {
 
         })
     } catch (error) {
+        console.log(error.message);
         res.render('404');
     }
 }
@@ -106,8 +109,8 @@ const sendOtpVerification = async ({ _id, email }, res) => {
 
 
     } catch (error) {
+        console.log(error.message);
         res.render('404');
-        res.status(500).send('Internal Server Error');
     }
 }
 
@@ -116,6 +119,7 @@ const renderOtp = async (req, res) => {
     try {
         res.render('otp');
     } catch (error) {
+        console.log(error.message);
         res.render('404');
     }
 }
@@ -154,6 +158,7 @@ const verifyOtp = async (req, res) => {
 const verifyLogin = async (req, res) => {
 
     try {
+        console.log(req.body);
         const email = req.body.loginEmail;
         const password = req.body.loginPassword;
         const userData = await User.findOne({ email });
@@ -162,16 +167,17 @@ const verifyLogin = async (req, res) => {
             const passwordMatch = await bcrypt.compare(password, userData.password);
             if (passwordMatch) {
                 req.session.user_id = userData._id;
-                res.redirect('/home');
+                res.json({success:true});
 
             } else {
-                res.render('signup-&-login', { logMessage: "Incorrect username or password" });
+                res.json({success:false});
             }
 
         } else {
-            res.render('signup-&-login', { logMessage: "Incorrect username or password" });
+            res.json({success:false});
         }
     } catch (error) {
+        console.log(error.message);
         res.render('404');
     }
 }

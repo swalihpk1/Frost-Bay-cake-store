@@ -1101,7 +1101,6 @@
                 })
                     .then(response => response.json())
                     .then(result => {
-                        console.log(result);
 
                         $('#addressTab').load('/account #addressTab', function () {
                             if (result.success) {

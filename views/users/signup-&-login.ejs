@@ -1,346 +1,406 @@
 <%-include('../layouts/user/header')-%>
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="/assets/css/eye-toggler.css">
-</head>
-<body>
-    <div class="page-wrapper">
-        <header class="header">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/assets/css/eye-toggler.css">
+    </head>
 
-            <div class="header-middle sticky-header">
-                <div class="container">
-                    <div class="header-left">
-                        <button class="mobile-menu-toggler">
-                            <span class="sr-only">Toggle mobile menu</span>
-                            <i class="icon-bars"></i>
-                        </button>
+    <body>
+        <div class="page-wrapper">
+            <header class="header">
 
-                        <a href="index.html" class="logo">
-                            <img src="/assets/images/Frost-Bay logo.png" alt="Frost-Bay logo" width="105" height="25">
-                        </a>
+                <div class="header-middle sticky-header">
+                    <div class="container">
+                        <div class="header-left">
+                            <button class="mobile-menu-toggler">
+                                <span class="sr-only">Toggle mobile menu</span>
+                                <i class="icon-bars"></i>
+                            </button>
 
-                        <nav class="main-nav">
-                            <ul class="menu sf-arrows">
-                                <li>
-                                    <a href="/" class="">Home</a>
-                                <li>
-                                    <a href="/shop" class="">Shop</a>
-                                <li>
-                                    <a href="#" class="">Contact us</a>
-                                <li>
-                                     <a href="blog.html" class="">About us</a>
-                            </ul><!-- End .menu -->
-                        </nav><!-- End .main-nav -->
-                    </div><!-- End .header-left -->
-
-
-                    
-                </div><!-- End .container -->
-            </div><!-- End .header-middle -->
-        </header><!-- End .header -->
-
-        <main class="main">
-            <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
-                <div class="container">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="/home">Home</a></li>
-                        <li class="breadcrumb-item active" aria-current="page">Login</li>
-                        <% if(typeof message !=='undefined' ){ %>
-                        
-                            <h5 class="text-danger position-absolute" style="left: 45%">
-                            <%= message %>
-                            </h5>
-                        
-                            <% } %>
-                    </ol>
-                </div><!-- End .container -->
-            </nav><!-- End .breadcrumb-nav -->
-
-
-  
-
-                
-            <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
-                style="background-image: url('/assets/images/Logo bg.jpg')">
-                <div class="container">
-                    <div class="form-box">
-                    
-                        <div class="form-tab">
-                          
-                            <ul class="nav nav-pills nav-fill" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link" id="signin-tab-2" data-toggle="tab" href="#signin-2" role="tab"
-                                        aria-controls="signin-2" aria-selected="false">Login In</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="register-tab-2" data-toggle="tab" href="#register-2"
-                                        role="tab" aria-controls="register-2" aria-selected="true">Sign Up</a>
-                                </li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane fade " id="signin-2" role="tabpanel" aria-labelledby="signin-tab-2">
-                                    <% if(typeof logMessage !== 'undefined'){ %>
-
-                                        <h6 class="text-danger"><%= logMessage %></h6>
-                  
-                                        <%  } %>
-                                    <form action="/login" method="post" >
-                                        <div class="form-group">
-                                            <label for="singin-email-2">Email address *</label>
-                                            <input type="email" class="form-control" id="singin-email-2"
-                                                name="loginEmail" required>
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-group">
-                                            <label for="singin-password-2">Password *</label>
-                                            <input type="password" class="form-control" id="singin-password-2"
-                                                name="loginPassword" required>
-                                        </div><!-- End .form-group -->
-                                        <a href="/logOtp" class="forgot-link">Login with OTP?</a>
-                                        <div class="form-footer">
-                                            <button type="submit" class="btn btn-outline-primary-2">
-                                                <span>LOG IN</span>
-                                                <i class="icon-long-arrow-right"></i>
-                                            </button>
-
-                                            
-                                            <a href="#" class="forgot-link">Forgot Your Password?</a>
-                                        </div><!-- End .form-footer -->
-                                    </form>
-                                    
-                                </div><!-- .End .tab-pane -->
-                                <div class="tab-pane fade show active" id="register-2" role="tabpanel"
-                                    aria-labelledby="register-tab-2">
-                                    <% if(typeof signMessage !== 'undefined'){ %>
-
-                                        <h6 class="text-danger"><%= signMessage %></h6>
-                  
-                                        <%  } %>
-                                    <form method="POST" onsubmit="return validation();">
-                                        <div class="form-group">
-                                            <label for="register-email-2">Name *</label>  
-                                            <p class="m-0 text-danger d-inline" id="nameError"></p>  
-                                            <input type="text" class="form-control m-0" id="name"
-                                                name="name" >
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label for="register-email-2">Email address *</label>
-                                            <p class="m-0 text-danger d-inline" id="emailError"></p>  
-                                            <input type="" class="form-control m-0" id="email"
-                                                name="signupEmail" >
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-group">
-                                            <label for="register-password-2">Password *</label>
-                                            <p class="m-0 text-danger d-inline" id="passError"></p>  
-                                            <input type="password" class="form-control m-0" id="password"
-                                                name="signupPassword" >
-                                                <!-- <span toggle="#password-field"
-									            class="fa fa-fw fa-eye field-icon toggle-password"></span> -->
-                                        </div><!-- End .form-group -->
-                                        
-
-                                        <div class="form-group">
-                                            <label for="register-password-2">Confirm password *</label>
-                                            <p class="m-0 text-danger d-inline" id="confirmError"></p>  
-                                            <input type="password" class="form-control m-0" id="confirmPass"
-                                                name="confirmPassword" >
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-group">
-                                            <label for="">Phone*</label>
-                                            <p class="m-0 text-danger d-inline" id="phoneError"></p>  
-                                            <input type="text" class="form-control m-0" id="phone"
-                                                name="phone" >
-                                        </div><!-- End .form-group -->
-
-                                        <div class="form-group">
-                                            <label for="">Location *</label>
-                                                <select id="" name="location" type="" class="form-control">
-                                                    <option value="">Select your location</option>
-                                                    <option value="Kerala">Kerala</option>
-                                                    <option value="Banglore">Banglore</option>
-                                                    <option value="Chennai">Chennai</option>
-                                                    <option value="Kochi">Kochi</option>
-                                                </select>
-                                               
-                                        </div>
-
-                                        <div class="form-footer">
-                                            <button type="submit" class="btn btn-outline-primary-2">
-                                                <span>SIGN UP</span>
-                                                <i class="icon-long-arrow-right"></i>
-                                            </button>
-
-                                        </div><!-- End .form-footer -->
-                                    </form>
-                                    
-                                </div><!-- .End .tab-pane -->
-                            </div><!-- End .tab-content -->
-                        </div><!-- End .form-tab -->
-                    </div><!-- End .form-box -->
-                </div><!-- End .container -->
-            </div><!-- End .login-page section-bg -->
-        </main><!-- End .main -->
-
-        <footer class="footer " style="background-color: black;">
-            <div class="footer-middle">
-                <div class="container ">
-                    <div class="row">
-                        <div class="col-sm-6 col-lg-3">
-                            <div class="widget widget-about">
-                                <img src="/assets/images/Frost-Bay logo.png" class="footer-logo" alt="Footer Logo" width="105"
+                            <a href="index.html" class="logo">
+                                <img src="/assets/images/Frost-Bay logo.png" alt="Frost-Bay logo" width="105"
                                     height="25">
-                                <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu vulputate
-                                    magna eros eu erat. </p>
+                            </a>
 
-                                <div class="social-icons">
-                                    <a href="#" class="social-icon" target="_blank" title="Facebook"><i
-                                            class="icon-facebook-f"></i></a>
-                                    <a href="#" class="social-icon" target="_blank" title="Twitter"><i
-                                            class="icon-twitter"></i></a>
-                                    <a href="#" class="social-icon" target="_blank" title="Instagram"><i
-                                            class="icon-instagram"></i></a>
-                                    <a href="#" class="social-icon" target="_blank" title="Youtube"><i
-                                            class="icon-youtube"></i></a>
-                                    <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
-                                            class="icon-pinterest"></i></a>
-                                </div><!-- End .soial-icons -->
-                            </div><!-- End .widget about-widget -->
-                        </div><!-- End .col-sm-6 col-lg-3 -->
-
-                    </div><!-- End .row -->
-                </div><!-- End .container -->
-            </div><!-- End .footer-middle -->
-
-            <div class="footer-bottom">
-                <div class="container">
-                    <p class="footer-copyright">Copyright © 2019 Frost-Bay Store. All Rights Reserved.</p>
-                    <!-- End .footer-copyright -->
-                    <figure class="footer-payments">
-                        <img src="/assets/images/payments.png" alt="Payment methods" width="272" height="20">
-                    </figure><!-- End .footer-payments -->
-                </div><!-- End .container -->
-            </div><!-- End .footer-bottom -->
-        </footer><!-- End .footer -->
-    </div><!-- End .page-wrapper -->
-    <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
-
- 
-
-    <div class="mobile-menu-container">
-        <div class="mobile-menu-wrapper">
-            <span class="mobile-menu-close"><i class="icon-close"></i></span>
-
-            <form action="#" method="get" class="mobile-search">
-                <label for="mobile-search" class="sr-only">Search</label>
-                <input type="search" class="form-control" name="mobile-search" id="mobile-search"
-                    placeholder="Search in..." required>
-                <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
-            </form>
-
-            <nav class="mobile-nav">
-                <ul class="mobile-menu">
-                    <li class="active">
-                        <a href="/home">Home</a>
-                    </li>
-                    <li>
-                        <a href="/shop">Shop</a>
-                    </li>
-                    <li>
-                        <a href="#">Contact us</a>
-                    </li>
-                    <li>
-                        <a href="">About us</a>
-                    </li>
-                </ul>
-            </nav><!-- End .mobile-nav -->
-
-            <div class="social-icons">
-                <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
-                <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
-                <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
-                <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
-            </div><!-- End .social-icons -->
-        </div><!-- End .mobile-menu-wrapper -->
-    </div><!-- End .mobile-menu-container -->
-
-   
-
-    <!-- Plugins JS File -->
-    <script src="/assets/js/jquery.min.js"></script>
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/jquery.hoverIntent.min.js"></script>
-    <script src="/assets/js/jquery.waypoints.min.js"></script>
-    <script src="/assets/js/superfish.min.js"></script>
-    <script src="/assets/js/owl.carousel.min.js"></script>
-    <!-- Main JS File -->
-    <script src="/assets/js/main.js"></script>
-    <!-- ------Eye toggler js------ -->
-    <script src="/assets/js/popper.js"></script>
+                            <nav class="main-nav">
+                                <ul class="menu sf-arrows">
+                                    <li>
+                                        <a href="/" class="">Home</a>
+                                    <li>
+                                        <a href="/shop" class="">Shop</a>
+                                    <li>
+                                        <a href="#" class="">Contact us</a>
+                                    <li>
+                                        <a href="blog.html" class="">About us</a>
+                                </ul><!-- End .menu -->
+                            </nav><!-- End .main-nav -->
+                        </div><!-- End .header-left -->
 
 
 
-    <script>
-      function validation() {
-  var name = document.getElementById('name').value;
-  var email = document.getElementById('email').value; 
-  var phone = document.getElementById('phone').value;
-  var password = document.getElementById('password').value;
-  var confirmPassword = document.getElementById('confirmPass').value; 
+                    </div><!-- End .container -->
+                </div><!-- End .header-middle -->
+            </header><!-- End .header -->
 
-  var nameError = document.getElementById('nameError');
-  var emailError = document.getElementById('emailError');
-  var phoneError = document.getElementById('phoneError');
-  var passwordError = document.getElementById('passError'); 
-  var confirmError = document.getElementById('confirmError');
+            <main class="main">
+                <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+                    <div class="container">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="/home">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Login</li>
+                        </ol>
+                    </div><!-- End .container -->
+                </nav><!-- End .breadcrumb-nav -->
 
-  var trimmedName = name.trim();
 
-  // Regular expressions for validation
-  var nameRegex = /^[A-Za-z\s]{4,}$/;
-  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  var phoneRegex = /^\d{10}$/;
-  let regexPassword = /^(?=.*\d)(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
 
-  if (!nameRegex.test(trimmedName)) {
-    nameError.textContent = 'Name should contain at least 4 letters and no digits.';
-    return false;
-  } else {
-    nameError.textContent = '';
-  }
 
-  if (!emailRegex.test(email)) {
-    emailError.textContent = 'Invalid email format.';
-    return false;
-  } else {
-    emailError.textContent = '';
-  }
 
-  if (!phoneRegex.test(phone)) {
-    phoneError.textContent = 'Phone should contain 10 digits.';
-    return false;
-  } else {
-    phoneError.textContent = '';
-  }
+                <div class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
+                    style="background-image: url('/assets/images/Logo bg.jpg')">
+                    <div class="container">
+                        <div class="form-box">
 
-  if (password !== confirmPassword) { 
-    confirmError.textContent = 'Passwords not match';
-    return false;
-  } else {
-    confirmError.textContent = '';
-  }
+                            <div class="form-tab">
 
-  if (!regexPassword.test(password)) {
-    passwordError.textContent = 'Password must contain at least 6 characters, at least one uppercase, and one digit';
-    return false;
-  } else {
-    passwordError.textContent = '';
-  }
+                                <ul class="nav nav-pills nav-fill" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="signin-tab-2" data-toggle="tab" href="#signin-2"
+                                            role="tab" aria-controls="signin-2" aria-selected="false">Login In</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="register-tab-2" data-toggle="tab"
+                                            href="#register-2" role="tab" aria-controls="register-2"
+                                            aria-selected="true">Sign Up</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane fade " id="signin-2" role="tabpanel"
+                                        aria-labelledby="signin-tab-2">
+                                        <% if(typeof logMessage !=='undefined' ){ %>
 
-  return true;
-}
-    </script>
+                                            <h6  class="text-danger">
+                                                <%= logMessage %>
+                                            </h6>
 
-    <%-include('../layouts/user/footer')-%>
+                                            <% } %>
+                                            <h6 id="error" class="text-danger">
+                                                
+                                            </h6>
+                                                <form id="login-form">
+                                                    <div class="form-group">
+                                                        <label for="singin-email-2">Email address *</label>
+                                                        <input type="" class="form-control" id="singin-email-2"
+                                                            name="loginEmail">
+                                                    </div><!-- End .form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="singin-password-2">Password *</label>
+                                                        <input type="password" class="form-control"
+                                                            id="singin-password-2" name="loginPassword">
+                                                    </div><!-- End .form-group -->
+                                                    <a href="/logOtp" class="forgot-link">Login with OTP?</a>
+                                                    <div class="form-footer">
+                                                        <button type="submit" class="btn btn-outline-primary-2">
+                                                            <span>LOG IN</span>
+                                                            <i class="icon-long-arrow-right"></i>
+                                                        </button>
+
+
+                                                        <a href="#" class="forgot-link">Forgot Your Password?</a>
+                                                    </div><!-- End .form-footer -->
+                                                </form>
+
+                                    </div><!-- .End .tab-pane -->
+                                    <div class="tab-pane fade show active" id="register-2" role="tabpanel"
+                                        aria-labelledby="register-tab-2">
+                                        <% if(typeof signMessage !=='undefined' ){ %>
+
+                                            <h6 class="text-danger">
+                                                <%= signMessage %>
+                                            </h6>
+
+                                            <% } %>
+                                                <form method="POST" onsubmit="return validation();">
+                                                    <div class="form-group">
+                                                        <label for="register-email-2">Name *</label>
+                                                        <p class="m-0 text-danger d-inline" id="nameError"></p>
+                                                        <input type="text" class="form-control m-0" id="name"
+                                                            name="name">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="register-email-2">Email address *</label>
+                                                        <p class="m-0 text-danger d-inline" id="emailError"></p>
+                                                        <input type="" class="form-control m-0" id="email"
+                                                            name="signupEmail">
+                                                    </div><!-- End .form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="register-password-2">Password *</label>
+                                                        <p class="m-0 text-danger d-inline" id="passError"></p>
+                                                        <input type="password" class="form-control m-0" id="password"
+                                                            name="signupPassword">
+                                                        <!-- <span toggle="#password-field"
+									            class="fa fa-fw fa-eye field-icon toggle-password"></span> -->
+                                                    </div><!-- End .form-group -->
+
+
+                                                    <div class="form-group">
+                                                        <label for="register-password-2">Confirm password *</label>
+                                                        <p class="m-0 text-danger d-inline" id="confirmError"></p>
+                                                        <input type="password" class="form-control m-0" id="confirmPass"
+                                                            name="confirmPassword">
+                                                    </div><!-- End .form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="">Phone*</label>
+                                                        <p class="m-0 text-danger d-inline" id="phoneError"></p>
+                                                        <input type="text" class="form-control m-0" id="phone"
+                                                            name="phone">
+                                                    </div><!-- End .form-group -->
+
+                                                    <div class="form-group">
+                                                        <label for="">Location *</label>
+                                                        <select id="" name="location" type="" class="form-control">
+                                                            <option value="">Select your location</option>
+                                                            <option value="Kerala">Kerala</option>
+                                                            <option value="Banglore">Banglore</option>
+                                                            <option value="Chennai">Chennai</option>
+                                                            <option value="Kochi">Kochi</option>
+                                                        </select>
+
+                                                    </div>
+
+                                                    <div class="form-footer">
+                                                        <button type="submit" class="btn btn-outline-primary-2">
+                                                            <span>SIGN UP</span>
+                                                            <i class="icon-long-arrow-right"></i>
+                                                        </button>
+
+                                                    </div><!-- End .form-footer -->
+                                                </form>
+
+                                    </div><!-- .End .tab-pane -->
+                                </div><!-- End .tab-content -->
+                            </div><!-- End .form-tab -->
+                        </div><!-- End .form-box -->
+                    </div><!-- End .container -->
+                </div><!-- End .login-page section-bg -->
+            </main><!-- End .main -->
+
+            <footer class="footer " style="background-color: black;">
+                <div class="footer-middle">
+                    <div class="container ">
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-3">
+                                <div class="widget widget-about">
+                                    <img src="/assets/images/Frost-Bay logo.png" class="footer-logo" alt="Footer Logo"
+                                        width="105" height="25">
+                                    <p>Praesent dapibus, neque id cursus ucibus, tortor neque egestas augue, eu
+                                        vulputate
+                                        magna eros eu erat. </p>
+
+                                    <div class="social-icons">
+                                        <a href="#" class="social-icon" target="_blank" title="Facebook"><i
+                                                class="icon-facebook-f"></i></a>
+                                        <a href="#" class="social-icon" target="_blank" title="Twitter"><i
+                                                class="icon-twitter"></i></a>
+                                        <a href="#" class="social-icon" target="_blank" title="Instagram"><i
+                                                class="icon-instagram"></i></a>
+                                        <a href="#" class="social-icon" target="_blank" title="Youtube"><i
+                                                class="icon-youtube"></i></a>
+                                        <a href="#" class="social-icon" target="_blank" title="Pinterest"><i
+                                                class="icon-pinterest"></i></a>
+                                    </div><!-- End .soial-icons -->
+                                </div><!-- End .widget about-widget -->
+                            </div><!-- End .col-sm-6 col-lg-3 -->
+
+                        </div><!-- End .row -->
+                    </div><!-- End .container -->
+                </div><!-- End .footer-middle -->
+
+                <div class="footer-bottom">
+                    <div class="container">
+                        <p class="footer-copyright">Copyright © 2019 Frost-Bay Store. All Rights Reserved.</p>
+                        <!-- End .footer-copyright -->
+                        <figure class="footer-payments">
+                            <img src="/assets/images/payments.png" alt="Payment methods" width="272" height="20">
+                        </figure><!-- End .footer-payments -->
+                    </div><!-- End .container -->
+                </div><!-- End .footer-bottom -->
+            </footer><!-- End .footer -->
+        </div><!-- End .page-wrapper -->
+        <button id="scroll-top" title="Back to Top"><i class="icon-arrow-up"></i></button>
+
+
+
+        <div class="mobile-menu-container">
+            <div class="mobile-menu-wrapper">
+                <span class="mobile-menu-close"><i class="icon-close"></i></span>
+
+                <form action="#" method="get" class="mobile-search">
+                    <label for="mobile-search" class="sr-only">Search</label>
+                    <input type="search" class="form-control" name="mobile-search" id="mobile-search"
+                        placeholder="Search in..." required>
+                    <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
+                </form>
+
+                <nav class="mobile-nav">
+                    <ul class="mobile-menu">
+                        <li class="active">
+                            <a href="/home">Home</a>
+                        </li>
+                        <li>
+                            <a href="/shop">Shop</a>
+                        </li>
+                        <li>
+                            <a href="#">Contact us</a>
+                        </li>
+                        <li>
+                            <a href="">About us</a>
+                        </li>
+                    </ul>
+                </nav><!-- End .mobile-nav -->
+
+                <div class="social-icons">
+                    <a href="#" class="social-icon" target="_blank" title="Facebook"><i class="icon-facebook-f"></i></a>
+                    <a href="#" class="social-icon" target="_blank" title="Twitter"><i class="icon-twitter"></i></a>
+                    <a href="#" class="social-icon" target="_blank" title="Instagram"><i class="icon-instagram"></i></a>
+                    <a href="#" class="social-icon" target="_blank" title="Youtube"><i class="icon-youtube"></i></a>
+                </div><!-- End .social-icons -->
+            </div><!-- End .mobile-menu-wrapper -->
+        </div><!-- End .mobile-menu-container -->
+
+        <div id="notification-container"></div>
+
+
+
+        <!-- Plugins JS File -->
+        <script src="/assets/js/jquery.min.js"></script>
+        <script src="/assets/js/bootstrap.bundle.min.js"></script>
+        <script src="/assets/js/jquery.hoverIntent.min.js"></script>
+        <script src="/assets/js/jquery.waypoints.min.js"></script>
+        <script src="/assets/js/superfish.min.js"></script>
+        <script src="/assets/js/owl.carousel.min.js"></script>
+        <!-- Main JS File -->
+        <script src="/assets/js/main.js"></script>
+        <!-- ------Eye toggler js------ -->
+        <script src="/assets/js/popper.js"></script>
+
+
+
+        <script>
+            function validation() {
+                var name = document.getElementById('name').value;
+                var email = document.getElementById('email').value;
+                var phone = document.getElementById('phone').value;
+                var password = document.getElementById('password').value;
+                var confirmPassword = document.getElementById('confirmPass').value;
+
+                var nameError = document.getElementById('nameError');
+                var emailError = document.getElementById('emailError');
+                var phoneError = document.getElementById('phoneError');
+                var passwordError = document.getElementById('passError');
+                var confirmError = document.getElementById('confirmError');
+
+                var trimmedName = name.trim();
+
+                // Regular expressions for validation
+                var nameRegex = /^[A-Za-z\s]{4,}$/;
+                var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                var phoneRegex = /^\d{10}$/;
+                let regexPassword = /^(?=.*\d)(?=.*[A-Z])[0-9a-zA-Z]{6,}$/;
+
+                if (!nameRegex.test(trimmedName)) {
+                    nameError.textContent = 'Name should contain at least 4 letters and no digits.';
+                    return false;
+                } else {
+                    nameError.textContent = '';
+                }
+
+                if (!emailRegex.test(email)) {
+                    emailError.textContent = 'Invalid email format.';
+                    return false;
+                } else {
+                    emailError.textContent = '';
+                }
+
+                if (!phoneRegex.test(phone)) {
+                    phoneError.textContent = 'Phone should contain 10 digits.';
+                    return false;
+                } else {
+                    phoneError.textContent = '';
+                }
+
+                if (password !== confirmPassword) {
+                    confirmError.textContent = 'Passwords not match';
+                    return false;
+                } else {
+                    confirmError.textContent = '';
+                }
+
+                if (!regexPassword.test(password)) {
+                    passwordError.textContent = 'Password must contain at least 6 characters, at least one uppercase, and one digit';
+                    return false;
+                } else {
+                    passwordError.textContent = '';
+                }
+
+                return true;
+            }
+        </script>
+
+        <script>
+            document.getElementById('login-form').addEventListener('submit', function (event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+                const formObj = Object.fromEntries(Array.from(formData.entries()));
+                 console.log(formObj);
+
+                fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(formObj),
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if(data.success){
+                            showNotification("Login succesfully! Welcome to Frost bay",true);
+                            setTimeout(() => {
+                                window.location.href = "/home"
+                            }, 2000);
+
+                        }else{
+                            document.getElementById('error').innerHTML = "Incorrect username or password"
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+
+            function showNotification(message, success = true) {
+                const notificationContainer = document.getElementById('notification-container');
+                notificationContainer.innerHTML = message;
+
+                if (success) {
+                    notificationContainer.style.color = '#fff';
+                    notificationContainer.style.background = '#c96';
+                } else {
+                    notificationContainer.style.color = 'red';
+                }
+
+                notificationContainer.style.display = 'block';
+
+                setTimeout(() => {
+                    notificationContainer.style.display = 'none';
+                }, 3000);
+            }
+
+        </script>
+
+        <%-include('../layouts/user/footer')-%>
